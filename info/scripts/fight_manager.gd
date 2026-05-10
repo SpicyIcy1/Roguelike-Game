@@ -8,7 +8,8 @@ const HealthBarScene: PackedScene = preload("res://scenes/health_bar.tscn")
 var player: Player
 
 func start_combat(p: Player, enemies: Array[Enemy]) -> void:
-	player = p
+	current_turn = 0
+	player = p  
 	get_tree().paused = true
 	%Fight.visible = true
 	combatants = [p]
@@ -38,6 +39,7 @@ func _next_turn() -> void:
 	if combatants.is_empty():
 		return
 	var acting: Character = combatants[current_turn % combatants.size()]
+	print("acting: ", acting.name)  # add this
 	%FightUI.visible = acting is Player
 	if not acting is Player:
 		acting.take_turn(self)
@@ -85,7 +87,8 @@ func _on_enemy_targeted(enemy: Enemy) -> void:
 	for btn in %Enemies.get_children():
 		btn.disabled = true
 	apply_damage(enemy, player.physical_attack)
-	end_turn()
+	if not combatants.is_empty(): 
+		end_turn()
 
 func _on_run_pressed() -> void:
 	end_combat()
