@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://bv5p4kchdebl0"]
+
+[ext_resource type="PackedScene" uid="uid://p15jcv2yafyu" path="res://scenes/Player.tscn" id="1_o5qli"]
+[ext_resource type="Texture2D" uid="uid://y67axb4flfrq" path="res://assets/a.png" id="2_0wfyh"]
+[ext_resource type="Script" uid="uid://dro7oji136d42" path="res://scripts/walls.gd" id="3_sugp2"]
+[ext_resource type="PackedScene" uid="uid://0t1n3vaq1wrr" path="res://scenes/enemy.tscn" id="4_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://cl8wgue3ni36m" path="res://scenes/fight_manager.tscn" id="5_tbgi4"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0wfyh"]
+texture = ExtResource("2_0wfyh")
+texture_region_size = Vector2i(20, 20)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
+
+[sub_resource type="TileSet" id="TileSet_sugp2"]
+tile_size = Vector2i(20, 20)
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_0wfyh")
+
+[node name="Main" type="Node2D" unique_id=96172719]
+
+[node name="Player" parent="." unique_id=2039837430 instance=ExtResource("1_o5qli")]
+position = Vector2(91, 286)
+
+[node name="Walls" type="TileMapLayer" parent="." unique_id=1837700577]
+tile_set = SubResource("TileSet_sugp2")
+script = ExtResource("3_sugp2")
+
+[node name="Enemy" parent="." unique_id=546620876 instance=ExtResource("4_jyhfs")]
+position = Vector2(182, 109)
+
+[node name="FightManager" parent="." unique_id=2085015419 instance=ExtResource("5_tbgi4")]
+
+[node name="Enemy2" parent="." unique_id=2032599403 instance=ExtResource("4_jyhfs")]
+position = Vector2(161, 94)
+
+[node name="Enemy3" parent="." unique_id=542216502 instance=ExtResource("4_jyhfs")]
+position = Vector2(346, 318)

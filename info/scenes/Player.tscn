@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://p15jcv2yafyu"]
+
+[ext_resource type="Script" uid="uid://bbs7du11j4pv2" path="res://scripts/Player.gd" id="1_p0vlq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p0vlq"]
+size = Vector2(30, 30)
+
+[sub_resource type="QuadMesh" id="QuadMesh_p0vlq"]
+size = Vector2(30, 30)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_p0vlq"]
+radius = 100.0
+
+[node name="Player" type="CharacterBody2D" unique_id=2039837430]
+script = ExtResource("1_p0vlq")
+physical_attack = 20.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=837681213]
+shape = SubResource("RectangleShape2D_p0vlq")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="." unique_id=1319450174]
+mesh = SubResource("QuadMesh_p0vlq")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=963098582]
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=1336583662]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1186408888]
+shape = SubResource("CircleShape2D_p0vlq")
