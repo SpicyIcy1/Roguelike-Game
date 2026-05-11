@@ -34,3 +34,11 @@ func _start_combat() -> void:
 		return
 	in_combat = true
 	get_tree().get_first_node_in_group("FightManager").start_combat(self, enemies)
+
+func no_fight():
+	%DetectionArea.monitoring = false
+	%NoFight.start()
+
+
+func _on_no_fight_timeout() -> void:
+	%DetectionArea.monitoring = true

@@ -79,6 +79,15 @@ func end_combat() -> void:
 	current_turn = 0
 	player.in_combat = false  
 
+
+func run() -> void:
+	get_tree().paused = false
+	%Fight.visible = false
+	combatants.clear()
+	health_bars.clear()
+	current_turn = 0
+	player.in_combat = false  
+
 func _on_attack_b_pressed() -> void:
 	for btn in %Enemies.get_children():
 		btn.disabled = false
@@ -91,4 +100,4 @@ func _on_enemy_targeted(enemy: Enemy) -> void:
 		end_turn()
 
 func _on_run_pressed() -> void:
-	end_combat()
+	run()

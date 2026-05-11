@@ -3,7 +3,7 @@ extends TileMapLayer
 var starting_room_size = Vector2i(10,10)
 
 func _ready() -> void:
-	create_square_room(Vector2i(0,0), Vector2i(32,18))
+	create_square_room(Vector2i(0,0), Vector2i(32,40))
 	#for x in starting_room_size.x:
 		#for y in starting_room_size.y:
 			#set_cell(Vector2i(x,y),0, Vector2i(0,0))

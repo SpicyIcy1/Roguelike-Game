@@ -24,6 +24,13 @@ mesh = SubResource("QuadMesh_p0vlq")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=963098582]
 
 [node name="DetectionArea" type="Area2D" parent="." unique_id=1336583662]
+unique_name_in_owner = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1186408888]
 shape = SubResource("CircleShape2D_p0vlq")
+
+[node name="NoFight" type="Timer" parent="." unique_id=1097060674]
+unique_name_in_owner = true
+wait_time = 10.0
+
+[connection signal="timeout" from="NoFight" to="." method="_on_no_fight_timeout"]
