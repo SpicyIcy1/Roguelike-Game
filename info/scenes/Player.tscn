@@ -1,36 +1,144 @@
 [gd_scene format=3 uid="uid://p15jcv2yafyu"]
 
-[ext_resource type="Script" uid="uid://bbs7du11j4pv2" path="res://scripts/Player.gd" id="1_p0vlq"]
+[ext_resource type="Script" uid="uid://bbs7du11j4pv2" path="res://scripts/player.gd" id="1_p0vlq"]
+[ext_resource type="Texture2D" uid="uid://7y8ytswixx2p" path="res://assets/randi_sprites_36x36.png" id="2_v6fml"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_p0vlq"]
-size = Vector2(30, 30)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5q5h1"]
+size = Vector2(14, 28)
 
-[sub_resource type="QuadMesh" id="QuadMesh_p0vlq"]
-size = Vector2(30, 30)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v6fml"]
+size = Vector2(10, 13)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_p0vlq"]
-radius = 100.0
+[sub_resource type="Animation" id="Animation_3li8b"]
+length = 0.1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Hitbox:monitoring")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Hitbox/CollisionShape2D:shape:size")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(10, 13)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("RandiSprites36x36:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Hitbox/CollisionShape2D:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 17)]
+}
 
-[node name="Player" type="CharacterBody2D" unique_id=2039837430]
+[sub_resource type="Animation" id="Animation_v6fml"]
+resource_name = "punch"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Hitbox:monitoring")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Hitbox/CollisionShape2D:shape:size")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(10, 13)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("RandiSprites36x36:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [217, 0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Hitbox/CollisionShape2D:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 18)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3li8b"]
+_data = {
+&"RESET": SubResource("Animation_3li8b"),
+&"punch_l": SubResource("Animation_v6fml")
+}
+
+[node name="Player" type="CharacterBody2D" unique_id=1294629943]
 script = ExtResource("1_p0vlq")
-physical_attack = 20.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=837681213]
-shape = SubResource("RectangleShape2D_p0vlq")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=341936671]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_5q5h1")
 
-[node name="MeshInstance2D" type="MeshInstance2D" parent="." unique_id=1319450174]
-mesh = SubResource("QuadMesh_p0vlq")
+[node name="RandiSprites36x36" type="Sprite2D" parent="." unique_id=659547563]
+position = Vector2(0, 1)
+texture = ExtResource("2_v6fml")
+hframes = 18
+vframes = 17
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=963098582]
+[node name="Hitbox" type="Area2D" parent="." unique_id=658371483]
+monitorable = false
 
-[node name="DetectionArea" type="Area2D" parent="." unique_id=1336583662]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=143045110]
+position = Vector2(1, 17)
+shape = SubResource("RectangleShape2D_v6fml")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1031224145]
 unique_name_in_owner = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1186408888]
-shape = SubResource("CircleShape2D_p0vlq")
-
-[node name="NoFight" type="Timer" parent="." unique_id=1097060674]
-unique_name_in_owner = true
-wait_time = 10.0
-
-[connection signal="timeout" from="NoFight" to="." method="_on_no_fight_timeout"]
+libraries/ = SubResource("AnimationLibrary_3li8b")

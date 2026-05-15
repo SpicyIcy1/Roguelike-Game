@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://y67axb4flfrq"
-path="res://.godot/imported/a.png-3acc9621f40dad3baad9a355645c3ae3.ctex"
+uid="uid://7y8ytswixx2p"
+path="res://.godot/imported/randi_sprites_36x36.png-7d587855ab82c00063e33c2e0966213d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/a.png"
-dest_files=["res://.godot/imported/a.png-3acc9621f40dad3baad9a355645c3ae3.ctex"]
+source_file="res://assets/randi_sprites_36x36.png"
+dest_files=["res://.godot/imported/randi_sprites_36x36.png-7d587855ab82c00063e33c2e0966213d.ctex"]
 
 [params]
 

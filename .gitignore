@@ -1,0 +1,58 @@
+# Godot 4+ specific
+.godot/
+.nomedia
+
+# Exported projects
+export/
+*.apk
+*.aab
+*.ipa
+*.exe
+*.x86
+*.x86_64
+*.arm
+*.arm64
+*.dmg
+*.pkg
+*.app
+*.html
+*.js
+*.wasm
+*.pck
+*.zip
+
+# Export presets (contains sensitive paths, generate locally)
+export_presets.cfg
+
+# Shader cache
+*.gdshaderinc
+*.tres.cache
+*.material.cache
+shader_cache/
+
+# Mono / C# specific
+.mono/
+data_*/
+mono_crash.*.json
+
+# VS Code
+.vscode/
+
+# JetBrains Rider
+.idea/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+
+
+# Godot-specific ignores
+.import/
+export.cfg
+export_credentials.cfg
+*.tmp
+
