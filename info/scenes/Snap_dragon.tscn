@@ -1,0 +1,118 @@
+[gd_scene format=3 uid="uid://r0yn2a2s6tuy"]
+
+[ext_resource type="Script" uid="uid://cywdx3ckp4ncq" path="res://scripts/snap_dragon.gd" id="1_s0kvb"]
+[ext_resource type="Texture2D" uid="uid://une8mvp4t4ky" path="res://assets/snap_dragon_spritesheet.png" id="2_6bdoh"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6bdoh"]
+height = 22.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6bdoh"]
+radius = 80.0
+
+[sub_resource type="Animation" id="Animation_l4nvr"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_6bdoh"]
+resource_name = "attack_x"
+length = 0.4
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [4, 9, 7, 6]
+}
+
+[sub_resource type="Animation" id="Animation_i140g"]
+resource_name = "chase_x"
+length = 0.2
+loop_mode = 2
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 2]
+}
+
+[sub_resource type="Animation" id="Animation_k412i"]
+resource_name = "idle"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_l4nvr"]
+_data = {
+&"RESET": SubResource("Animation_l4nvr"),
+&"attack_x": SubResource("Animation_6bdoh"),
+&"chase_x": SubResource("Animation_i140g"),
+&"idle": SubResource("Animation_k412i")
+}
+
+[node name="snap_dragon_enemy" type="CharacterBody2D" unique_id=2065204506]
+collision_layer = 4
+script = ExtResource("1_s0kvb")
+ACCELERATION = 20.0
+ATTACK_RANGE = 20.0
+PATH_UPDATE_INTERVAL = 1.5
+metadata/_custom_type_script = "uid://mlckovjujp2"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=107498826]
+shape = SubResource("CapsuleShape2D_6bdoh")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=600473681]
+texture = ExtResource("2_6bdoh")
+hframes = 5
+vframes = 7
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=1079749842]
+debug_enabled = true
+
+[node name="PathUpdateTimer" type="Timer" parent="." unique_id=1312229281]
+
+[node name="Sight" type="Area2D" parent="." unique_id=470969171]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sight" unique_id=895182701]
+shape = SubResource("CircleShape2D_6bdoh")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=648520751]
+libraries/ = SubResource("AnimationLibrary_l4nvr")
+
+[connection signal="body_entered" from="Sight" to="." method="_on_sight_body_entered"]
+[connection signal="body_exited" from="Sight" to="." method="_on_sight_body_exited"]
