@@ -9,4 +9,4 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 	_transitioning = true
 	PlayerData.spawn_point = spawn_point_name
-	get_tree().change_scene_to_file.call_deferred(destination_path)
+	get_tree().change_scene_to_file.call_deferred(destination_path) #fancy way zu verzögern wann die szene gewechselt wird damit der debugger nicht mit Fehlermeldungen überquillt
