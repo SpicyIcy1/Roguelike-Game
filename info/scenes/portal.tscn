@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://d00vao07smdfj"]
+
+[ext_resource type="Script" uid="uid://b0a1lj2mrnsfy" path="res://scripts/portal.gd" id="1_lcwci"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0bbpv"]
+size = Vector2(40, 20)
+
+[node name="Portal" type="Area2D" unique_id=1722887702]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_lcwci")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=75045613]
+shape = SubResource("RectangleShape2D_0bbpv")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
