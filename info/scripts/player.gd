@@ -7,7 +7,7 @@ var max_health = 100
 var current_health = max_health
 var damage = 10
 var attack_cooldown = 0.4
-var reichweite_FightArea: float = 100.0
+var reichweite_FightArea: float = 40.0
 
 var can_attack = true
 var is_attacking = false
@@ -18,9 +18,8 @@ var enemies_in_range: Array = []
 
 func _ready() -> void:
 	get_window().grab_focus() #Damit ich nicht immer "w" in den Code editor schreibe wenn ich das Spiel starte
-	get_window().grab_focus()
 	attack_shape.shape.radius = reichweite_FightArea
-	
+		
 @warning_ignore("unused_parameter")
 func _physics_process(delta: float) -> void:
 	var direction = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
