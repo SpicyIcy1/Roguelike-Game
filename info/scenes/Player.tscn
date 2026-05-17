@@ -27,7 +27,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Hitbox/CollisionShape2D:shape:size")
+tracks/1/path = NodePath("Hitbox/HitboxShape2D:shape:size")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -51,7 +51,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Hitbox/CollisionShape2D:position")
+tracks/3/path = NodePath("Hitbox/HitboxShape2D:position")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -79,7 +79,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Hitbox/CollisionShape2D:shape:size")
+tracks/1/path = NodePath("Hitbox/HitboxShape2D:shape:size")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -103,7 +103,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Hitbox/CollisionShape2D:position")
+tracks/3/path = NodePath("Hitbox/HitboxShape2D:position")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -118,6 +118,9 @@ _data = {
 &"RESET": SubResource("Animation_3li8b"),
 &"punch_l": SubResource("Animation_v6fml")
 }
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_v6fml"]
+radius = 36.0
 
 [node name="Player" type="CharacterBody2D" unique_id=1294629943 groups=["Player"]]
 collision_layer = 2
@@ -137,7 +140,7 @@ vframes = 17
 [node name="Hitbox" type="Area2D" parent="." unique_id=658371483]
 monitorable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=143045110]
+[node name="HitboxShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=143045110]
 position = Vector2(1, 17)
 shape = SubResource("RectangleShape2D_v6fml")
 
@@ -146,3 +149,14 @@ unique_name_in_owner = true
 libraries/ = SubResource("AnimationLibrary_3li8b")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=289636269]
+
+[node name="AttackArea2D" type="Area2D" parent="." unique_id=1126996340]
+collision_layer = 0
+collision_mask = 4
+
+[node name="FightArea" type="CollisionShape2D" parent="AttackArea2D" unique_id=655791729]
+position = Vector2(0, 4)
+shape = SubResource("CircleShape2D_v6fml")
+
+[connection signal="body_entered" from="AttackArea2D" to="." method="_on_attack_area_2d_body_entered"]
+[connection signal="body_exited" from="AttackArea2D" to="." method="_on_attack_area_2d_body_exited"]

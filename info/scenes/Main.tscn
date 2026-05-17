@@ -9,7 +9,7 @@
 [node name="Player" parent="." unique_id=1294629943 instance=ExtResource("1_rvslj")]
 position = Vector2(228, 130)
 
-[node name="Enemy" parent="." unique_id=2065204506 instance=ExtResource("2_0bbpv")]
+[node name="Enemy" parent="." unique_id=2065204506 groups=["enemy"] instance=ExtResource("2_0bbpv")]
 position = Vector2(320, 129)
 
 [node name="Room0" parent="." unique_id=97569535 instance=ExtResource("3_0bbpv")]
