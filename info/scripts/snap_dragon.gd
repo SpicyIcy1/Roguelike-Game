@@ -18,10 +18,16 @@ func _set_state(new_state: State) -> void:
 		State.INVESTIGATE: $AnimationPlayer.play("chase_x") #gibt wohl keine passenden Frames für eine lauf animation
 
 func attack() -> void:
-	if abs(velocity.x) > abs(velocity.y):
+	var dx = PlayerData.global_position.x - global_position.x 
+	var dy = PlayerData.global_position.y - global_position.y
+	
+	if abs(dx) > abs(dy): #der Gegner kann in 4 Richtungen angreifen und soll in die Richtung kämpfen in der der Spieler eher ist
 		$AnimationPlayer.play("attack_x")
 	else:
-		$AnimationPlayer.play("attack_x")
+		if dy > 0:
+			$AnimationPlayer.play("attack_down") 
+		else:
+			$AnimationPlayer.play("attack_up")
 
 func die() -> void:
 	super()
