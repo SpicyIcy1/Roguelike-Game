@@ -1,8 +1,9 @@
 extends Enemy
 
-var max_health = 100
+var max_health = 1000
 var current_health = max_health
 var weight = 4
+var knockback_stop_time = 0.08
 
 func _physics_process(delta: float) -> void:
 	super(delta)
@@ -42,9 +43,13 @@ func take_damage(damage_amount: float) -> void:
 	
 	#Knockback durch Attacke wird hier ausgelösst
 	var direction_knockback = (global_position - PlayerData.global_position).normalized()
-	var knockback_strenght = 100.0 / weight
+	var knockback_strenght = 400.0 / weight
 	#Ich würde gerne das der stun die _set_state() blockiert
 	velocity = direction_knockback * knockback_strenght
+	#Abrupterer Knockback
+	await get_tree().create_timer(knockback_stop_time).timeout
+	velocity = Vector2.ZERO
+	
 	var base_stun = 0.4
 	var stun_time = base_stun / weight
 	set_physics_process(false)

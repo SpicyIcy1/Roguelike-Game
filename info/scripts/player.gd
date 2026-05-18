@@ -69,9 +69,24 @@ func attack():
 		for enemy in enemies_in_range:
 			if enemy.has_method("take_damage"):
 				enemy.take_damage(damage)
+	
 	# Animation hier anpassen
-	randi_sprites_36x_36.flip_h = false
-	%AnimationPlayer.play("punch_l")
+	var animation_direction = get_global_mouse_position() - global_position
+	if abs(animation_direction.x) > abs(animation_direction.y):
+		if animation_direction.x > 0:
+			randi_sprites_36x_36.flip_h = true
+		else:
+			randi_sprites_36x_36.flip_h = false
+		%AnimationPlayer.play("punch_l")
+	else:
+		#Godot Koordinatensystem ist auf y-Achse vertauscht
+		if animation_direction.y < 0:
+			#%AnimationPlayer.play("punch_up")
+			%AnimationPlayer.play("punch_l")
+		else:
+			#%AnimationPlayer.play("punch_down")
+			%AnimationPlayer.play("punch_l")
+	
 	await %AnimationPlayer.animation_finished
 	await get_tree().create_timer(cooldown).timeout
 	can_attack = true
