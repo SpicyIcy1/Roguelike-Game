@@ -33,21 +33,16 @@ func _physics_process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("attack"):
 		attack()
-		print("Attack wird ausgeführt")
 
 func anim():
 	pass
 
 func _on_attack_area_2d_body_entered(body: Node2D) -> void:
-	print("ENTER:", body)
 	if body.is_in_group("enemy"):
-		print("ENEMY ENTERED")
 		enemies_in_range.append(body)
 
 func _on_attack_area_2d_body_exited(body: Node2D) -> void:
-	print("EXIT:", body)
 	if body.is_in_group("enemy"):
-		print("ENEMY EXITED")
 		enemies_in_range.erase(body)
 
 func attack():
@@ -57,7 +52,6 @@ func attack():
 		return
 	
 	if enemies_in_range.is_empty():
-		print("Kein Gegner in Reichweite")
 		return
 	
 	can_attack = false
@@ -66,7 +60,6 @@ func attack():
 	#Die Animation muss hier je nach Gegner Position gedreht werden
 	randi_sprites_36x_36.flip_h = false
 	%AnimationPlayer.play("punch_l")
-	print("Animation wurde ausgeführt")
 	
 	await %AnimationPlayer.animation_finished
 	is_attacking = false
