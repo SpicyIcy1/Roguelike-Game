@@ -7,10 +7,13 @@ var max_health = 100
 var current_health = max_health
 var damage = 10
 var attack_cooldown = 0.4
-var reichweite_FightArea: float = 100.0
+#falls der Spieler ins leere schlägt = längere cooldown
+var attack_cooldown_debuff = 2
+
+var reichweite_FightArea: float = 40.0
+var abstand_FightArea: float = 30.0
 
 var can_attack = true
-var is_attacking = false
 var enemies_in_range: Array = []
 
 @onready var randi_sprites_36x_36: Sprite2D = $RandiSprites36x36
@@ -18,9 +21,8 @@ var enemies_in_range: Array = []
 
 func _ready() -> void:
 	get_window().grab_focus() #Damit ich nicht immer "w" in den Code editor schreibe wenn ich das Spiel starte
-	get_window().grab_focus()
 	attack_shape.shape.radius = reichweite_FightArea
-	
+		
 @warning_ignore("unused_parameter")
 func _physics_process(delta: float) -> void:
 	var direction = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
@@ -32,45 +34,45 @@ func _physics_process(delta: float) -> void:
 	
 	move_and_slide()
 	
+	update_attack_area_to_mouse()
 	if Input.is_action_just_pressed("attack"):
 		attack()
-		print("Attack wird ausgeführt")
 
 func anim():
 	pass
 
-func _on_attack_area_2d_body_entered(body: Node2D) -> void:
-	print("ENTER:", body)
+func attack_area_enemy_entered(body: Node2D) -> void:
 	if body.is_in_group("enemy"):
-		print("ENEMY ENTERED")
 		enemies_in_range.append(body)
+			
 
-func _on_attack_area_2d_body_exited(body: Node2D) -> void:
-	print("EXIT:", body)
+func attack_area_enemy_exited(body: Node2D) -> void:
 	if body.is_in_group("enemy"):
-		print("ENEMY EXITED")
 		enemies_in_range.erase(body)
+
+# Die Funktion zeichnet je nach MausCurserPosition einen Vektor
+func update_attack_area_to_mouse() -> void:
+	var mouse_pos = get_global_mouse_position()
+	var unit_vector_FigthArea = (mouse_pos - global_position).normalized()
+	var position_FightArea = unit_vector_FigthArea * reichweite_FightArea
+	$AttackArea2D.position = position_FightArea
 
 func attack():
 	if not can_attack:
 		return
-	if is_attacking:
-		return
-	
-	if enemies_in_range.is_empty():
-		print("Kein Gegner in Reichweite")
-		return
-	
 	can_attack = false
-	is_attacking = true 
-	
-	#Die Animation muss hier je nach Gegner Position gedreht werden
+	var cooldown = attack_cooldown
+	if enemies_in_range.is_empty():
+		# Kein Treffer = längerer Cooldown
+		cooldown *= attack_cooldown_debuff
+	else:
+		 # Treffer → Schaden zufügen
+		for enemy in enemies_in_range:
+			if enemy.has_method("take_damage"):
+				enemy.take_damage(damage)
+	# Animation hier anpassen
 	randi_sprites_36x_36.flip_h = false
 	%AnimationPlayer.play("punch_l")
-	print("Animation wurde ausgeführt")
-	
 	await %AnimationPlayer.animation_finished
-	is_attacking = false
-	
-	await get_tree().create_timer(attack_cooldown).timeout
+	await get_tree().create_timer(cooldown).timeout
 	can_attack = true
