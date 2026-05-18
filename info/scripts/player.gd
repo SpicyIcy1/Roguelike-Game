@@ -8,7 +8,7 @@ var current_health = max_health
 var damage = 10
 var attack_cooldown = 0.4
 #falls der Spieler ins leere schlägt = längere cooldown
-var attack_cooldown_debuff = 2
+var attack_cooldown_debuff = 3
 
 var reichweite_FightArea: float = 40.0
 var abstand_FightArea: float = 30.0
@@ -66,7 +66,6 @@ func attack():
 		# Kein Treffer = längerer Cooldown
 		cooldown *= attack_cooldown_debuff
 	else:
-		 # Treffer → Schaden zufügen
 		for enemy in enemies_in_range:
 			if enemy.has_method("take_damage"):
 				enemy.take_damage(damage)
