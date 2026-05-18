@@ -76,3 +76,4 @@ func attack():
 	await %AnimationPlayer.animation_finished
 	await get_tree().create_timer(cooldown).timeout
 	can_attack = true
+	
