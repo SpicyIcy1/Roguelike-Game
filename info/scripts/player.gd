@@ -34,6 +34,7 @@ func _physics_process(delta: float) -> void:
 	
 	move_and_slide()
 	
+	update_attack_area_to_mouse()
 	if Input.is_action_just_pressed("attack"):
 		attack()
 
@@ -49,10 +50,12 @@ func attack_area_enemy_exited(body: Node2D) -> void:
 	if body.is_in_group("enemy"):
 		enemies_in_range.erase(body)
 
-# Die Funktion soll die Position der AttackArea2D nach Laufrichtung verschieben
-func update_attack_area(direction: Vector2 ) -> void:
-	if direction == Vector2.ZERO:
-		return
+# Die Funktion zeichnet je nach MausCurserPosition einen Vektor
+func update_attack_area_to_mouse() -> void:
+	var mouse_pos = get_global_mouse_position()
+	var unit_vector_FigthArea = (mouse_pos - global_position).normalized()
+	var position_FightArea = unit_vector_FigthArea * reichweite_FightArea
+	$AttackArea2D.position = position_FightArea
 
 func attack():
 	if not can_attack:

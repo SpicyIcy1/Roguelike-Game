@@ -17,6 +17,7 @@ position = Vector2(228, 130)
 position = Vector2(320, 129)
 
 [node name="Room0" parent="." unique_id=97569535 instance=ExtResource("4_rarhs")]
+position = Vector2(14, 25)
 
 [node name="Portal" parent="." unique_id=1722887702 instance=ExtResource("4_vcsgt")]
 position = Vector2(257, 278)
