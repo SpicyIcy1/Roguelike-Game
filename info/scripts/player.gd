@@ -7,6 +7,7 @@ var max_health = 100
 var current_health = max_health
 var damage = 10
 var attack_cooldown = 0.4
+#falls der Spieler ins leere schlägt = längere cooldown
 var attack_cooldown_debuff = 2
 var reichweite_FightArea: float = 40.0
 
@@ -48,21 +49,19 @@ func _on_attack_area_2d_body_exited(body: Node2D) -> void:
 func attack():
 	if not can_attack:
 		return
-	if enemies_in_range.is_empty():
-		can_attack = false
-		#Die Animation muss hier je nach Gegner Position gedreht werden
-		%AnimationPlayer.play("punch_l")
-		await %AnimationPlayer.animation_finished
-		await get_tree().create_timer(attack_cooldown * attack_cooldown_debuff).timeout
-		can_attack = true
-	
 	can_attack = false
-	
-	#Die Animation muss hier je nach Gegner Position gedreht werden
+	var cooldown = attack_cooldown
+	if enemies_in_range.is_empty():
+		# Kein Treffer = längerer Cooldown
+		cooldown *= attack_cooldown_debuff
+	else:
+		 # Treffer → Schaden zufügen
+		for enemy in enemies_in_range:
+			if enemy.has_method("take_damage"):
+				enemy.take_damage(damage)
+	# Animation hier anpassen
 	randi_sprites_36x_36.flip_h = false
 	%AnimationPlayer.play("punch_l")
-	
 	await %AnimationPlayer.animation_finished
-	
-	await get_tree().create_timer(attack_cooldown).timeout
+	await get_tree().create_timer(cooldown).timeout
 	can_attack = true

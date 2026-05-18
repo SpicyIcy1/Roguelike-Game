@@ -1,5 +1,8 @@
 extends Enemy
 
+var max_health = 50
+var current_health = max_health
+
 func _physics_process(delta: float) -> void:
 	super(delta)
 
@@ -23,6 +26,11 @@ func attack() -> void:
 	else:
 		$AnimationPlayer.play("attack_x")
 
+func take_damage(damage_amount: float) -> void:
+	current_health -= damage_amount
+	if current_health <= 0:
+		die()
+		
 func die() -> void:
 	super()
 	$AnimationPlayer.play("death")
