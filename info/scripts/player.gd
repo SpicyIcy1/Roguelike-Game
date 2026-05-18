@@ -9,7 +9,9 @@ var damage = 10
 var attack_cooldown = 0.4
 #falls der Spieler ins leere schlägt = längere cooldown
 var attack_cooldown_debuff = 2
+
 var reichweite_FightArea: float = 40.0
+var abstand_FightArea: float = 30.0
 
 var can_attack = true
 var enemies_in_range: Array = []
@@ -38,13 +40,19 @@ func _physics_process(delta: float) -> void:
 func anim():
 	pass
 
-func _on_attack_area_2d_body_entered(body: Node2D) -> void:
+func attack_area_enemy_entered(body: Node2D) -> void:
 	if body.is_in_group("enemy"):
 		enemies_in_range.append(body)
+			
 
-func _on_attack_area_2d_body_exited(body: Node2D) -> void:
+func attack_area_enemy_exited(body: Node2D) -> void:
 	if body.is_in_group("enemy"):
 		enemies_in_range.erase(body)
+
+# Die Funktion soll die Position der AttackArea2D nach Laufrichtung verschieben
+func update_attack_area(direction: Vector2 ) -> void:
+	if direction == Vector2.ZERO:
+		return
 
 func attack():
 	if not can_attack:
