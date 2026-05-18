@@ -7,10 +7,10 @@ var max_health = 100
 var current_health = max_health
 var damage = 10
 var attack_cooldown = 0.4
+var attack_cooldown_debuff = 2
 var reichweite_FightArea: float = 40.0
 
 var can_attack = true
-var is_attacking = false
 var enemies_in_range: Array = []
 
 @onready var randi_sprites_36x_36: Sprite2D = $RandiSprites36x36
@@ -48,21 +48,21 @@ func _on_attack_area_2d_body_exited(body: Node2D) -> void:
 func attack():
 	if not can_attack:
 		return
-	if is_attacking:
-		return
-	
 	if enemies_in_range.is_empty():
-		return
+		can_attack = false
+		#Die Animation muss hier je nach Gegner Position gedreht werden
+		%AnimationPlayer.play("punch_l")
+		await %AnimationPlayer.animation_finished
+		await get_tree().create_timer(attack_cooldown * attack_cooldown_debuff).timeout
+		can_attack = true
 	
 	can_attack = false
-	is_attacking = true 
 	
 	#Die Animation muss hier je nach Gegner Position gedreht werden
 	randi_sprites_36x_36.flip_h = false
 	%AnimationPlayer.play("punch_l")
 	
 	await %AnimationPlayer.animation_finished
-	is_attacking = false
 	
 	await get_tree().create_timer(attack_cooldown).timeout
 	can_attack = true
