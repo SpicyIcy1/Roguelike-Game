@@ -151,7 +151,6 @@ libraries/ = SubResource("AnimationLibrary_3li8b")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=289636269]
 
 [node name="AttackArea2D" type="Area2D" parent="." unique_id=1126996340]
-visible = false
 collision_layer = 0
 collision_mask = 4
 

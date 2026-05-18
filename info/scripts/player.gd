@@ -41,12 +41,12 @@ func _physics_process(delta: float) -> void:
 func anim():
 	pass
 
-func attack_area_enemy_entered(body: Node2D) -> void:
+func _on_attack_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemy"):
 		enemies_in_range.append(body)
 			
 
-func attack_area_enemy_exited(body: Node2D) -> void:
+func _on_attack_area_2d_body_exited(body: Node2D) -> void:
 	if body.is_in_group("enemy"):
 		enemies_in_range.erase(body)
 
