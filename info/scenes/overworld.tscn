@@ -574,7 +574,6 @@ tile_map_data = PackedByteArray("AAAFAAAAAAAMAAEAAAAAAAAAAAAMAAEAAAABAAAAAAANAAE
 tile_set = SubResource("TileSet_16ktt")
 
 [node name="Player" parent="." unique_id=1294629943 instance=ExtResource("2_16ktt")]
-visible = false
 position = Vector2(16, 49)
 
 [node name="Portal" parent="." unique_id=1722887702 instance=ExtResource("3_u2ss0")]
