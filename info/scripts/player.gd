@@ -25,6 +25,10 @@ func _ready() -> void:
 		
 @warning_ignore("unused_parameter")
 func _physics_process(delta: float) -> void:
+	
+	if Input.is_action_pressed("esc"):
+		get_tree().quit()
+	
 	var direction = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	
 	if direction != Vector2.ZERO:

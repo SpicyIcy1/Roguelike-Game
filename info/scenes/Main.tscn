@@ -14,7 +14,7 @@ z_index = 1
 position = Vector2(228, 130)
 
 [node name="Enemy" parent="." unique_id=2065204506 groups=["enemy"] instance=ExtResource("2_0bbpv")]
-position = Vector2(419, 174)
+position = Vector2(419, 147)
 
 [node name="Room0" parent="." unique_id=97569535 instance=ExtResource("4_rarhs")]
 position = Vector2(14, 25)
