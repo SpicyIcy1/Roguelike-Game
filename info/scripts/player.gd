@@ -95,3 +95,10 @@ func attack():
 	await get_tree().create_timer(cooldown).timeout
 	can_attack = true
 	
+func take_damage(amount: float) -> void:
+	current_health -= amount
+	if current_health <= 0:
+		die()
+	
+func die() -> void:
+	get_tree().reload_current_scene()
