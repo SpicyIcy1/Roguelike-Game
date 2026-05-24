@@ -1,12 +1,5 @@
 extends Enemy
 
-var max_health = 1000
-var current_health = max_health
-var weight = 4
-var knockback_stop_time = 0.08
-
-var damage = 10
-
 var in_range : bool = false
 var player_ref
 
@@ -44,10 +37,7 @@ func attack() -> void:
 		player_ref.take_damage(damage)
 
 func take_damage(damage_amount: float) -> void:
-	current_health -= damage_amount
-	if current_health <= 0:
-		die()
-		return
+	super(damage_amount)
 	
 	#Knockback durch Attacke wird hier ausgelösst
 	var direction_knockback = (global_position - PlayerData.global_position).normalized()

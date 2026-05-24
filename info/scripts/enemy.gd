@@ -1,6 +1,13 @@
 class_name Enemy
 extends CharacterBody2D
 
+var max_health = 1000
+var current_health = max_health
+
+var weight = 4
+var knockback_stop_time = 0.08
+
+var damage = 10
 
 enum State { IDLE, CHASE, INVESTIGATE, DEAD }
 var current_state: State = State.IDLE
@@ -97,7 +104,10 @@ func attack() -> void:
 	push_warning("Enemy: attack() not implemented in ", name)
 
 func take_damage(amount: float) -> void:
-	push_warning("Enemy: take_damage() not implemented in ", name)
+	current_health -= amount
+	if current_health <= 0:
+		die()
+		return
 
 func die() -> void:
 	_set_state(State.DEAD)
