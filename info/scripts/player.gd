@@ -19,7 +19,9 @@ var enemies_in_range: Array = []
 @onready var randi_sprites_36x_36: Sprite2D = $RandiSprites36x36
 @onready var attack_shape: CollisionShape2D = $AttackArea2D/FightArea
 
+
 func _ready() -> void:
+	
 	get_window().grab_focus() #Damit ich nicht immer "w" in den Code editor schreibe wenn ich das Spiel starte
 	attack_shape.shape.radius = reichweite_FightArea
 		

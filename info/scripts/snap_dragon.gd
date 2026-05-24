@@ -5,6 +5,11 @@ var current_health = max_health
 var weight = 4
 var knockback_stop_time = 0.08
 
+var damage = 10
+
+var in_range : bool = false
+var player_ref
+
 func _physics_process(delta: float) -> void:
 	super(delta)
 
@@ -34,6 +39,9 @@ func attack() -> void:
 			$AnimationPlayer.play("attack_down") 
 		else:
 			$AnimationPlayer.play("attack_up")
+	
+	if in_range:
+		player_ref.take_damage(damage)
 
 func take_damage(damage_amount: float) -> void:
 	current_health -= damage_amount
@@ -59,3 +67,11 @@ func take_damage(damage_amount: float) -> void:
 func die() -> void:
 	super()
 	$AnimationPlayer.play("death")
+
+
+func _on_attack_body_entered(body: Node2D) -> void:
+	in_range = true
+	player_ref = body
+
+func _on_attack_body_exited(body: Node2D) -> void:
+	in_range = false
