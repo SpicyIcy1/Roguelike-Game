@@ -1,11 +1,11 @@
 [gd_scene format=4 uid="uid://bdux750uju5hj"]
 
-[ext_resource type="Texture2D" uid="uid://dylqu5dlqpanv" path="res://assets/SNES - Secret of Mana - Tilesets - Great Forest.png" id="1_m1b5j"]
-[ext_resource type="PackedScene" uid="uid://p15jcv2yafyu" path="res://scenes/Player.tscn" id="2_16ktt"]
-[ext_resource type="PackedScene" uid="uid://d00vao07smdfj" path="res://scenes/portal.tscn" id="3_u2ss0"]
+[ext_resource type="Texture2D" uid="uid://dylqu5dlqpanv" path="res://assets/SNES - Secret of Mana - Tilesets - Great Forest.png" id="1_puia7"]
+[ext_resource type="PackedScene" uid="uid://p15jcv2yafyu" path="res://scenes/Player.tscn" id="2_gacct"]
+[ext_resource type="PackedScene" uid="uid://d00vao07smdfj" path="res://scenes/Portal.tscn" id="3_w51ix"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m1b5j"]
-texture = ExtResource("1_m1b5j")
+texture = ExtResource("1_puia7")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
@@ -573,10 +573,10 @@ sources/0 = SubResource("TileSetAtlasSource_m1b5j")
 tile_map_data = PackedByteArray("AAAFAAAAAAAMAAEAAAAAAAAAAAAMAAEAAAABAAAAAAANAAEAAAAAAAEAAAAMAAIAAAABAAEAAAANAAIAAAACAAEAAAAFAAQAAAACAAAAAAAFAAMAAAACAP//AAAFAAIAAAABAP//AAAEAAIAAAAAAP//AAADAAIAAAD/////AAACAAIAAAD//wAAAAACAAMAAAD//wEAAAACAAQAAAD//wIAAAAMAAoAAAAAAAIAAAANAAoAAAABAAIAAAANAAoAAAACAAIAAAAOAAoAAAAAAAMAAAAKABUAAAABAAMAAAAKABUAAAAAAAQAAAAKABYAAAABAAQAAAAKABYAAAD//wQAAAALABYAAAD//wMAAAAIABYAAAACAAMAAAAIABYAAAACAAQAAAALABYAAAADAAIAAAANABYAAAAEAAIAAAANABYAAAD+/wIAAAAHABMAAAABAAUAAAAMAAwAAAAAAAUAAAAMAAwAAAD//wUAAAAMAAwAAAD//wYAAAAMAAwAAAAAAAYAAAAMAAwAAAABAAYAAAAMAAwAAAACAAYAAAAMAAwAAAACAAUAAAAMAAwAAAADAAUAAAAMAAwAAAADAAYAAAAMAAwAAAD+/wAAAAACAAMAAAD+////AAACAAMAAAADAP//AAACAAMAAAADAAAAAAACAAMAAAADAAEAAAAIAAQAAAD+/wEAAAACAAMAAAAEAAEAAAAEAAQAAAAEAAAAAAAEAAIAAAAEAP//AAAEAAEAAAD+/wUAAAAMAAwAAAD+/wYAAAAMAAwAAAD+/wcAAAAMAAwAAAD//wcAAAAMAAwAAAAAAAcAAAAMAAwAAAABAAcAAAAMAAwAAAACAAcAAAAMAAwAAAADAAcAAAAMAAwAAAAEAAUAAAAMAAwAAAAEAAYAAAAMAAwAAAAEAAcAAAAMAAwAAAADAAgAAAAMAAwAAAAEAAgAAAAMAAwAAAACAAgAAAAMAAwAAAABAAgAAAAMAAwAAAAAAAgAAAAMAAwAAAD//wgAAAAMAAwAAAD+/wgAAAAMAAwAAAA=")
 tile_set = SubResource("TileSet_16ktt")
 
-[node name="Player" parent="." unique_id=1294629943 instance=ExtResource("2_16ktt")]
+[node name="Player" parent="." unique_id=1294629943 instance=ExtResource("2_gacct")]
 position = Vector2(16, 49)
 
-[node name="Portal" parent="." unique_id=1722887702 instance=ExtResource("3_u2ss0")]
+[node name="Portal" parent="." unique_id=1722887702 instance=ExtResource("3_w51ix")]
 position = Vector2(16, 20)
 destination_path = "res://scenes/Main.tscn"
 spawn_point_name = "Entry0"

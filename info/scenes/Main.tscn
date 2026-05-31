@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cxyllvoucrk1g" path="res://scripts/main.gd" id="1_vcsgt"]
 [ext_resource type="PackedScene" uid="uid://r0yn2a2s6tuy" path="res://scenes/Snap_dragon.tscn" id="2_0bbpv"]
 [ext_resource type="PackedScene" uid="uid://b6gx0asw6uh80" path="res://scenes/rooms/Room_0.tscn" id="4_rarhs"]
-[ext_resource type="PackedScene" uid="uid://d00vao07smdfj" path="res://scenes/portal.tscn" id="4_vcsgt"]
+[ext_resource type="PackedScene" uid="uid://d00vao07smdfj" path="res://scenes/Portal.tscn" id="4_vcsgt"]
 [ext_resource type="PackedScene" uid="uid://p15jcv2yafyu" path="res://scenes/Player.tscn" id="5_vcsgt"]
 
 [node name="Main" type="Node2D" unique_id=96172719]
