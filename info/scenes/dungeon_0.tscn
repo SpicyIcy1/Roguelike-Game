@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://u0usf5pt8ite"]
+
+[ext_resource type="Script" uid="uid://cdn5ha7ax8ry8" path="res://scripts/dungeon_0.gd" id="1_64giy"]
+[ext_resource type="PackedScene" uid="uid://bb1y2i10x1132" path="res://scenes/map_generator.tscn" id="2_d47ov"]
+[ext_resource type="PackedScene" uid="uid://p15jcv2yafyu" path="res://scenes/Player.tscn" id="3_d47ov"]
+
+[node name="Dungeon0" type="Node2D" unique_id=1670368270]
+script = ExtResource("1_64giy")
+
+[node name="MapGenerator" parent="." unique_id=385521267 instance=ExtResource("2_d47ov")]
+unique_name_in_owner = true
+MIN_ROOMS = 4
+CORRIDOR_GAP = 1
+
+[node name="Player" parent="." unique_id=1294629943 instance=ExtResource("3_d47ov")]
+position = Vector2(0, -8)
