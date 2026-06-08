@@ -4,18 +4,10 @@ extends Node2D
 
 var TILE_SIZE: int = 16
 @export var MAX_ROOMS: int = 15
-@export var MAX_ROOM_USES: int = 2  # how many times the same room file may appear in one dungeon
-@export var MIN_ROOMS: int = 3      # retry generation if fewer rooms than this were placed
+@export var MAX_ROOM_USES: int = 2
+@export var MIN_ROOMS: int = 3
 @export var CORRIDOR_GAP: int = 2   # minimum grid cells between door and new room
 
-
-@export var corridor_layer: TileMapLayer
-
-## Atlas source ID and coords for floor / wall tiles in your corridor TileMapLayer.
-@export var floor_atlas_source: int = 0
-@export var floor_atlas_coords: Vector2i = Vector2i(0, 0)
-@export var wall_atlas_source: int = 0
-@export var wall_atlas_coords: Vector2i = Vector2i(1, 0)
 
 const ROOMS_DIR := "res://scenes/rooms/"
 const OPPOSITE := { "North": "South", "South": "North", "East": "West", "West": "East" }
@@ -25,20 +17,18 @@ var _layout: DungeonLayout
 var _master_pool: Array[RoomData] = []
 var _sub_pools: Dictionary = { "North": [], "South": [], "East": [], "West": [] }
 var _generation_attempt: int = 0
-var _room_use_counts: Dictionary = {}  # file_name -> int, reset each attempt
+var _room_use_counts: Dictionary = {}
 
 
-
-const MAX_ATTEMPTS := 20  # es wird immer dann ein neuer Versuch gemacht wenn zu wenig Räume platziert werden konnten
+const MAX_ATTEMPTS := 20
 
 func generate() -> void:
 	print("━━━ MapGenerator.generate() START ━━━")
 	print("  Config: TILE_SIZE=%d  MAX_ROOMS=%d  MAX_ROOM_USES=%d  MIN_ROOMS=%d  CORRIDOR_GAP=%d" % [
 		TILE_SIZE, MAX_ROOMS, MAX_ROOM_USES, MIN_ROOMS, CORRIDOR_GAP
 	])
-	print("  corridor_layer: %s" % ("(null — walls won't paint!)" if corridor_layer == null else str(corridor_layer)))
 
-	_phase1_scan_and_parse()  # parse once — pool is reused across retries
+	_phase1_scan_and_parse()
 
 	for attempt in range(1, MAX_ATTEMPTS + 1):
 		_generation_attempt = attempt
@@ -49,13 +39,12 @@ func generate() -> void:
 		if placed < MIN_ROOMS:
 			print("  ✗ Only %d room(s) placed (MIN_ROOMS=%d) — retrying..." % [placed, MIN_ROOMS])
 			continue
-		# Success
 		_phase3_assign_special_rooms()
 		_phase4_assemble()
 		print("━━━ MapGenerator.generate() END (attempt %d, %d rooms) ━━━" % [attempt, placed])
 		return
 
-	push_error("MapGenerator: failed to place >= %d rooms after %d attempts. Check room pool size, MAX_ROOM_USES, and CORRIDOR_GAP." % [MIN_ROOMS, MAX_ATTEMPTS])
+	push_error("MapGenerator: failed to place >= %d rooms after %d attempts." % [MIN_ROOMS, MAX_ATTEMPTS])
 
 
 # ─── Phase 1: Directory scan & metadata parsing ───────────────────────────────
@@ -67,7 +56,7 @@ func _phase1_scan_and_parse() -> void:
 
 	var dir := DirAccess.open(ROOMS_DIR)
 	if dir == null:
-		push_error("Phase 1: DirAccess.open('%s') returned null. Check the path exists and is spelled correctly." % ROOMS_DIR)
+		push_error("Phase 1: DirAccess.open('%s') returned null." % ROOMS_DIR)
 		return
 	print("  Opened directory OK: '%s'" % ROOMS_DIR)
 
@@ -113,7 +102,6 @@ func _parse_room_file(file_name: String) -> RoomData:
 
 	var instance: Node = packed.instantiate()
 
-	
 	var tile_map: TileMapLayer = _find_first_child_of_type(instance, TileMapLayer)
 	if tile_map == null:
 		push_warning("  _parse_room_file: no TileMapLayer child in '%s'" % file_name)
@@ -122,16 +110,13 @@ func _parse_room_file(file_name: String) -> RoomData:
 	var used_rect: Rect2i = tile_map.get_used_rect()
 	var grid_size := used_rect.size
 	if grid_size == Vector2i.ZERO:
-		push_warning("  _parse_room_file: TileMapLayer in '%s' has no painted cells (get_used_rect().size == ZERO)" % file_name)
+		push_warning("  _parse_room_file: TileMapLayer in '%s' has no painted cells" % file_name)
 
-	# --- available_exits from $Exits children ---
 	var exits_node: Node = instance.find_child("Exits", false, false)
 	if exits_node == null:
 		push_warning("  _parse_room_file: no child named 'Exits' in '%s'" % file_name)
 		instance.free()
 		return null
-
-	var exit_children := exits_node.get_children().map(func(c): return c.name)
 
 	var available_exits: Dictionary = {}
 	var dir_map := { "Exit_N": "North", "Exit_S": "South", "Exit_E": "East", "Exit_W": "West" }
@@ -164,20 +149,18 @@ func _phase2_layout_loop() -> void:
 	_layout = DungeonLayout.new()
 
 	if _master_pool.is_empty():
-		push_error("Phase 2: master_pool is empty — Phase 1 likely failed. No rooms to place.")
+		push_error("Phase 2: master_pool is empty.")
 		return
 
 	var start_template: RoomData = _find_room_by_name("Room_Start.tscn")
 	if start_template == null:
-		push_error("Phase 2: 'Room_Start.tscn' not found in master_pool. Files in pool: %s" % \
-			_master_pool.map(func(r): return r.room_file_name))
+		push_error("Phase 2: 'Room_Start.tscn' not found in master_pool.")
 		return
 	print("  Start template found: '%s' | exits: %s" % [start_template.room_file_name, start_template.available_exits.keys()])
 
 	var start_room := _duplicate_room(start_template)
 	start_room.room_type = RoomData.RoomType.START
 	start_room.grid_position = Vector2i.ZERO
-	# Reset per-attempt usage tracking
 	_room_use_counts.clear()
 
 	_layout.register_room(start_room)
@@ -228,7 +211,6 @@ func _try_place_room(current_room: RoomData, direction: String) -> RoomData:
 		print("      sub_pool['%s'] is empty — no candidates for %s exit" % [opposite, direction])
 		return null
 
-	# Filter out any room file that has already hit MAX_ROOM_USES this attempt
 	var candidates: Array = pool.filter(func(r: RoomData) -> bool:
 		var uses: int = _room_use_counts.get(r.room_file_name, 0)
 		return uses < MAX_ROOM_USES
@@ -251,27 +233,20 @@ func _try_place_room(current_room: RoomData, direction: String) -> RoomData:
 		var target_entrance_global: Vector2i = current_exit_global + gap_offset
 		new_room.grid_position = target_entrance_global - new_entrance_local
 
-		var p_start: Vector2i  = current_exit_global
-		var p_target: Vector2i = new_room.grid_position + new_entrance_local
-		var p_bend             := _calc_bend(p_start, p_target, direction)
-		var corridor_cells     := _trace_l_path(p_start, p_bend, p_target)
-
 		var new_room_rect := Rect2i(new_room.grid_position, new_room.grid_size)
 		var space_free    := _layout.is_space_free(new_room_rect)
-		var path_free     := _layout.is_corridor_path_free(corridor_cells, p_start, p_target)
 
 		var uses: int = _room_use_counts.get(template.room_file_name, 0)
-		print("      candidate[%d] '%s' (uses %d/%d) | pos: %s | rect: %s | space_free: %s | path_free: %s" % [
+		print("      candidate[%d] '%s' (uses %d/%d) | pos: %s | rect: %s | space_free: %s" % [
 			i, template.room_file_name, uses, MAX_ROOM_USES,
-			new_room.grid_position, new_room_rect, space_free, path_free
+			new_room.grid_position, new_room_rect, space_free
 		])
 
-		if not space_free or not path_free:
+		if not space_free:
 			continue
 
 		# Commit
 		_room_use_counts[template.room_file_name] = uses + 1
-		_layout.register_corridor(corridor_cells)
 		current_room.connected_rooms[direction] = new_room
 		new_room.connected_rooms[opposite] = current_room
 		return new_room
@@ -334,28 +309,6 @@ func _phase4_assemble() -> void:
 			room.room_file_name, RoomData.RoomType.keys()[room.room_type], instance.position
 		])
 
-	if corridor_layer == null:
-		push_warning("Phase 4: corridor_layer is null — assign it in the Inspector. Skipping tile painting.")
-		return
-
-	print("  Painting %d corridor floor cells..." % _layout.corridor_map.size())
-	for cell: Vector2i in _layout.corridor_map.keys():
-		corridor_layer.set_cell(cell, floor_atlas_source, floor_atlas_coords)
-
-	var wall_candidates: Dictionary = {}
-	for cell: Vector2i in _layout.corridor_map.keys():
-		for dx in range(-1, 2):
-			for dy in range(-1, 2):
-				if dx == 0 and dy == 0:
-					continue
-				var neighbor := cell + Vector2i(dx, dy)
-				if not _layout.grid_map.has(neighbor) and not _layout.corridor_map.has(neighbor):
-					wall_candidates[neighbor] = true
-
-	print("  Painting %d corridor wall cells..." % wall_candidates.size())
-	for cell: Vector2i in wall_candidates.keys():
-		corridor_layer.set_cell(cell, wall_atlas_source, wall_atlas_coords)
-
 	print("  Phase 4 done.")
 
 
@@ -363,11 +316,7 @@ func _phase4_assemble() -> void:
 
 func _clear_previous() -> void:
 	for child in get_children():
-		if child == corridor_layer:
-			continue
 		child.queue_free()
-	if corridor_layer != null:
-		corridor_layer.clear()
 
 
 func _duplicate_room(template: RoomData) -> RoomData:
@@ -395,33 +344,6 @@ func _direction_vector(direction: String) -> Vector2i:
 		"East":  return Vector2i(1,  0)
 		"West":  return Vector2i(-1, 0)
 	return Vector2i.ZERO
-
-
-func _calc_bend(p_start: Vector2i, p_target: Vector2i, exit_direction: String) -> Vector2i:
-	match exit_direction:
-		"North", "South":
-			return Vector2i(p_start.x, p_target.y)
-		"East", "West":
-			return Vector2i(p_target.x, p_start.y)
-	return p_start
-
-
-func _trace_l_path(p_start: Vector2i, p_bend: Vector2i, p_target: Vector2i) -> Array[Vector2i]:
-	var cells: Array[Vector2i] = []
-	_trace_segment(p_start, p_bend, cells)
-	_trace_segment(p_bend, p_target, cells)
-	return cells
-
-
-func _trace_segment(from: Vector2i, to: Vector2i, out: Array[Vector2i]) -> void:
-	var step := Vector2i(sign(to.x - from.x), sign(to.y - from.y))
-	var current := from
-	while current != to:
-		if not out.has(current):
-			out.append(current)
-		current += step
-	if not out.has(to):
-		out.append(to)
 
 
 func _find_room_by_name(file_name: String) -> RoomData:

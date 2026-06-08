@@ -5,8 +5,6 @@
 
 [node name="MapGenerator" type="Node2D" unique_id=385521267]
 script = ExtResource("1_qw5ad")
-floor_atlas_coords = Vector2i(3, 0)
-wall_atlas_coords = Vector2i(0, 3)
 
 [node name="CorridorLayer" type="TileMapLayer" parent="." unique_id=515029714]
 tile_set = ExtResource("2_g3i74")

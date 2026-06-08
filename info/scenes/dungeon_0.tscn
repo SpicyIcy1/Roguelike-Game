@@ -9,8 +9,8 @@ script = ExtResource("1_64giy")
 
 [node name="MapGenerator" parent="." unique_id=385521267 instance=ExtResource("2_d47ov")]
 unique_name_in_owner = true
-MIN_ROOMS = 4
-CORRIDOR_GAP = 1
+MIN_ROOMS = 7
+CORRIDOR_GAP = 5
 
 [node name="Player" parent="." unique_id=1294629943 instance=ExtResource("3_d47ov")]
 position = Vector2(0, -8)
