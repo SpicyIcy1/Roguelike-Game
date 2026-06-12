@@ -15,6 +15,7 @@ var abstand_FightArea: float = 30.0
 
 var can_attack = true
 var enemies_in_range: Array = []
+var equipped_items: Array[Equipment] = []
 
 @onready var randi_sprites_36x_36: Sprite2D = $RandiSprites36x36
 @onready var attack_shape: CollisionShape2D = $AttackArea2D/FightArea
@@ -110,6 +111,18 @@ func attack():
 	await get_tree().create_timer(cooldown).timeout
 	can_attack = true
 	
+func equip_item(item: Equipment) -> void:
+	for existing in equipped_items:
+		if existing.type == item.type:
+			unequip_item(existing)
+			break
+	item.equip(self)
+	equipped_items.append(item)
+
+func unequip_item(item: Equipment) -> void:
+	item.unequip(self)
+	equipped_items.erase(item)
+
 func take_damage(amount: float) -> void:
 	current_health -= amount
 	if current_health <= 0:
