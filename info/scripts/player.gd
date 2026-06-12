@@ -29,6 +29,7 @@ func _ready() -> void:
 @warning_ignore("unused_parameter")
 func _physics_process(delta: float) -> void:
 	
+	anim()
 	if Input.is_action_pressed("esc"):
 		get_tree().quit()
 	
@@ -46,7 +47,19 @@ func _physics_process(delta: float) -> void:
 		attack()
 
 func anim():
-	pass
+	
+	$RandiSprites36x36.flip_h = velocity.x < 0
+	
+		
+	if abs(velocity.x) > abs(velocity.y):
+		%AnimationPlayer.play("Walk_H")
+	elif velocity.y < 0:
+		%AnimationPlayer.play("Walk_Up")
+	elif velocity.y > 0:
+		%AnimationPlayer.play("Walk_Down")
+	
+	if velocity == Vector2.ZERO:
+		%AnimationPlayer.play("Idle")
 
 func _on_attack_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemy"):
