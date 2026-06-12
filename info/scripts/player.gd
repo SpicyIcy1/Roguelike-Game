@@ -11,7 +11,7 @@ var attack_cooldown = 0.4
 var attack_cooldown_debuff = 3
 
 var reichweite_FightArea: float = 40.0
-var abstand_FightArea: float = 30.0
+var abstand_FightArea: float = 40.0
 
 var can_attack = true
 var enemies_in_range: Array = []
@@ -61,7 +61,7 @@ func _on_attack_area_2d_body_exited(body: Node2D) -> void:
 func update_attack_area_to_mouse() -> void:
 	var mouse_pos = get_global_mouse_position()
 	var unit_vector_FigthArea = (mouse_pos - global_position).normalized()
-	var position_FightArea = unit_vector_FigthArea * reichweite_FightArea
+	var position_FightArea = unit_vector_FigthArea * abstand_FightArea
 	$AttackArea2D.position = position_FightArea
 
 func attack():

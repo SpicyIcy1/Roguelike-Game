@@ -13,6 +13,7 @@ enum Type { WEAPON, ARMOR, ACCESSORY }
 @export var attack_cooldown_bonus: float = 0.0  # negativ = schnellerer Angriff
 @export var speed_bonus: float = 0.0
 @export var attack_range_bonus: float = 0.0
+@export var attack_offset_bonus: float = 0.0
 
 
 func equip(player) -> void:
@@ -22,6 +23,7 @@ func equip(player) -> void:
 	player.attack_cooldown += attack_cooldown_bonus
 	player.max_speed += speed_bonus
 	player.reichweite_FightArea += attack_range_bonus
+	player.abstand_FightArea += attack_offset_bonus
 	player.attack_shape.shape.radius = player.reichweite_FightArea
 
 
@@ -32,4 +34,5 @@ func unequip(player) -> void:
 	player.attack_cooldown -= attack_cooldown_bonus
 	player.max_speed -= speed_bonus
 	player.reichweite_FightArea -= attack_range_bonus
+	player.abstand_FightArea -= attack_offset_bonus
 	player.attack_shape.shape.radius = player.reichweite_FightArea
