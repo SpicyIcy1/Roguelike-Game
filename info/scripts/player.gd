@@ -50,12 +50,13 @@ func _physics_process(delta: float) -> void:
 
 
 func anim():
+	if velocity != Vector2.ZERO:
+		$RandiSprites36x36.flip_h = velocity.x < 0
 
-	$RandiSprites36x36.flip_h = velocity.x < 0
 	if velocity != Vector2.ZERO:
 		if abs(velocity.x) > abs(velocity.y):
 			%AnimationPlayer.play("Walk_H")
-			last_direction = Direction.UP
+			last_direction = Direction.HORIZONTAL
 		elif velocity.y < 0:
 			%AnimationPlayer.play("Walk_Up")
 			last_direction = Direction.UP
