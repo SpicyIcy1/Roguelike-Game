@@ -16,6 +16,8 @@ var abstand_FightArea: float = 40.0
 var can_attack = true
 var enemies_in_range: Array = []
 var equipped_items: Array[Equipment] = []
+enum Direction { UP, DOWN, HORIZONTAL }
+var last_direction: Direction = Direction.DOWN
 
 @onready var randi_sprites_36x_36: Sprite2D = $RandiSprites36x36
 @onready var attack_shape: CollisionShape2D = $AttackArea2D/FightArea
@@ -46,20 +48,30 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("attack"):
 		attack()
 
+
 func anim():
-	
+
 	$RandiSprites36x36.flip_h = velocity.x < 0
-	
-		
-	if abs(velocity.x) > abs(velocity.y):
-		%AnimationPlayer.play("Walk_H")
-	elif velocity.y < 0:
-		%AnimationPlayer.play("Walk_Up")
-	elif velocity.y > 0:
-		%AnimationPlayer.play("Walk_Down")
-	
-	if velocity == Vector2.ZERO:
-		%AnimationPlayer.play("Idle")
+	if velocity != Vector2.ZERO:
+		if abs(velocity.x) > abs(velocity.y):
+			%AnimationPlayer.play("Walk_H")
+			last_direction = Direction.UP
+		elif velocity.y < 0:
+			%AnimationPlayer.play("Walk_Up")
+			last_direction = Direction.UP
+		elif velocity.y > 0:
+			%AnimationPlayer.play("Walk_Down")
+			last_direction = Direction.DOWN
+
+
+	else: #also wenn er sich nicht bewegt
+		match last_direction:
+			Direction.HORIZONTAL:
+				%AnimationPlayer.play("Idle_H") 
+			Direction.UP:
+				%AnimationPlayer.play("Idle_Up")
+			Direction.DOWN:
+				%AnimationPlayer.play("Idle_Down")
 
 func _on_attack_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemy"):
