@@ -22,4 +22,4 @@ navigation_polygon = SubResource("NavigationPolygon_scgta")
 [node name="Exits" type="Node" parent="." unique_id=1839648480]
 
 [node name="Exit_E" type="Marker2D" parent="Exits" unique_id=848521201]
-position = Vector2(416, 120)
+position = Vector2(408, 120)

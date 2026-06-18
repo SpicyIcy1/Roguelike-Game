@@ -27,4 +27,4 @@ position = Vector2(0, -176)
 position = Vector2(-144, -16)
 
 [node name="Exit_E" type="Marker2D" parent="Exits" unique_id=1354556737]
-position = Vector2(144, -16)
+position = Vector2(136, -16)

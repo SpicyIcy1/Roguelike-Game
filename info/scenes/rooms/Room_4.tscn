@@ -25,4 +25,4 @@ navigation_polygon = SubResource("NavigationPolygon_qpftx")
 position = Vector2(0, 224)
 
 [node name="Exit_N" type="Marker2D" parent="Exits" unique_id=1452700063]
-position = Vector2(0, -240)
+position = Vector2(0, -232)
