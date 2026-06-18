@@ -4,9 +4,9 @@
 [ext_resource type="TileSet" uid="uid://bj18vugqpe2c" path="res://assets/tilesets/dungeon0.tres" id="3_nenaj"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_0g03g"]
-vertices = PackedVector2Array(293.1172, 130.07031, 370.4375, 127.328125, 375.54688, 243.0625, 231.35938, 243.96875, 216.32813, 227.64063, 238.46094, 189.42969, 275.1875, 122.390625, 45.171875, -7.8203125, 99.74219, -60.8125)
-polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3, 4, 5), PackedInt32Array(6, 0, 5), PackedInt32Array(6, 5, 7, 8)])
-outlines = Array[PackedVector2Array]([PackedVector2Array(100, -75, 281, 114, 295, 120, 380, 117, 386, 253, 227, 254, 204, 229, 226, 191, 31, -8)])
+vertices = PackedVector2Array(375.54688, 243, 200, 243, 185.92969, 224.24219, 242.39844, 193.45313, 370.4375, 127.328125, 293.1172, 130.07031, 275.1875, 122.390625, 45.171875, -7.8203125, 99.74219, -60.8125)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3, 4), PackedInt32Array(5, 4, 3), PackedInt32Array(6, 5, 3), PackedInt32Array(6, 3, 7, 8)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(100, -75, 281, 114, 295, 120, 419, 133, 411, 245, 195, 253, 171, 221, 226, 191, 31, -8)])
 
 [node name="WasserKorridor" type="Node2D" unique_id=1247425168]
 

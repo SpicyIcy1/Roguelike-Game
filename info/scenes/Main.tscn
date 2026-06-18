@@ -1,27 +1,9 @@
 [gd_scene format=3 uid="uid://bv5p4kchdebl0"]
 
 [ext_resource type="Script" uid="uid://cxyllvoucrk1g" path="res://scripts/main.gd" id="1_vcsgt"]
-[ext_resource type="PackedScene" uid="uid://r0yn2a2s6tuy" path="res://scenes/Snap_dragon.tscn" id="2_0bbpv"]
-[ext_resource type="PackedScene" uid="uid://b6gx0asw6uh80" path="res://scenes/rooms/Room_0.tscn" id="4_rarhs"]
-[ext_resource type="PackedScene" uid="uid://d00vao07smdfj" path="res://scenes/Portal.tscn" id="4_vcsgt"]
-[ext_resource type="PackedScene" uid="uid://p15jcv2yafyu" path="res://scenes/Player.tscn" id="5_vcsgt"]
+[ext_resource type="PackedScene" uid="uid://u0usf5pt8ite" path="res://scenes/dungeon_0.tscn" id="2_rvslj"]
 
 [node name="Main" type="Node2D" unique_id=96172719]
 script = ExtResource("1_vcsgt")
 
-[node name="Player" parent="." unique_id=1294629943 instance=ExtResource("5_vcsgt")]
-z_index = 1
-position = Vector2(228, 130)
-
-[node name="Enemy" parent="." unique_id=2065204506 groups=["enemy"] instance=ExtResource("2_0bbpv")]
-position = Vector2(419, 147)
-
-[node name="Room0" parent="." unique_id=97569535 instance=ExtResource("4_rarhs")]
-position = Vector2(14, 25)
-
-[node name="Portal" parent="." unique_id=1722887702 instance=ExtResource("4_vcsgt")]
-position = Vector2(257, 278)
-destination_path = "res://scenes/overworld.tscn"
-
-[node name="Entry0" type="Marker2D" parent="." unique_id=1467418530]
-position = Vector2(256, 248)
+[node name="Dungeon0" parent="." unique_id=1670368270 instance=ExtResource("2_rvslj")]

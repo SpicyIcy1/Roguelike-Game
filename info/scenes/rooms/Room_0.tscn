@@ -4,9 +4,9 @@
 [ext_resource type="Script" uid="uid://dfm8g0ls2ytmf" path="res://scripts/BoundingBox.gd" id="2_j58ac"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_kx1ml"]
-vertices = PackedVector2Array(283.85938, 106, 374, 106, 374, 134, 262, 134, 262, 278, 250, 278, 250, 134, 170, 134, 170, 116.140625, 196.14063, 90, 267.85938, 90)
-polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(3, 4, 5, 6), PackedInt32Array(6, 7, 8, 9, 10, 0), PackedInt32Array(6, 0, 3)])
-outlines = Array[PackedVector2Array]([PackedVector2Array(240, 288, 272, 288, 272, 144, 384, 144, 384, 96, 288, 96, 272, 80, 192, 80, 160, 112, 160, 144, 232, 144, 240, 144)])
+vertices = PackedVector2Array(390.20313, 106.90625, 390.78125, 134, 262, 134, 283.8203, 105.96094, 262, 278, 250, 278, 250, 134, 170, 134, 170, 116.140625, 196.14063, 90, 267.85938, 90)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(2, 4, 5, 6), PackedInt32Array(6, 7, 8, 9, 10, 3), PackedInt32Array(6, 3, 2)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(240, 288, 272, 288, 272, 144, 401, 144, 400, 97, 288, 96, 272, 80, 192, 80, 160, 112, 160, 144, 232, 144, 240, 144)])
 
 [node name="Room0" type="Node2D" unique_id=97569535]
 
@@ -24,3 +24,7 @@ navigation_polygon = SubResource("NavigationPolygon_kx1ml")
 
 [node name="Exit_E" type="Marker2D" parent="Exits" unique_id=279514210]
 position = Vector2(141, -8)
+
+[node name="NavigationLink2D" type="NavigationLink2D" parent="." unique_id=413781052]
+start_position = Vector2(169, -6)
+end_position = Vector2(131, -6)

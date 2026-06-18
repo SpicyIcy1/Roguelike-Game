@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://dfm8g0ls2ytmf" path="res://scripts/BoundingBox.gd" id="2_fdmxd"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_qpftx"]
-vertices = PackedVector2Array(125.64844, -86, 134, -81.82031, 134, 102, 6, 102, 6, -86, 6, 214, -6, 214, -6, 102, -6, -86, -6, -230, 6, -230, -141.64844, -86, -139.85938, 102, -150, 91.859375, -150, -81.82031)
+vertices = PackedVector2Array(125.64844, -86, 134, -81.82031, 134, 102, 6, 102, 6, -86, 6, 230, -6, 230, -6, 102, -6, -86, -6, -230, 6, -230, -141.64844, -86, -139.85938, 102, -150, 91.859375, -150, -81.82031)
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3, 4), PackedInt32Array(3, 5, 6, 7), PackedInt32Array(4, 3, 7, 8), PackedInt32Array(8, 9, 10, 4), PackedInt32Array(11, 8, 7, 12, 13, 14)])
 outlines = Array[PackedVector2Array]([PackedVector2Array(-16, 224, -16, 112, -144, 112, -160, 96, -160, -88, -144, -96, -16, -96, -16, -240, 16, -240, 16, -96, 128, -96, 144, -88, 144, 112, 16, 112, 16, 224)])
 
@@ -26,3 +26,12 @@ position = Vector2(0, 224)
 
 [node name="Exit_N" type="Marker2D" parent="Exits" unique_id=1452700063]
 position = Vector2(0, -232)
+
+[node name="NavigationLink2D" type="NavigationLink2D" parent="." unique_id=1992519649]
+start_position = Vector2(0, 256)
+end_position = Vector2(0, 224)
+
+[node name="NavigationLink2D2" type="NavigationLink2D" parent="." unique_id=1309139501]
+position = Vector2(0, -480)
+start_position = Vector2(0, 256)
+end_position = Vector2(0, 224)

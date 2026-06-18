@@ -2,11 +2,12 @@
 
 [ext_resource type="TileSet" uid="uid://bj18vugqpe2c" path="res://assets/tilesets/dungeon0.tres" id="1_eijpu"]
 [ext_resource type="Script" uid="uid://dfm8g0ls2ytmf" path="res://scripts/BoundingBox.gd" id="2_84ca7"]
+[ext_resource type="PackedScene" uid="uid://r0yn2a2s6tuy" path="res://scenes/Snap_dragon.tscn" id="3_wrr2d"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_scgta"]
-vertices = PackedVector2Array(291.96094, 90, 407.1172, 88.15625, 407.8672, 148.50781, 394.64063, 149.21875, 236, 230.34375, 236, 177.60938, 243.75, 88.85156, 344.85938, 199, 248.74219, 241.07031, 169.25, 116.32031, 116.609375, 111.859375, 119.359375, 69.140625, 234.77344, 70.89844, 331.09375, 242.89844, 345.85156, 228.84375)
+vertices = PackedVector2Array(292.03906, 90, 441, 85.32031, 441, 145.72656, 394.53906, 149.3125, 236, 230.34375, 236, 177.60938, 243.75, 88.85156, 344.85938, 199, 248.74219, 241.07031, 169.25, 116.32031, 116.609375, 111.859375, 119.359375, 69.140625, 234.77344, 70.89844, 331.09375, 242.89844, 345.85156, 228.84375)
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(4, 5, 6, 0, 3, 7, 8), PackedInt32Array(9, 10, 11, 12), PackedInt32Array(5, 9, 12, 6), PackedInt32Array(13, 8, 7, 14)])
-outlines = Array[PackedVector2Array]([PackedVector2Array(110, 59, 106, 121, 165, 126, 226, 182, 226, 235, 245, 251, 335, 253, 356, 233, 355, 203, 399, 159, 418, 158, 417, 78, 292, 80, 250, 79, 241, 61)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(110, 59, 106, 121, 165, 126, 226, 182, 226, 235, 245, 251, 335, 253, 356, 233, 355, 203, 399, 159, 419, 155, 419, 75, 292, 80, 250, 79, 241, 61)])
 
 [node name="Room1" type="Node2D" unique_id=858342480]
 
@@ -23,3 +24,10 @@ navigation_polygon = SubResource("NavigationPolygon_scgta")
 
 [node name="Exit_E" type="Marker2D" parent="Exits" unique_id=848521201]
 position = Vector2(408, 120)
+
+[node name="snap_dragon_enemy" parent="." unique_id=2065204506 instance=ExtResource("3_wrr2d")]
+position = Vector2(136, 104)
+
+[node name="NavigationLink2D" type="NavigationLink2D" parent="." unique_id=2112210100]
+start_position = Vector2(448, 120)
+end_position = Vector2(408, 120)
