@@ -4,9 +4,9 @@
 [ext_resource type="Script" uid="uid://dfm8g0ls2ytmf" path="res://scripts/BoundingBox.gd" id="2_d37wq"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_fy4m4"]
-vertices = PackedVector2Array(263, 15.1015625, 9, 17.882813, 9, -35.03125, 263, -35.960938)
+vertices = PackedVector2Array(286, 22, -6, 22, -6, -38, 286, -38)
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
-outlines = Array[PackedVector2Array]([PackedVector2Array(-1, -45, -1, 28, 273, 25, 273, -46)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-16, -48, -16, 32, 296, 32, 296, -48)])
 
 [node name="Node2D" type="Node2D" unique_id=43633248]
 
@@ -24,3 +24,11 @@ position = Vector2(270, -1)
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=326464679]
 navigation_polygon = SubResource("NavigationPolygon_fy4m4")
+
+[node name="NavigationLink2D" type="NavigationLink2D" parent="." unique_id=1256415669]
+start_position = Vector2(-24, 0)
+
+[node name="NavigationLink2D2" type="NavigationLink2D" parent="." unique_id=1569024503]
+position = Vector2(320, 0)
+start_position = Vector2(-24, 0)
+end_position = Vector2(-64, 0)

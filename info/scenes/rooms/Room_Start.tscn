@@ -2,13 +2,15 @@
 
 [ext_resource type="TileSet" uid="uid://bj18vugqpe2c" path="res://assets/tilesets/dungeon0.tres" id="2_lafxa"]
 
-[sub_resource type="NavigationPolygon" id="NavigationPolygon_kx1ml"]
-outlines = Array[PackedVector2Array]([PackedVector2Array(240, 288, 272, 288, 272, 144, 384, 144, 384, 96, 288, 96, 272, 80, 192, 80, 160, 112, 160, 144, 232, 144, 240, 144)])
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_h20sg"]
+vertices = PackedVector2Array(102, -22, 158, -22, 158, -10, 113.82031, -10, 102, 13.640625, 102, 38, 29.640625, 38, 6, 49.820313, 6, 94, -6, 94, -6, 49.820313, -125.640625, -10, -158, -10, -158, -22, -102, -22, -102, 1.8203125, -6, -102, -6, -190, 6, -190, 6, -102, 91.859375, -102, 102, -91.859375, -29.640625, 38, -91.859375, -102, -91.859375, 38, -102, 27.859375, -102, -91.859375)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(4, 5, 6), PackedInt32Array(7, 8, 9, 10), PackedInt32Array(11, 12, 13, 14), PackedInt32Array(15, 11, 14), PackedInt32Array(16, 17, 18, 19), PackedInt32Array(0, 3, 4, 6), PackedInt32Array(20, 21, 0, 6, 19), PackedInt32Array(16, 19, 6, 7, 10, 22), PackedInt32Array(23, 16, 22, 24, 25, 15), PackedInt32Array(23, 15, 14), PackedInt32Array(23, 14, 26)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-16, 104, -16, 56, -32, 48, -96, 48, -112, 32, -112, 8, -128, 0, -168, 0, -168, -32, -112, -32, -112, -96, -96, -112, -16, -112, -16, -200, 16, -200, 16, -112, 96, -112, 112, -96, 112, -32, 168, -32, 168, 0, 120, 0, 112, 16, 112, 48, 32, 48, 16, 56, 16, 104)])
 
 [node name="Room0" type="Node2D" unique_id=97569535]
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=1049495221]
-navigation_polygon = SubResource("NavigationPolygon_kx1ml")
+navigation_polygon = SubResource("NavigationPolygon_h20sg")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1151897924]
 z_index = -1
@@ -27,4 +29,23 @@ position = Vector2(0, -176)
 position = Vector2(-144, -16)
 
 [node name="Exit_E" type="Marker2D" parent="Exits" unique_id=1354556737]
-position = Vector2(144, -16)
+position = Vector2(136, -16)
+
+[node name="NavigationLink2D" type="NavigationLink2D" parent="." unique_id=217775455]
+start_position = Vector2(-168, -16)
+end_position = Vector2(-136, -16)
+
+[node name="NavigationLink2D2" type="NavigationLink2D" parent="." unique_id=783634866]
+position = Vector2(304, 0)
+start_position = Vector2(-168, -16)
+end_position = Vector2(-136, -16)
+
+[node name="NavigationLink2D3" type="NavigationLink2D" parent="." unique_id=483074171]
+position = Vector2(168, -160)
+start_position = Vector2(-168, -16)
+end_position = Vector2(-168, -40)
+
+[node name="NavigationLink2D4" type="NavigationLink2D" parent="." unique_id=1476040001]
+position = Vector2(168, 112)
+start_position = Vector2(-168, -8)
+end_position = Vector2(-168, -40)

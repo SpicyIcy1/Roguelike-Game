@@ -6,7 +6,6 @@ var TILE_SIZE: int = 16
 @export var MAX_ROOMS: int = 15
 @export var MAX_ROOM_USES: int = 2
 @export var MIN_ROOMS: int = 3
-@export var CORRIDOR_GAP: int = 2   # minimum grid cells between door and new room
 
 
 const ROOMS_DIR := "res://scenes/rooms/"
@@ -24,8 +23,8 @@ const MAX_ATTEMPTS := 20
 
 func generate() -> void:
 	print("━━━ MapGenerator.generate() START ━━━")
-	print("  Config: TILE_SIZE=%d  MAX_ROOMS=%d  MAX_ROOM_USES=%d  MIN_ROOMS=%d  CORRIDOR_GAP=%d" % [
-		TILE_SIZE, MAX_ROOMS, MAX_ROOM_USES, MIN_ROOMS, CORRIDOR_GAP
+	print("  Config: TILE_SIZE=%d  MAX_ROOMS=%d  MAX_ROOM_USES=%d  MIN_ROOMS=%d" % [
+		TILE_SIZE, MAX_ROOMS, MAX_ROOM_USES, MIN_ROOMS
 	])
 
 	_phase1_scan_and_parse()
@@ -226,11 +225,13 @@ func _try_place_room(current_room: RoomData, direction: String) -> RoomData:
 		var template: RoomData = candidates[i]
 		var new_room := _duplicate_room(template)
 
+		# Align doors directly: new room's entrance door sits one cell beyond
+		# the current room's exit door, so the two doors butt up against
+		# each other with no corridor in between.
 		var current_exit_local: Vector2i  = current_room.available_exits[direction]
 		var current_exit_global: Vector2i = current_room.grid_position + current_exit_local
 		var new_entrance_local: Vector2i  = new_room.available_exits[opposite]
-		var gap_offset := _direction_vector(direction) * CORRIDOR_GAP
-		var target_entrance_global: Vector2i = current_exit_global + gap_offset
+		var target_entrance_global: Vector2i = current_exit_global + _direction_vector(direction)
 		new_room.grid_position = target_entrance_global - new_entrance_local
 
 		var new_room_rect := Rect2i(new_room.grid_position, new_room.grid_size)
