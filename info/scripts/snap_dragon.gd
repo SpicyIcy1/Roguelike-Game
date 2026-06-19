@@ -2,12 +2,14 @@ extends Enemy
 
 var in_range : bool = false
 var player_ref
+var is_in_knockback = false
 
 func _physics_process(delta: float) -> void:
 	super(delta)
 
 func _set_state(new_state: State) -> void:
-	# Ich würde gerne für den Stun hier ein If stunned: return einbauen
+	if is_in_knockback:
+		return
 	if new_state == current_state: #wirklich kein schöner fix die State machine sollte auch so nicht versuchen immer in den gleichen State zu gehen
 		return
 	print(name, ": ", State.keys()[current_state], " → ", State.keys()[new_state])
@@ -42,19 +44,23 @@ func take_damage(damage_amount: float) -> void:
 		return
 
 	#Knockback durch Attacke wird hier ausgelösst
+	is_in_knockback = true
+	$AnimationPlayer.stop()
 	var direction_knockback = (global_position - PlayerData.global_position).normalized()
-	var knockback_strenght = 400.0 / weight
+	var knockback_strenght = 800.0 / weight
 	#Ich würde gerne das der stun die _set_state() blockiert
 	velocity = direction_knockback * knockback_strenght
 	#Abrupterer Knockback
 	await get_tree().create_timer(knockback_stop_time).timeout
 	velocity = Vector2.ZERO
 	
-	var base_stun = 0.4
+	var base_stun = 0.3
 	var stun_time = base_stun / weight
+	
 	set_physics_process(false)
 	await get_tree().create_timer(stun_time).timeout
 	set_physics_process(true)
+	is_in_knockback = false
 	
 func die() -> void:
 	super()

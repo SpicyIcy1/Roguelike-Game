@@ -52,7 +52,6 @@ func _physics_process(delta: float) -> void:
 func anim():
 	if is_attacking:
 		return
-		
 	if velocity != Vector2.ZERO:
 		$RandiSprites36x36.flip_h = velocity.x < 0
 	if velocity != Vector2.ZERO:
