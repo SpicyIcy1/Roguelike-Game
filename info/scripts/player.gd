@@ -86,10 +86,20 @@ func _on_attack_area_2d_body_exited(body: Node2D) -> void:
 # Die Funktion zeichnet je nach MausCurserPosition einen Vektor
 func update_attack_area_to_mouse() -> void:
 	var mouse_pos = get_global_mouse_position()
-	var unit_vector_FigthArea = (mouse_pos - global_position).normalized()
-	var position_FightArea = unit_vector_FigthArea * abstand_FightArea
-	$AttackArea2D.position = position_FightArea
-
+	var vec = (mouse_pos - global_position).normalized()
+	if abs(vec.x) > abs(vec.y):
+		if vec.x > 0:
+			vec = Vector2.RIGHT
+		else:
+			vec = Vector2.LEFT
+	else:
+		if vec.y > 0:
+			vec = Vector2.DOWN
+		else:
+			vec = Vector2.UP
+			
+	$AttackArea2D.position = vec * abstand_FightArea
+	
 func attack():
 	if not can_attack:
 		return
