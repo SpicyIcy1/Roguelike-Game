@@ -116,15 +116,15 @@ func attack():
 	# Animation hier anpassen
 	match attack_dir:
 		Vector2.UP:
-			%AnimationPlayer.play("slash_up")
+			%AnimationPlayer.play("Slash_Up")
 		Vector2.DOWN:
-			%AnimationPlayer.play("slash_down")
+			%AnimationPlayer.play("Slash_Down")
 		Vector2.LEFT:
 			randi_sprites_36x_36.flip_h = true
-			%AnimationPlayer.play("slash_l")
+			%AnimationPlayer.play("Slash_H")
 		Vector2.RIGHT:
 			randi_sprites_36x_36.flip_h = false
-			%AnimationPlayer.play("slash_l")
+			%AnimationPlayer.play("Slash_H")
 	can_attack = true
 	
 func equip_item(item: Equipment) -> void:
