@@ -38,7 +38,9 @@ func attack() -> void:
 
 func take_damage(damage_amount: float) -> void:
 	super(damage_amount)
-	
+	if current_state == State.DEAD:
+		return
+
 	#Knockback durch Attacke wird hier ausgelösst
 	var direction_knockback = (global_position - PlayerData.global_position).normalized()
 	var knockback_strenght = 400.0 / weight
@@ -56,7 +58,10 @@ func take_damage(damage_amount: float) -> void:
 	
 func die() -> void:
 	super()
-	$AnimationPlayer.play("death")
+	if $AnimationPlayer.has_animation("death"):
+		$AnimationPlayer.play("death")
+		await $AnimationPlayer.animation_finished
+	queue_free()
 
 
 func _on_attack_body_entered(body: Node2D) -> void:

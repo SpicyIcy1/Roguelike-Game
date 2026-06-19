@@ -96,7 +96,7 @@ func update_attack_area_to_mouse() -> void:
 		else:
 			vec = Vector2.UP
 			
-	var animation_dir = vec
+	attack_dir = vec
 	$AttackArea2D.position = vec * abstand_FightArea
 	
 func attack():
@@ -124,6 +124,8 @@ func attack():
 		Vector2.RIGHT:
 			randi_sprites_36x_36.flip_h = false
 			%AnimationPlayer.play("Slash_H")
+
+	await get_tree().create_timer(cooldown).timeout
 	can_attack = true
 	
 func equip_item(item: Equipment) -> void:

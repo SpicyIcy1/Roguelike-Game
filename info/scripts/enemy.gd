@@ -1,7 +1,7 @@
 class_name Enemy
 extends CharacterBody2D
 
-var max_health = 1000
+var max_health = 100
 var current_health = max_health
 
 var weight = 4
@@ -33,6 +33,7 @@ var last_known_position: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
+	add_to_group("enemy")
 	path_timer.wait_time = PATH_UPDATE_INTERVAL
 	path_timer.timeout.connect(_update_path)
 	path_timer.start()
