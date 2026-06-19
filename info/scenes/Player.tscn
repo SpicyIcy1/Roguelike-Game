@@ -111,7 +111,6 @@ tracks/3/keys = {
 
 [sub_resource type="Animation" id="Animation_6eyey"]
 resource_name = "Slash_Down"
-length = 4.0
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -128,7 +127,6 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_d3wef"]
 resource_name = "Slash_H"
-length = 4.0
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
