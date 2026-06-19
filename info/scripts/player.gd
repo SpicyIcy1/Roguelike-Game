@@ -125,6 +125,7 @@ func attack():
 			randi_sprites_36x_36.flip_h = false
 			%AnimationPlayer.play("Slash_H")
 
+	await %AnimationPlayer.animation_finished
 	await get_tree().create_timer(cooldown).timeout
 	can_attack = true
 	
