@@ -6,6 +6,7 @@ var current_health = max_health
 
 var weight = 4
 var knockback_stop_time = 0.08
+var is_in_knockback = false
 
 var damage = 10
 
@@ -39,7 +40,8 @@ func _ready() -> void:
 	path_timer.start()
 
 func _physics_process(delta: float) -> void:
-	sprite.flip_h=velocity.x>0 #Spiegelt den Gegnercharakter immer so dass er nach links/rechts in Laufrichtung guckt
+	if not is_in_knockback:
+		sprite.flip_h=velocity.x>0 #Spiegelt den Gegnercharakter immer so dass er nach links/rechts in Laufrichtung guckt
 	match current_state:
 		State.IDLE:
 			_apply_friction(delta)
@@ -104,12 +106,33 @@ func _on_sight_body_exited(body: Node2D) -> void:
 func attack() -> void:
 	push_warning("Enemy: attack() not implemented in ", name)
 
-func take_damage(amount: float) -> void:
+func take_damage(amount: float, knockback_dir: Vector2 = Vector2.ZERO, knockback_strength: float = 0.0) -> void:
 	current_health -= amount
 	if current_health <= 0:
 		die()
 		return
 
+	#Knockback durch Attacke wird hier ausgelösst
+	is_in_knockback = true
+	$AnimationPlayer.stop()
+	if knockback_dir == Vector2.ZERO:
+		knockback_dir = (global_position - PlayerData.global_position).normalized()
+	if knockback_strength <= 0.0:
+		knockback_strength = 800.0 / weight
+	#Ich würde gerne das der stun die _set_state() blockiert
+	velocity = knockback_dir * knockback_strength
+	#Abrupterer Knockback
+	await get_tree().create_timer(knockback_stop_time).timeout
+	velocity = Vector2.ZERO
+	
+	var base_stun = 0.3
+	var stun_time = base_stun / weight
+	
+	set_physics_process(false)
+	await get_tree().create_timer(stun_time).timeout
+	set_physics_process(true)
+	is_in_knockback = false
+	
 func die() -> void:
 	_set_state(State.DEAD)
 	push_warning("Enemy: die() not implemented in ", name)

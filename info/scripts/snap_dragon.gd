@@ -2,7 +2,6 @@ extends Enemy
 
 var in_range : bool = false
 var player_ref
-var is_in_knockback = false
 
 func _physics_process(delta: float) -> void:
 	super(delta)
@@ -38,29 +37,6 @@ func attack() -> void:
 	if in_range:
 		player_ref.take_damage(damage)
 
-func take_damage(damage_amount: float) -> void:
-	super(damage_amount)
-	if current_state == State.DEAD:
-		return
-
-	#Knockback durch Attacke wird hier ausgelösst
-	is_in_knockback = true
-	$AnimationPlayer.stop()
-	var direction_knockback = (global_position - PlayerData.global_position).normalized()
-	var knockback_strenght = 800.0 / weight
-	#Ich würde gerne das der stun die _set_state() blockiert
-	velocity = direction_knockback * knockback_strenght
-	#Abrupterer Knockback
-	await get_tree().create_timer(knockback_stop_time).timeout
-	velocity = Vector2.ZERO
-	
-	var base_stun = 0.3
-	var stun_time = base_stun / weight
-	
-	set_physics_process(false)
-	await get_tree().create_timer(stun_time).timeout
-	set_physics_process(true)
-	is_in_knockback = false
 	
 func die() -> void:
 	super()
