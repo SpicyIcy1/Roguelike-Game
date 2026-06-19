@@ -2,7 +2,8 @@
 
 [ext_resource type="TileSet" uid="uid://bj18vugqpe2c" path="res://assets/tilesets/dungeon0.tres" id="1_eijpu"]
 [ext_resource type="Script" uid="uid://dfm8g0ls2ytmf" path="res://scripts/BoundingBox.gd" id="2_84ca7"]
-[ext_resource type="PackedScene" uid="uid://r0yn2a2s6tuy" path="res://scenes/Snap_dragon.tscn" id="3_wrr2d"]
+[ext_resource type="PackedScene" uid="uid://bsrihjy7mh2mu" path="res://scenes/enemy_spawn_zone.tscn" id="3_wrr2d"]
+[ext_resource type="PackedScene" uid="uid://r0yn2a2s6tuy" path="res://scenes/Snap_dragon.tscn" id="4_yxps1"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_scgta"]
 vertices = PackedVector2Array(292.03906, 90, 441, 85.32031, 441, 145.72656, 394.53906, 149.3125, 236, 230.34375, 236, 177.60938, 243.75, 88.85156, 344.85938, 199, 248.74219, 241.07031, 169.25, 116.32031, 116.609375, 111.859375, 119.359375, 69.140625, 234.77344, 70.89844, 331.09375, 242.89844, 345.85156, 228.84375)
@@ -25,9 +26,16 @@ navigation_polygon = SubResource("NavigationPolygon_scgta")
 [node name="Exit_E" type="Marker2D" parent="Exits" unique_id=848521201]
 position = Vector2(408, 120)
 
-[node name="snap_dragon_enemy" parent="." unique_id=2065204506 instance=ExtResource("3_wrr2d")]
-position = Vector2(136, 104)
-
 [node name="NavigationLink2D" type="NavigationLink2D" parent="." unique_id=2112210100]
 start_position = Vector2(448, 120)
 end_position = Vector2(408, 120)
+
+[node name="EnemySpawnZone" parent="." unique_id=1127633428 instance=ExtResource("3_wrr2d")]
+position = Vector2(272, 104)
+enemy_type = ExtResource("4_yxps1")
+
+[node name="Marker2D" type="Marker2D" parent="EnemySpawnZone" unique_id=1035986342]
+position = Vector2(64, 72)
+
+[node name="Marker2D2" type="Marker2D" parent="EnemySpawnZone" unique_id=1926244524]
+position = Vector2(-64, -24)
