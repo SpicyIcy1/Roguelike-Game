@@ -25,14 +25,12 @@ func _ready() -> void:
 	
 	get_window().grab_focus() #Damit ich nicht immer "w" in den Code editor schreibe wenn ich das Spiel starte
 	attack_shape.shape.radius = reichweite_FightArea
+	add_child(EscMenu.new())
 		
 @warning_ignore("unused_parameter")
 func _physics_process(delta: float) -> void:
 	
 	anim()
-	if Input.is_action_pressed("esc"):
-		get_tree().quit()
-	
 	var direction = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	
 	if direction != Vector2.ZERO:
