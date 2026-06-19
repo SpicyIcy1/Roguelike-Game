@@ -12,6 +12,7 @@ var attack_cooldown_debuff = 3
 
 var reichweite_FightArea: float = 40.0
 var abstand_FightArea: float = 40.0
+var attack_dir: Vector2 = Vector2.ZERO
 
 var can_attack = true
 var enemies_in_range: Array = []
@@ -96,6 +97,7 @@ func update_attack_area_to_mouse() -> void:
 		else:
 			vec = Vector2.UP
 			
+	var animation_dir = vec
 	$AttackArea2D.position = vec * abstand_FightArea
 	
 func attack():
@@ -105,31 +107,24 @@ func attack():
 	var cooldown = attack_cooldown
 	if enemies_in_range.is_empty():
 		# Kein Treffer = längerer Cooldown
-		cooldown *= attack_cooldown_debuff
+		cooldown = attack_cooldown_debuff
 	else:
 		for enemy in enemies_in_range:
 			if enemy.has_method("take_damage"):
 				enemy.take_damage(damage)
 	
 	# Animation hier anpassen
-	var animation_direction = get_global_mouse_position() - global_position
-	if abs(animation_direction.x) > abs(animation_direction.y):
-		if animation_direction.x > 0:
+	match attack_dir:
+		Vector2.UP:
+			%AnimationPlayer.play("slash_up")
+		Vector2.DOWN:
+			%AnimationPlayer.play("slash_down")
+		Vector2.LEFT:
 			randi_sprites_36x_36.flip_h = true
-		else:
+			%AnimationPlayer.play("slash_l")
+		Vector2.RIGHT:
 			randi_sprites_36x_36.flip_h = false
-		%AnimationPlayer.play("punch_l")
-	else:
-		#Godot Koordinatensystem ist auf y-Achse vertauscht
-		if animation_direction.y < 0:
-			#%AnimationPlayer.play("punch_up")
-			%AnimationPlayer.play("punch_l")
-		else:
-			#%AnimationPlayer.play("punch_down")
-			%AnimationPlayer.play("punch_l")
-	
-	await %AnimationPlayer.animation_finished
-	await get_tree().create_timer(cooldown).timeout
+			%AnimationPlayer.play("slash_l")
 	can_attack = true
 	
 func equip_item(item: Equipment) -> void:
