@@ -14,6 +14,7 @@ var reichweite_FightArea: float = 40.0
 var abstand_FightArea: float = 40.0
 var attack_dir: Vector2 = Vector2.ZERO
 
+var is_attacking = false
 var can_attack = true
 var enemies_in_range: Array = []
 var equipped_items: Array[Equipment] = []
@@ -49,6 +50,9 @@ func _physics_process(delta: float) -> void:
 
 
 func anim():
+	if is_attacking:
+		return
+		
 	if velocity != Vector2.ZERO:
 		$RandiSprites36x36.flip_h = velocity.x < 0
 	if velocity != Vector2.ZERO:
@@ -100,6 +104,7 @@ func update_attack_area_to_mouse() -> void:
 	$AttackArea2D.position = vec * abstand_FightArea
 	
 func attack():
+	is_attacking = true
 	if not can_attack:
 		return
 	can_attack = false
@@ -128,6 +133,7 @@ func attack():
 	await %AnimationPlayer.animation_finished
 	await get_tree().create_timer(cooldown).timeout
 	can_attack = true
+	is_attacking = false
 	
 func equip_item(item: Equipment) -> void:
 	for existing in equipped_items:
