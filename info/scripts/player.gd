@@ -51,7 +51,6 @@ func _physics_process(delta: float) -> void:
 func anim():
 	if velocity != Vector2.ZERO:
 		$RandiSprites36x36.flip_h = velocity.x < 0
-
 	if velocity != Vector2.ZERO:
 		if abs(velocity.x) > abs(velocity.y):
 			%AnimationPlayer.play("Walk_H")
@@ -107,7 +106,7 @@ func attack():
 	var cooldown = attack_cooldown
 	if enemies_in_range.is_empty():
 		# Kein Treffer = längerer Cooldown
-		cooldown = attack_cooldown_debuff
+		cooldown *= attack_cooldown_debuff
 	else:
 		for enemy in enemies_in_range:
 			if enemy.has_method("take_damage"):
