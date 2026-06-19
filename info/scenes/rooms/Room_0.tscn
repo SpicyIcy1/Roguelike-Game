@@ -2,6 +2,8 @@
 
 [ext_resource type="TileSet" uid="uid://bj18vugqpe2c" path="res://assets/tilesets/dungeon0.tres" id="1_kx1ml"]
 [ext_resource type="Script" uid="uid://dfm8g0ls2ytmf" path="res://scripts/BoundingBox.gd" id="2_j58ac"]
+[ext_resource type="PackedScene" uid="uid://bsrihjy7mh2mu" path="res://scenes/enemy_spawn_zone.tscn" id="3_vh58p"]
+[ext_resource type="PackedScene" uid="uid://r0yn2a2s6tuy" path="res://scenes/Snap_dragon.tscn" id="4_fsxpb"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_kx1ml"]
 vertices = PackedVector2Array(390.20313, 106.90625, 390.78125, 134, 262, 134, 283.8203, 105.96094, 262, 278, 250, 278, 250, 134, 170, 134, 170, 116.140625, 196.14063, 90, 267.85938, 90)
@@ -28,3 +30,13 @@ position = Vector2(141, -8)
 [node name="NavigationLink2D" type="NavigationLink2D" parent="." unique_id=413781052]
 start_position = Vector2(169, -6)
 end_position = Vector2(131, -6)
+
+[node name="EnemySpawnZone" parent="." unique_id=1127633428 instance=ExtResource("3_vh58p")]
+position = Vector2(-82, -44)
+enemy_type = ExtResource("4_fsxpb")
+
+[node name="Marker2D" type="Marker2D" parent="EnemySpawnZone" unique_id=1336068944]
+position = Vector2(-11, 0)
+
+[node name="Marker2D2" type="Marker2D" parent="EnemySpawnZone" unique_id=391768160]
+position = Vector2(224, 58)
