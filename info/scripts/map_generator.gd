@@ -9,6 +9,7 @@ var TILE_SIZE: int = 16
 
 
 const ROOMS_DIR := "res://scenes/rooms/"
+const END_DIR := "res://scenes/dead_ends/"
 const OPPOSITE := { "North": "South", "South": "North", "East": "West", "West": "East" }
 
 
@@ -17,6 +18,14 @@ var _master_pool: Array[RoomData] = []
 var _sub_pools: Dictionary = { "North": [], "South": [], "East": [], "West": [] }
 var _generation_attempt: int = 0
 var _room_use_counts: Dictionary = {}
+
+# Dead-end caps live in a separate pool from regular rooms. Each dead-end
+# piece has exactly one entrance exit. It's keyed by the direction THAT
+# entrance faces, e.g. a piece whose single exit is "North" is the piece
+# you plug into a room's open North exit (entrance facing back at it).
+var _dead_end_pool: Array[RoomData] = []
+var _dead_end_sub_pools: Dictionary = { "North": [], "South": [], "East": [], "West": [] }
+var _placed_dead_ends: Array[RoomData] = []
 
 
 const MAX_ATTEMPTS := 20
@@ -40,7 +49,10 @@ func generate() -> void:
 			continue
 		_phase3_assign_special_rooms()
 		_phase4_assemble()
-		print("━━━ MapGenerator.generate() END (attempt %d, %d rooms) ━━━" % [attempt, placed])
+		_phase5_cap_dead_ends()
+		print("━━━ MapGenerator.generate() END (attempt %d, %d rooms, %d dead-end caps) ━━━" % [
+			attempt, placed, _placed_dead_ends.size()
+		])
 		return
 
 	push_error("MapGenerator: failed to place >= %d rooms after %d attempts." % [MIN_ROOMS, MAX_ATTEMPTS])
@@ -90,6 +102,99 @@ func _phase1_scan_and_parse() -> void:
 		_sub_pools["North"].size(), _sub_pools["South"].size(),
 		_sub_pools["East"].size(),  _sub_pools["West"].size()
 	])
+
+	_phase1b_scan_dead_ends()
+
+
+# ─── Phase 1b: Dead-end directory scan & parsing ──────────────────────────────
+# Dead-ends are simpler than rooms: no TileMapLayer requirement, just an
+# Exits node with exactly one recognised Exit_N/S/E/W child.
+func _phase1b_scan_dead_ends() -> void:
+	print("\n── Phase 1b: Scan Dead Ends ──")
+	_dead_end_pool.clear()
+	for key in _dead_end_sub_pools:
+		_dead_end_sub_pools[key].clear()
+
+	var dir := DirAccess.open(END_DIR)
+	if dir == null:
+		push_error("Phase 1b: DirAccess.open('%s') returned null." % END_DIR)
+		return
+	print("  Opened directory OK: '%s'" % END_DIR)
+
+	var all_files: Array[String] = []
+	dir.list_dir_begin()
+	var file_name := dir.get_next()
+	while file_name != "":
+		if not dir.current_is_dir():
+			all_files.append(file_name)
+		file_name = dir.get_next()
+	dir.list_dir_end()
+
+	print("  Files found in dir: %d → %s" % [all_files.size(), all_files])
+
+	for fname in all_files:
+		var clean_name := fname.trim_suffix(".remap")
+		if not clean_name.ends_with(".tscn"):
+			print("    SKIP (not .tscn): '%s'" % fname)
+			continue
+		print("  Parsing: '%s'" % clean_name)
+		var end_data := _parse_dead_end_file(clean_name)
+		if end_data != null:
+			_dead_end_pool.append(end_data)
+			var facing: String = end_data.available_exits.keys()[0]
+			_dead_end_sub_pools[facing].append(end_data)
+			print("    ✓ Added to dead-end pool | facing: %s" % facing)
+		else:
+			print("    ✗ Parse returned null — skipped")
+
+	print("  dead_end_pool size: %d" % _dead_end_pool.size())
+	print("  Dead-end sub-pool sizes → N:%d  S:%d  E:%d  W:%d" % [
+		_dead_end_sub_pools["North"].size(), _dead_end_sub_pools["South"].size(),
+		_dead_end_sub_pools["East"].size(),  _dead_end_sub_pools["West"].size()
+	])
+
+
+func _parse_dead_end_file(file_name: String) -> RoomData:
+	var path := END_DIR + file_name
+	var packed: PackedScene = load(path)
+	if packed == null:
+		push_warning("  _parse_dead_end_file: load('%s') returned null" % path)
+		return null
+
+	var instance: Node = packed.instantiate()
+
+	var exits_node: Node = instance.find_child("Exits", false, false)
+	if exits_node == null:
+		push_warning("  _parse_dead_end_file: no child named 'Exits' in '%s'" % file_name)
+		instance.free()
+		return null
+
+	var available_exits: Dictionary = {}
+	var dir_map := { "Exit_N": "North", "Exit_S": "South", "Exit_E": "East", "Exit_W": "West" }
+	for child in exits_node.get_children():
+		if dir_map.has(child.name):
+			var pixel_pos: Vector2 = child.position
+			var grid_offset := Vector2i(int(pixel_pos.x) / TILE_SIZE, int(pixel_pos.y) / TILE_SIZE)
+			available_exits[dir_map[child.name]] = grid_offset
+			print("    Exit '%s' → pixel %s → grid offset %s" % [child.name, pixel_pos, grid_offset])
+		else:
+			print("    Unrecognised exit child name '%s' (expected Exit_N/S/E/W)" % child.name)
+
+	instance.free()
+
+	if available_exits.is_empty():
+		push_warning("  _parse_dead_end_file: '%s' has an Exits node but no recognised Exit_N/S/E/W children" % file_name)
+		return null
+	if available_exits.size() > 1:
+		push_warning("  _parse_dead_end_file: '%s' has %d exits, expected exactly 1 — using the first found" % [file_name, available_exits.size()])
+
+	var end_data := RoomData.new()
+	end_data.room_file_name = file_name
+	end_data.grid_size = Vector2i.ZERO
+	end_data.available_exits = available_exits
+	for direction in available_exits.keys():
+		end_data.connected_rooms[direction] = null
+	return end_data
 
 
 func _parse_room_file(file_name: String) -> RoomData:
@@ -311,6 +416,78 @@ func _phase4_assemble() -> void:
 		])
 
 	print("  Phase 4 done.")
+
+
+# ─── Phase 5: Dead-end capping ─────────────────────────────────────────────────
+# Walk every room placed in the layout and, for each exit that never got
+# connected to another room, plug it with a dead-end piece from END_DIR
+# whose single entrance exit faces back the way we came (same OPPOSITE
+# relationship _try_place_room uses for regular rooms). No reuse-limit
+# tracking and no multi-candidate retry: take the first dead-end whose
+# pool isn't empty, place it, move on. If a direction's pool is empty the
+# exit is logged and left uncapped rather than failing generation.
+func _phase5_cap_dead_ends() -> void:
+	print("\n── Phase 5: Cap Dead Ends ──")
+	_placed_dead_ends.clear()
+
+	if _dead_end_pool.is_empty():
+		push_warning("Phase 5: dead_end_pool is empty — no open exits will be capped.")
+		return
+
+	var open_exits_found := 0
+	var capped := 0
+	var uncapped := 0
+
+	for room in _layout.rooms:
+		for direction in room.available_exits.keys():
+			if room.connected_rooms.get(direction) != null:
+				continue  # exit already leads to another room
+
+			open_exits_found += 1
+			var opposite: String = OPPOSITE[direction]
+			var pool: Array = _dead_end_sub_pools.get(opposite, [])
+			if pool.is_empty():
+				print("    ✗ '%s' open %s exit — no dead-end faces %s, leaving uncapped" % [
+					room.room_file_name, direction, opposite
+				])
+				uncapped += 1
+				continue
+
+			var template: RoomData = pool[0]
+			var cap := _duplicate_room(template)
+			cap.room_type = RoomData.RoomType.STANDARD
+
+			# Same alignment math as _try_place_room: the cap's entrance
+			# door butts up directly against the room's open exit door.
+			var exit_local: Vector2i  = room.available_exits[direction]
+			var exit_global: Vector2i = room.grid_position + exit_local
+			var entrance_local: Vector2i = cap.available_exits[opposite]
+			var target_entrance_global: Vector2i = exit_global + _direction_vector(direction)
+			cap.grid_position = target_entrance_global - entrance_local
+
+			room.connected_rooms[direction] = cap
+			cap.connected_rooms[opposite] = room
+			_placed_dead_ends.append(cap)
+			capped += 1
+			print("    ✓ '%s' open %s exit → capped with '%s' @ %s" % [
+				room.room_file_name, direction, cap.room_file_name, cap.grid_position
+			])
+
+	print("  Instancing %d dead-end cap(s)..." % _placed_dead_ends.size())
+	for cap in _placed_dead_ends:
+		var path := END_DIR + cap.room_file_name
+		var packed: PackedScene = load(path)
+		if packed == null:
+			push_warning("Phase 5: load('%s') failed" % path)
+			continue
+		var instance: Node2D = packed.instantiate()
+		instance.position = Vector2(cap.grid_position * TILE_SIZE)
+		add_child(instance)
+		print("  ✓ Instanced '%s' at world pos %s" % [cap.room_file_name, instance.position])
+
+	print("  Phase 5 done | open exits: %d | capped: %d | uncapped: %d" % [
+		open_exits_found, capped, uncapped
+	])
 
 
 # ─── Helpers ──────────────────────────────────────────────────────────────────
