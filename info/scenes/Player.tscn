@@ -249,6 +249,7 @@ unique_name_in_owner = true
 libraries/ = SubResource("AnimationLibrary_3li8b")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=289636269]
+unique_name_in_owner = true
 
 [node name="AttackArea2D" type="Area2D" parent="." unique_id=1126996340]
 collision_layer = 0

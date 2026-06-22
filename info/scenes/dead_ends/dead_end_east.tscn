@@ -1,0 +1,17 @@
+[gd_scene format=4 uid="uid://cu264o656ojto"]
+
+[ext_resource type="TileSet" uid="uid://bj18vugqpe2c" path="res://assets/tilesets/dungeon0.tres" id="1_21lea"]
+[ext_resource type="Script" uid="uid://dfm8g0ls2ytmf" path="res://scripts/BoundingBox.gd" id="2_l0ru2"]
+
+[node name="DeadEndEast" type="Node2D" unique_id=97569535]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1211228144]
+z_index = -1
+tile_map_data = PackedByteArray("AAAAAPz/AAACAAAAAAAAAP3/AAAEAAEAAAAAAP7/AAAJAAAAAAAAAP//AAABAAIAAAAAAAAAAAABAAIAAAAAAAEAAAABAAIAAAAAAAIAAAAKAAIAAAABAPz/AAADAAAAAAABAP3/AAAOAAAAAAABAP7/AAAOAAAAAAABAP//AAAOAAAAAAABAAAAAAAOAAAAAAABAAEAAAAOAAAAAAABAAIAAAADAAAAAFA=")
+tile_set = ExtResource("1_21lea")
+script = ExtResource("2_l0ru2")
+
+[node name="Exits" type="Node" parent="." unique_id=1618898967]
+
+[node name="Exit_W" type="Marker2D" parent="Exits" unique_id=279514210]
+position = Vector2(0, 30)

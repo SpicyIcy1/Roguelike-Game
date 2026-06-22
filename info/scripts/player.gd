@@ -1,5 +1,10 @@
 extends CharacterBody2D
 
+var dev_mode := false
+var target_zoom: Vector2 = Vector2(1.0, 1.0)
+var zoom_speed: float = 0.05
+
+
 var max_speed = 120
 var acceleration = 50
 
@@ -47,6 +52,25 @@ func _physics_process(delta: float) -> void:
 	update_attack_area_to_mouse()
 	if Input.is_action_just_pressed("attack"):
 		attack()
+	
+
+func _input(event: InputEvent) -> void: #alles was mit input zu tun hat und gleichzeitig nicht physics basiert ist kommt hier hin
+	
+	if Input.is_action_just_pressed("DevMode"):
+		dev_mode = !dev_mode
+	
+	if dev_mode:
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_WHEEL_UP:
+			target_zoom += Vector2(zoom_speed, zoom_speed)
+			
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			target_zoom -= Vector2(zoom_speed, zoom_speed)
+
+func _process(delta: float) -> void: #ähnlich wie bei input
+	if dev_mode:
+		current_health = max_health
+	%Camera2D.zoom = %Camera2D.zoom.lerp(target_zoom, 10 * delta)
+
 
 
 func anim():
