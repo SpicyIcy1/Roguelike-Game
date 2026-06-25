@@ -1,4 +1,4 @@
-extends CharacterBody2D
+extends Entity
 
 var dev_mode := false
 var target_zoom: Vector2 = Vector2(1.0, 1.0)
@@ -7,10 +7,6 @@ var zoom_speed: float = 0.025
 
 var max_speed = 120
 var acceleration = 50
-
-var max_health = 100
-var current_health = max_health
-var damage = 10
 var attack_cooldown = 0.4
 #falls der Spieler ins leere schlägt = längere cooldown
 var attack_cooldown_debuff = 3
