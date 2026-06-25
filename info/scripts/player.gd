@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 var dev_mode := false
 var target_zoom: Vector2 = Vector2(1.0, 1.0)
-var zoom_speed: float = 0.05
+var zoom_speed: float = 0.025
 
 
 var max_speed = 120
@@ -60,6 +60,8 @@ func _input(event: InputEvent) -> void: #alles was mit input zu tun hat und glei
 		dev_mode = !dev_mode
 	
 	if dev_mode:
+		damage = 1000
+		max_speed = 250
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_WHEEL_UP:
 			target_zoom += Vector2(zoom_speed, zoom_speed)
 			

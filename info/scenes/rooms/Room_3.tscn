@@ -23,6 +23,3 @@ navigation_polygon = SubResource("NavigationPolygon_0g03g")
 
 [node name="Exit_E" type="Marker2D" parent="Exits" unique_id=1319669016]
 position = Vector2(185, 97)
-
-[node name="Exit_W" type="Marker2D" parent="Exits" unique_id=887901270]
-position = Vector2(24, 144)
