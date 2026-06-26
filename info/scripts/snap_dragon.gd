@@ -3,7 +3,7 @@ extends Enemy
 var in_range : bool = false
 var player_ref
 
-var sprint_speed := 80.0
+var sprint_speed := 60.0
 var sprint_max_time := 0.5
 var sprint_stop_distance := 50.0
 var sprint_cooldown := 2

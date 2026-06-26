@@ -33,7 +33,7 @@ position = Vector2(0, -176)
 position = Vector2(192, 72)
 
 [node name="Exit_W" type="Marker2D" parent="Exits" unique_id=1776942323]
-position = Vector2(-160, 75)
+position = Vector2(-160, 72)
 
 [node name="NavigationLink2D" type="NavigationLink2D" parent="." unique_id=357842633]
 position = Vector2(32, 1)
@@ -51,7 +51,7 @@ start_position = Vector2(-168, -16)
 end_position = Vector2(-136, -16)
 
 [node name="NavigationLink2D4" type="NavigationLink2D" parent="." unique_id=974712331]
-position = Vector2(-10, 91)
+position = Vector2(-9, 88)
 start_position = Vector2(-168, -16)
 end_position = Vector2(-136, -16)
 
