@@ -18,6 +18,7 @@ var attack_dir: Vector2 = Vector2.ZERO
 var is_attacking = false
 var can_attack = true
 var enemies_in_range: Array = []
+var npcs_in_range: Array = []
 var equipped_items: Array[Equipment] = []
 enum Direction { UP, DOWN, HORIZONTAL }
 var last_direction: Direction = Direction.DOWN
@@ -104,11 +105,14 @@ func anim():
 func _on_attack_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemy"):
 		enemies_in_range.append(body)
-			
+	elif body.is_in_group("npc"):
+		npcs_in_range.append(body)
 
 func _on_attack_area_2d_body_exited(body: Node2D) -> void:
 	if body.is_in_group("enemy"):
 		enemies_in_range.erase(body)
+	elif body.is_in_group("npc"):
+		npcs_in_range.erase(body)
 
 # Die Funktion zeichnet je nach MausCurserPosition einen Vektor
 func update_attack_area_to_mouse() -> void:
@@ -134,13 +138,18 @@ func attack():
 		return
 	can_attack = false
 	var cooldown = attack_cooldown
-	if enemies_in_range.is_empty():
+	var hit_anything = false
+	for enemy in enemies_in_range:
+		if enemy.has_method("take_damage"):
+			enemy.take_damage(damage)
+			hit_anything = true
+	for npc in npcs_in_range:
+		if npc.has_method("take_damage"):
+			npc.take_damage(damage)
+			hit_anything = true
+	if not hit_anything:
 		# Kein Treffer = längerer Cooldown
 		cooldown *= attack_cooldown_debuff
-	else:
-		for enemy in enemies_in_range:
-			if enemy.has_method("take_damage"):
-				enemy.take_damage(damage)
 	
 	# Animation hier anpassen
 	match attack_dir:
