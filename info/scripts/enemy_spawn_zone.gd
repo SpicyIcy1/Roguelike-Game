@@ -1,3 +1,4 @@
+class_name EnemySpawnZone
 extends Node2D
 
 @export var enemy_type : PackedScene

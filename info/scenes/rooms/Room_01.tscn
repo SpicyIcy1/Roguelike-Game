@@ -6,8 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://r0yn2a2s6tuy" path="res://scenes/Snap_dragon.tscn" id="5_37ggs"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_kx1ml"]
-vertices = PackedVector2Array(262, 134, 262, 249.67188, 250, 249.29688, 250, 134, 390.20313, 106.90625, 390.78125, 134, 283.8203, 105.96094, 170, 134, 170, 116.140625, 196.14063, 90, 267.85938, 90)
-polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(4, 5, 0, 6), PackedInt32Array(3, 7, 8, 9, 10, 6), PackedInt32Array(3, 6, 0)])
+vertices = PackedVector2Array(-250, 249.29688, -262, 249.67188, -262, 134, -250, 134, -390.78125, 134, -390.20313, 106.90625, -283.8203, 105.96094, -267.85938, 90, -196.14063, 90, -170, 116.140625, -170, 134)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(2, 4, 5, 6), PackedInt32Array(7, 8, 9, 10, 3, 6), PackedInt32Array(6, 3, 2)])
 outlines = Array[PackedVector2Array]([PackedVector2Array(-240, 144, -232, 144, -160, 144, -160, 112, -192, 80, -272, 80, -288, 96, -400, 97, -401, 144, -272, 144, -272, 260, -240, 259)])
 
 [node name="Room0" type="Node2D" unique_id=97569535]
@@ -25,7 +25,7 @@ navigation_polygon = SubResource("NavigationPolygon_kx1ml")
 [node name="Exits" type="Node" parent="." unique_id=1618898967]
 
 [node name="Exit_W" type="Marker2D" parent="Exits" unique_id=279514210]
-position = Vector2(-125, -14)
+position = Vector2(-125, -8)
 
 [node name="Exit_S" type="Marker2D" parent="Exits" unique_id=1660264618]
 position = Vector2(16, 126)
@@ -33,20 +33,20 @@ metadata/_edit_group_ = true
 
 [node name="NavigationLink2D" type="NavigationLink2D" parent="." unique_id=413781052]
 position = Vector2(16, 0)
-start_position = Vector2(169, -6)
-end_position = Vector2(131, -6)
+start_position = Vector2(-169, -6)
+end_position = Vector2(-131, -6)
 
 [node name="NavigationLink2D2" type="NavigationLink2D" parent="." unique_id=968187452]
 position = Vector2(92, 73)
-start_position = Vector2(75, 74)
-end_position = Vector2(75, 37)
+start_position = Vector2(-75, 74)
+end_position = Vector2(-75, 37)
 
 [node name="EnemySpawnZone" parent="." unique_id=1127633428 instance=ExtResource("3_vwsn0")]
 position = Vector2(98, -44)
 enemy_type = ExtResource("5_37ggs")
 
 [node name="Marker2D" type="Marker2D" parent="EnemySpawnZone" unique_id=1336068944]
-position = Vector2(-11, 0)
+position = Vector2(11, 0)
 
 [node name="Marker2D2" type="Marker2D" parent="EnemySpawnZone" unique_id=391768160]
-position = Vector2(224, 58)
+position = Vector2(-224, 58)
