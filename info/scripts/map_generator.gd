@@ -9,8 +9,8 @@ var TILE_SIZE: int = 16
 
 
 const ROOMS_DIR := "res://scenes/rooms/"
-const END_DIR := "res://scenes/dead_ends/"
-const OPPOSITE := { "North": "South", "South": "North", "East": "West", "West": "East" }
+const END_DIR   := "res://scenes/dead_ends/"
+const OPPOSITE  := { "North": "South", "South": "North", "East": "West", "West": "East" }
 
 
 var _layout: DungeonLayout
@@ -19,16 +19,15 @@ var _sub_pools: Dictionary = { "North": [], "South": [], "East": [], "West": [] 
 var _generation_attempt: int = 0
 var _room_use_counts: Dictionary = {}
 
-# Dead-end caps live in a separate pool from regular rooms. Each dead-end
-# piece has exactly one entrance exit. It's keyed by the direction THAT
-# entrance faces, e.g. a piece whose single exit is "North" is the piece
-# you plug into a room's open North exit (entrance facing back at it).
 var _dead_end_pool: Array[RoomData] = []
 var _dead_end_sub_pools: Dictionary = { "North": [], "South": [], "East": [], "West": [] }
 var _placed_dead_ends: Array[RoomData] = []
 
 
 const MAX_ATTEMPTS := 20
+
+
+# ─── Entry point ──────────────────────────────────────────────────────────────
 
 func generate() -> void:
 	print("━━━ MapGenerator.generate() START ━━━")
@@ -59,6 +58,7 @@ func generate() -> void:
 
 
 # ─── Phase 1: Directory scan & metadata parsing ───────────────────────────────
+
 func _phase1_scan_and_parse() -> void:
 	print("\n── Phase 1: Scan & Parse ──")
 	_master_pool.clear()
@@ -93,7 +93,9 @@ func _phase1_scan_and_parse() -> void:
 			_master_pool.append(room_data)
 			for direction in room_data.available_exits.keys():
 				_sub_pools[direction].append(room_data)
-			print("    ✓ Added to pool | exits: %s | size: %s" % [room_data.available_exits.keys(), room_data.grid_size])
+			print("    ✓ Added to pool | exits: %s | size: %s" % [
+				room_data.available_exits.keys(), room_data.grid_size
+			])
 		else:
 			print("    ✗ Parse returned null — skipped")
 
@@ -107,8 +109,7 @@ func _phase1_scan_and_parse() -> void:
 
 
 # ─── Phase 1b: Dead-end directory scan & parsing ──────────────────────────────
-# Dead-ends are simpler than rooms: no TileMapLayer requirement, just an
-# Exits node with exactly one recognised Exit_N/S/E/W child.
+
 func _phase1b_scan_dead_ends() -> void:
 	print("\n── Phase 1b: Scan Dead Ends ──")
 	_dead_end_pool.clear()
@@ -143,7 +144,9 @@ func _phase1b_scan_dead_ends() -> void:
 			_dead_end_pool.append(end_data)
 			var facing: String = end_data.available_exits.keys()[0]
 			_dead_end_sub_pools[facing].append(end_data)
-			print("    ✓ Added to dead-end pool | facing: %s" % facing)
+			print("    ✓ Added to dead-end pool | facing: %s | size: %s" % [
+				facing, end_data.grid_size
+			])
 		else:
 			print("    ✗ Parse returned null — skipped")
 
@@ -154,51 +157,10 @@ func _phase1b_scan_dead_ends() -> void:
 	])
 
 
-func _parse_dead_end_file(file_name: String) -> RoomData:
-	var path := END_DIR + file_name
-	var packed: PackedScene = load(path)
-	if packed == null:
-		push_warning("  _parse_dead_end_file: load('%s') returned null" % path)
-		return null
-
-	var instance: Node = packed.instantiate()
-
-	var exits_node: Node = instance.find_child("Exits", false, false)
-	if exits_node == null:
-		push_warning("  _parse_dead_end_file: no child named 'Exits' in '%s'" % file_name)
-		instance.free()
-		return null
-
-	var available_exits: Dictionary = {}
-	var dir_map := { "Exit_N": "North", "Exit_S": "South", "Exit_E": "East", "Exit_W": "West" }
-	for child in exits_node.get_children():
-		if dir_map.has(child.name):
-			var pixel_pos: Vector2 = child.position
-			var grid_offset := Vector2i(int(pixel_pos.x) / TILE_SIZE, int(pixel_pos.y) / TILE_SIZE)
-			available_exits[dir_map[child.name]] = grid_offset
-			print("    Exit '%s' → pixel %s → grid offset %s" % [child.name, pixel_pos, grid_offset])
-		else:
-			print("    Unrecognised exit child name '%s' (expected Exit_N/S/E/W)" % child.name)
-
-	instance.free()
-
-	if available_exits.is_empty():
-		push_warning("  _parse_dead_end_file: '%s' has an Exits node but no recognised Exit_N/S/E/W children" % file_name)
-		return null
-	if available_exits.size() > 1:
-		push_warning("  _parse_dead_end_file: '%s' has %d exits, expected exactly 1 — using the first found" % [file_name, available_exits.size()])
-
-	var end_data := RoomData.new()
-	end_data.room_file_name = file_name
-	end_data.grid_size = Vector2i.ZERO
-	end_data.available_exits = available_exits
-	for direction in available_exits.keys():
-		end_data.connected_rooms[direction] = null
-	return end_data
-
+# ─── Parsing helpers ──────────────────────────────────────────────────────────
 
 func _parse_room_file(file_name: String) -> RoomData:
-	var path := ROOMS_DIR + file_name
+	var path   := ROOMS_DIR + file_name
 	var packed: PackedScene = load(path)
 	if packed == null:
 		push_warning("  _parse_room_file: load('%s') returned null" % path)
@@ -211,8 +173,11 @@ func _parse_room_file(file_name: String) -> RoomData:
 		push_warning("  _parse_room_file: no TileMapLayer child in '%s'" % file_name)
 		instance.free()
 		return null
+
 	var used_rect: Rect2i = tile_map.get_used_rect()
-	var grid_size := used_rect.size
+	var grid_size   := used_rect.size
+	var grid_offset := used_rect.position  # store locally first
+
 	if grid_size == Vector2i.ZERO:
 		push_warning("  _parse_room_file: TileMapLayer in '%s' has no painted cells" % file_name)
 
@@ -227,27 +192,91 @@ func _parse_room_file(file_name: String) -> RoomData:
 	for child in exits_node.get_children():
 		if dir_map.has(child.name):
 			var pixel_pos: Vector2 = child.position
-			var grid_offset := Vector2i(int(pixel_pos.x) / TILE_SIZE, int(pixel_pos.y) / TILE_SIZE)
-			available_exits[dir_map[child.name]] = grid_offset
-			print("    Exit '%s' → pixel %s → grid offset %s" % [child.name, pixel_pos, grid_offset])
+			var grid_exit := Vector2i(int(pixel_pos.x) / TILE_SIZE, int(pixel_pos.y) / TILE_SIZE)
+			available_exits[dir_map[child.name]] = grid_exit
+			print("    Exit '%s' → pixel %s → grid offset %s" % [child.name, pixel_pos, grid_exit])
 		else:
 			print("    Unrecognised exit child name '%s' (expected Exit_N/S/E/W)" % child.name)
 
 	if available_exits.is_empty():
-		push_warning("  _parse_room_file: '%s' has an Exits node but no recognised Exit_N/S/E/W children" % file_name)
+		push_warning("  _parse_room_file: '%s' has Exits node but no recognised Exit_N/S/E/W children" % file_name)
 
 	instance.free()
 
-	var room_data := RoomData.new()
-	room_data.room_file_name = file_name
-	room_data.grid_size = grid_size
+	var room_data := RoomData.new()  # declared before we assign to it
+	room_data.room_file_name  = file_name
+	room_data.grid_size       = grid_size
+	room_data.grid_offset     = grid_offset  # now valid
 	room_data.available_exits = available_exits
 	for direction in available_exits.keys():
 		room_data.connected_rooms[direction] = null
 	return room_data
 
 
+func _parse_dead_end_file(file_name: String) -> RoomData:
+	var path   := END_DIR + file_name
+	var packed: PackedScene = load(path)
+	if packed == null:
+		push_warning("  _parse_dead_end_file: load('%s') returned null" % path)
+		return null
+
+	var instance: Node = packed.instantiate()
+
+	# Dead ends are built like rooms — require a TileMapLayer for grid_size.
+	var tile_map: TileMapLayer = _find_first_child_of_type(instance, TileMapLayer)
+	if tile_map == null:
+		push_warning("  _parse_dead_end_file: no TileMapLayer child in '%s'" % file_name)
+		instance.free()
+		return null
+		
+	var used_rect: Rect2i = tile_map.get_used_rect()
+	var grid_size   := used_rect.size
+	var grid_offset := used_rect.position  # Store the tilemap offset locally first
+
+	if grid_size == Vector2i.ZERO:
+		push_warning("  _parse_dead_end_file: TileMapLayer in '%s' has no painted cells" % file_name)
+
+	var exits_node: Node = instance.find_child("Exits", false, false)
+	if exits_node == null:
+		push_warning("  _parse_dead_end_file: no child named 'Exits' in '%s'" % file_name)
+		instance.free()
+		return null
+
+	var available_exits: Dictionary = {}
+	var dir_map := { "Exit_N": "North", "Exit_S": "South", "Exit_E": "East", "Exit_W": "West" }
+	for child in exits_node.get_children():
+		if dir_map.has(child.name):
+			var pixel_pos: Vector2 = child.position
+			var grid_exit := Vector2i(int(pixel_pos.x) / TILE_SIZE, int(pixel_pos.y) / TILE_SIZE)
+			available_exits[dir_map[child.name]] = grid_exit
+			print("    Exit '%s' → pixel %s → grid offset %s" % [child.name, pixel_pos, grid_exit])
+		else:
+			print("    Unrecognised exit child name '%s' (expected Exit_N/S/E/W)" % child.name)
+
+	instance.free()
+
+	if available_exits.is_empty():
+		push_warning("  _parse_dead_end_file: '%s' has no recognised Exit_N/S/E/W children" % file_name)
+		return null
+		
+	if available_exits.size() > 1:
+		push_warning("  _parse_dead_end_file: '%s' has %d exits, expected exactly 1 — using first" % [
+			file_name, available_exits.size()
+		])
+
+	var end_data := RoomData.new()
+	end_data.room_file_name  = file_name
+	end_data.grid_size       = grid_size
+	end_data.grid_offset     = grid_offset  # Assigned to end_data correctly
+	end_data.available_exits = available_exits
+	for direction in available_exits.keys():
+		end_data.connected_rooms[direction] = null
+		
+	return end_data
+
+
 # ─── Phase 2: Graph layout loop ───────────────────────────────────────────────
+
 func _phase2_layout_loop() -> void:
 	print("\n── Phase 2: Layout Loop ──")
 	_layout = DungeonLayout.new()
@@ -260,10 +289,12 @@ func _phase2_layout_loop() -> void:
 	if start_template == null:
 		push_error("Phase 2: 'Room_Start.tscn' not found in master_pool.")
 		return
-	print("  Start template found: '%s' | exits: %s" % [start_template.room_file_name, start_template.available_exits.keys()])
+	print("  Start template found: '%s' | exits: %s" % [
+		start_template.room_file_name, start_template.available_exits.keys()
+	])
 
 	var start_room := _duplicate_room(start_template)
-	start_room.room_type = RoomData.RoomType.START
+	start_room.room_type     = RoomData.RoomType.START
 	start_room.grid_position = Vector2i.ZERO
 	_room_use_counts.clear()
 
@@ -330,16 +361,18 @@ func _try_place_room(current_room: RoomData, direction: String) -> RoomData:
 		var template: RoomData = candidates[i]
 		var new_room := _duplicate_room(template)
 
-		# Align doors directly: new room's entrance door sits one cell beyond
-		# the current room's exit door, so the two doors butt up against
-		# each other with no corridor in between.
-		var current_exit_local: Vector2i  = current_room.available_exits[direction]
+		# Use the boundary exit for alignment: the marker's perpendicular axis
+		# gives door row/col; the on-axis coordinate is snapped to the room edge.
+		var current_exit_local:  Vector2i = _boundary_exit(current_room, direction)
 		var current_exit_global: Vector2i = current_room.grid_position + current_exit_local
-		var new_entrance_local: Vector2i  = new_room.available_exits[opposite]
-		var target_entrance_global: Vector2i = current_exit_global + _direction_vector(direction)
-		new_room.grid_position = target_entrance_global - new_entrance_local
+		var new_entrance_local:  Vector2i = _boundary_exit(new_room, opposite)
 
-		var new_room_rect := Rect2i(new_room.grid_position, new_room.grid_size)
+		# Step one cell beyond the current room's wall, then align the new
+		# room so its entrance wall lands exactly there.
+		var mouth_cell:   Vector2i = current_exit_global + _direction_vector(direction)
+		new_room.grid_position = mouth_cell - new_entrance_local
+
+		var new_room_rect := Rect2i(new_room.grid_position + new_room.grid_offset, new_room.grid_size)
 		var space_free    := _layout.is_space_free(new_room_rect)
 
 		var uses: int = _room_use_counts.get(template.room_file_name, 0)
@@ -351,16 +384,17 @@ func _try_place_room(current_room: RoomData, direction: String) -> RoomData:
 		if not space_free:
 			continue
 
-		# Commit
+		# Commit placement.
 		_room_use_counts[template.room_file_name] = uses + 1
 		current_room.connected_rooms[direction] = new_room
-		new_room.connected_rooms[opposite] = current_room
+		new_room.connected_rooms[opposite]      = current_room
 		return new_room
 
 	return null
 
 
 # ─── Phase 3: Critical path & special room assignment ─────────────────────────
+
 func _phase3_assign_special_rooms() -> void:
 	print("\n── Phase 3: Special Room Assignment ──")
 	var start_room := _get_start_room()
@@ -372,11 +406,11 @@ func _phase3_assign_special_rooms() -> void:
 	for room in _layout.rooms:
 		if room == start_room:
 			continue
-		var non_null_count := 0
+		var connected_count := 0
 		for dir in room.connected_rooms.keys():
 			if room.connected_rooms[dir] != null:
-				non_null_count += 1
-		if non_null_count == 1:
+				connected_count += 1
+		if connected_count == 1:
 			dead_ends.append(room)
 
 	print("  Dead ends found: %d" % dead_ends.size())
@@ -398,12 +432,13 @@ func _phase3_assign_special_rooms() -> void:
 
 
 # ─── Phase 4: Assembly & physical instantiation ───────────────────────────────
+
 func _phase4_assemble() -> void:
 	print("\n── Phase 4: Assemble ──")
 	print("  Instancing %d rooms..." % _layout.rooms.size())
 
 	for room in _layout.rooms:
-		var path := ROOMS_DIR + room.room_file_name
+		var path   := ROOMS_DIR + room.room_file_name
 		var packed: PackedScene = load(path)
 		if packed == null:
 			push_warning("Phase 4: load('%s') failed" % path)
@@ -418,14 +453,8 @@ func _phase4_assemble() -> void:
 	print("  Phase 4 done.")
 
 
-# ─── Phase 5: Dead-end capping ─────────────────────────────────────────────────
-# Walk every room placed in the layout and, for each exit that never got
-# connected to another room, plug it with a dead-end piece from END_DIR
-# whose single entrance exit faces back the way we came (same OPPOSITE
-# relationship _try_place_room uses for regular rooms). No reuse-limit
-# tracking and no multi-candidate retry: take the first dead-end whose
-# pool isn't empty, place it, move on. If a direction's pool is empty the
-# exit is logged and left uncapped rather than failing generation.
+# ─── Phase 5: Dead-end capping ────────────────────────────────────────────────
+
 func _phase5_cap_dead_ends() -> void:
 	print("\n── Phase 5: Cap Dead Ends ──")
 	_placed_dead_ends.clear()
@@ -435,17 +464,18 @@ func _phase5_cap_dead_ends() -> void:
 		return
 
 	var open_exits_found := 0
-	var capped := 0
-	var uncapped := 0
+	var capped            := 0
+	var uncapped          := 0
 
 	for room in _layout.rooms:
 		for direction in room.available_exits.keys():
 			if room.connected_rooms.get(direction) != null:
-				continue  # exit already leads to another room
+				continue
 
 			open_exits_found += 1
 			var opposite: String = OPPOSITE[direction]
 			var pool: Array = _dead_end_sub_pools.get(opposite, [])
+
 			if pool.is_empty():
 				print("    ✗ '%s' open %s exit — no dead-end faces %s, leaving uncapped" % [
 					room.room_file_name, direction, opposite
@@ -453,29 +483,51 @@ func _phase5_cap_dead_ends() -> void:
 				uncapped += 1
 				continue
 
-			var template: RoomData = pool[0]
-			var cap := _duplicate_room(template)
-			cap.room_type = RoomData.RoomType.STANDARD
+			var placed := false
+			for template: RoomData in pool:
+				var cap := _duplicate_room(template)
+				cap.room_type = RoomData.RoomType.STANDARD
 
-			# Same alignment math as _try_place_room: the cap's entrance
-			# door butts up directly against the room's open exit door.
-			var exit_local: Vector2i  = room.available_exits[direction]
-			var exit_global: Vector2i = room.grid_position + exit_local
-			var entrance_local: Vector2i = cap.available_exits[opposite]
-			var target_entrance_global: Vector2i = exit_global + _direction_vector(direction)
-			cap.grid_position = target_entrance_global - entrance_local
+				# Same boundary-based alignment as _try_place_room.
+				var exit_local:   Vector2i = _boundary_exit(room, direction)
+				var exit_global:  Vector2i = room.grid_position + exit_local
+				var mouth_cell:   Vector2i = exit_global + _direction_vector(direction)
+				var entrance_local: Vector2i = _boundary_exit(cap, opposite)
+				cap.grid_position = mouth_cell - entrance_local
 
-			room.connected_rooms[direction] = cap
-			cap.connected_rooms[opposite] = room
-			_placed_dead_ends.append(cap)
-			capped += 1
-			print("    ✓ '%s' open %s exit → capped with '%s' @ %s" % [
-				room.room_file_name, direction, cap.room_file_name, cap.grid_position
-			])
+				if cap.grid_size == Vector2i.ZERO:
+					push_warning("Phase 5: cap '%s' has grid_size ZERO — skipping" % cap.room_file_name)
+					continue
+
+				var cap_rect := Rect2i(cap.grid_position + cap.grid_offset, cap.grid_size)
+
+				print("    try cap '%s' | mouth_cell: %s | entrance_local: %s | cap_pos: %s | cap_rect: %s" % [
+					cap.room_file_name, mouth_cell, entrance_local, cap.grid_position, cap_rect
+				])
+
+				if not _layout.is_space_free(cap_rect):
+					print("      ✗ overlaps — skipping")
+					continue
+
+				# Register so later caps respect this one.
+				_layout.register_room(cap)
+				room.connected_rooms[direction] = cap
+				cap.connected_rooms[opposite]   = room
+				_placed_dead_ends.append(cap)
+				capped += 1
+				placed = true
+				print("      ✓ placed '%s' @ %s" % [cap.room_file_name, cap.grid_position])
+				break
+
+			if not placed:
+				print("    ✗ '%s' open %s exit — all cap candidates overlapped, leaving uncapped" % [
+					room.room_file_name, direction
+				])
+				uncapped += 1
 
 	print("  Instancing %d dead-end cap(s)..." % _placed_dead_ends.size())
 	for cap in _placed_dead_ends:
-		var path := END_DIR + cap.room_file_name
+		var path   := END_DIR + cap.room_file_name
 		var packed: PackedScene = load(path)
 		if packed == null:
 			push_warning("Phase 5: load('%s') failed" % path)
@@ -490,7 +542,28 @@ func _phase5_cap_dead_ends() -> void:
 	])
 
 
-# ─── Helpers ──────────────────────────────────────────────────────────────────
+# ─── Alignment helper ─────────────────────────────────────────────────────────
+
+# Returns the grid cell on the true room boundary for the given exit direction.
+# The exit marker's perpendicular axis gives the door's row/column position;
+# the on-axis coordinate is snapped to the room's outer edge, regardless of
+# where the marker was placed inside the room.
+#
+#   North exit → top row    (y = 0),               x from marker
+#   South exit → bottom row (y = grid_size.y - 1), x from marker
+#   East  exit → right col  (x = grid_size.x - 1), y from marker
+#   West  exit → left col   (x = 0),               y from marker
+func _boundary_exit(room: RoomData, direction: String) -> Vector2i:
+	var marker: Vector2i = room.available_exits[direction]
+	match direction:
+		"North": return Vector2i(marker.x, room.grid_offset.y)
+		"South": return Vector2i(marker.x, room.grid_offset.y + room.grid_size.y - 1)
+		"East":  return Vector2i(room.grid_offset.x + room.grid_size.x - 1, marker.y)
+		"West":  return Vector2i(room.grid_offset.x, marker.y)
+	return marker
+
+
+# ─── General helpers ──────────────────────────────────────────────────────────
 
 func _clear_previous() -> void:
 	for child in get_children():
@@ -499,9 +572,10 @@ func _clear_previous() -> void:
 
 func _duplicate_room(template: RoomData) -> RoomData:
 	var r := RoomData.new()
-	r.room_file_name = template.room_file_name
-	r.grid_size = template.grid_size
-	r.room_type = RoomData.RoomType.STANDARD
+	r.room_file_name  = template.room_file_name
+	r.grid_size       = template.grid_size
+	r.grid_offset     = template.grid_offset  # ◄ CRITICAL FIX: Keep the offset!
+	r.room_type       = RoomData.RoomType.STANDARD
 	r.available_exits = template.available_exits.duplicate(true)
 	for direction in template.available_exits.keys():
 		r.connected_rooms[direction] = null
@@ -520,7 +594,7 @@ func _direction_vector(direction: String) -> Vector2i:
 		"North": return Vector2i(0, -1)
 		"South": return Vector2i(0,  1)
 		"East":  return Vector2i(1,  0)
-		"West":  return Vector2i(-1, 0)
+		"West":  return Vector2i(-1,  0)
 	return Vector2i.ZERO
 
 

@@ -6,7 +6,7 @@ var grid_map: Dictionary = {}     # Vector2i -> RoomData
 
 func register_room(room: RoomData) -> void:
 	rooms.append(room)
-	var top_left := room.grid_position
+	var top_left := room.grid_position + room.grid_offset  # offset applied here
 	for x in range(room.grid_size.x):
 		for y in range(room.grid_size.y):
 			grid_map[top_left + Vector2i(x, y)] = room

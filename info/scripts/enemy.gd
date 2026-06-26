@@ -1,14 +1,9 @@
 class_name Enemy
-extends CharacterBody2D
-
-var max_health = 100
-var current_health = max_health
+extends Entity
 
 var weight = 4
 var knockback_stop_time = 0.08
 var is_in_knockback = false
-
-var damage = 10
 
 enum State { IDLE, CHASE, INVESTIGATE, DEAD }
 var current_state: State = State.IDLE
@@ -102,9 +97,6 @@ func _on_sight_body_exited(body: Node2D) -> void:
 
 
 #  Abstract methods (hier absichtlich nicht auf abstract gesetzt damit ich beim konzipieren nicht zu sehr genervt werde)
-
-func attack() -> void:
-	push_warning("Enemy: attack() not implemented in ", name)
 
 func take_damage(amount: float, knockback_dir: Vector2 = Vector2.ZERO, knockback_strength: float = 0.0) -> void:
 	current_health -= amount
