@@ -3,8 +3,19 @@ extends Enemy
 var in_range : bool = false
 var player_ref
 
+var sprint_speed := 80.0
+var sprint_max_time := 0.5
+var sprint_stop_distance := 50.0
+var sprint_cooldown := 2
+var can_sprint := true
+
+var sprint_distance := 80.0 
+var sprint_chance := 0.2
+
 func _physics_process(delta: float) -> void:
 	super(delta)
+	if current_state == State.CHASE and can_sprint and target:
+		_try_sprint()
 
 func _set_state(new_state: State) -> void:
 	if is_in_knockback:
@@ -37,6 +48,34 @@ func attack() -> void:
 	if in_range:
 		player_ref.take_damage(damage)
 
+func _try_sprint() -> void:
+	var dist := global_position.distance_to(target.global_position)
+	if abs(dist - sprint_distance) > 50:
+		return
+	if randf() > sprint_chance:
+		return
+	_do_sprint()
+	
+func _do_sprint() -> void:
+	can_sprint = false
+	var dir := (target.global_position - global_position).normalized()
+	var sprint_timer := 0.0
+	
+	while sprint_timer < sprint_max_time:
+		if not target:
+			break
+		var dist := global_position.distance_to(target.global_position)
+		if dist <= sprint_stop_distance:
+			break
+			
+		velocity = dir * sprint_speed
+		move_and_slide()
+		await get_tree().process_frame
+		sprint_timer += get_process_delta_time()
+		velocity = Vector2.ZERO
+	
+	await get_tree().create_timer(sprint_cooldown).timeout
+	can_sprint = true
 	
 func die() -> void:
 	super()

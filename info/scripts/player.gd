@@ -35,11 +35,15 @@ func _ready() -> void:
 @warning_ignore("unused_parameter")
 func _physics_process(delta: float) -> void:
 	
+	var speed_multiplier = 1.0
+	if is_attacking:
+		speed_multiplier = 0.4
+		
 	anim()
 	var direction = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	
 	if direction != Vector2.ZERO:
-		velocity = velocity.move_toward(direction * max_speed, acceleration)
+		velocity = velocity.move_toward(direction * max_speed * speed_multiplier, acceleration)
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, acceleration)
 	
