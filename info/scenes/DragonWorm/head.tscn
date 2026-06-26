@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://c0hgeo4v4apje"]
+
+[ext_resource type="Script" uid="uid://b43wo8hyiong5" path="res://scripts/DragonWorm/head.gd" id="1_ttteh"]
+[ext_resource type="Texture2D" uid="uid://dmbpi7gcysypd" path="res://assets/DragonWorm.png" id="2_j0sdo"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_b7n0c"]
+
+[node name="Head" type="CharacterBody2D" unique_id=49835238]
+script = ExtResource("1_ttteh")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=361040727]
+unique_name_in_owner = true
+texture = ExtResource("2_j0sdo")
+region_enabled = true
+region_rect = Rect2(2, 0, 23, 27)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1701288721]
+shape = SubResource("CircleShape2D_b7n0c")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=1351870934]

@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://dpogbbuop5bcl"]
+
+[ext_resource type="Script" uid="uid://1ypppst1x0n0" path="res://scripts/DragonWorm/body.gd" id="1_0uiuj"]
+[ext_resource type="Texture2D" uid="uid://dmbpi7gcysypd" path="res://assets/DragonWorm.png" id="1_xswbo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b7n0c"]
+size = Vector2(25, 25)
+
+[node name="Body" type="Area2D" unique_id=1621403441]
+script = ExtResource("1_0uiuj")
+
+[node name="DragonWorm" type="Sprite2D" parent="." unique_id=826221874]
+unique_name_in_owner = true
+texture = ExtResource("1_xswbo")
+region_enabled = true
+region_rect = Rect2(160, 0, 32, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=481588850]
+shape = SubResource("RectangleShape2D_b7n0c")

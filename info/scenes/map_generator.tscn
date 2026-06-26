@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bb1y2i10x1132"]
 
-[ext_resource type="Script" uid="uid://qjbx2oj6ieak" path="res://scripts/map_generator.gd" id="1_qw5ad"]
+[ext_resource type="Script" uid="uid://qjbx2oj6ieak" path="res://scripts/MapGenerator/map_generator.gd" id="1_qw5ad"]
 [ext_resource type="TileSet" uid="uid://bj18vugqpe2c" path="res://assets/tilesets/dungeon0.tres" id="2_g3i74"]
 
 [node name="MapGenerator" type="Node2D" unique_id=385521267]
