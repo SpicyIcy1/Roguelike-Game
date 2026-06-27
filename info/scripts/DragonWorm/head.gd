@@ -1,12 +1,15 @@
-extends CharacterBody2D
+extends Area2D
 
-var speed = 100
+var speed = 50
+var velocity := Vector2.ZERO # newly defined because switch from characterbody2d to area2d
 var position_history: Array[Vector2] = []
 
 var time_accumulator := 0.0
-const RECORD_INTERVAL := 0.05 # time intervall between recording positions
+const RECORD_INTERVAL := 0.05 # time interval between recording positions
 const MAX_HISTORY_SIZE := 50
 
+func _ready() -> void:
+	add_to_group("enemy")
 
 func animate():
 	%Sprite2D.flip_h = velocity.x < 0
@@ -18,17 +21,20 @@ func animate():
 
 
 func _physics_process(delta: float) -> void:
-	velocity = (get_global_mouse_position()-global_position).normalized()*speed # oh yeah einheitsvektor mal geschwindigkeit Weimar wäre stolz
-	move_and_slide()
+	
+	velocity = (PlayerData.global_position-global_position).normalized()*speed
+	
+	
+	global_position += velocity * delta
 	
 	animate()
 	
 	time_accumulator += delta # counts time
 	
 	if time_accumulator >= RECORD_INTERVAL:
-		time_accumulator = 0 #resets timer
+		time_accumulator = 0 # resets timer
 		
-		position_history.push_front(global_position) #push front equals inserting at the beginning of the array and shifting everything back
+		position_history.push_front(global_position) # inserts at the beginning and shifts back
 		
-		if position_history.size() > MAX_HISTORY_SIZE: #Memory leak avoidance Info Projekt 1, Diablo IV 0
+		if position_history.size() > MAX_HISTORY_SIZE: # Info Projekt 1, Diablo IV 0
 			position_history.pop_back()

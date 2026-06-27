@@ -101,14 +101,7 @@ func anim():
 			Direction.DOWN:
 				%AnimationPlayer.play("Idle_Down")
 
-func _on_attack_area_2d_body_entered(body: Node2D) -> void:
-	if body.is_in_group("enemy"):
-		enemies_in_range.append(body)
-			
 
-func _on_attack_area_2d_body_exited(body: Node2D) -> void:
-	if body.is_in_group("enemy"):
-		enemies_in_range.erase(body)
 
 # Die Funktion zeichnet je nach MausCurserPosition einen Vektor
 func update_attack_area_to_mouse() -> void:
@@ -179,3 +172,24 @@ func take_damage(amount: float) -> void:
 	
 func die() -> void:
 	get_tree().reload_current_scene()
+
+
+# --Signals
+func _on_attack_area_2d_body_entered(body: Node2D) -> void:
+	if body.is_in_group("enemy"):
+		enemies_in_range.append(body)
+
+func _on_attack_area_2d_body_exited(body: Node2D) -> void:
+	if body.is_in_group("enemy"):
+		enemies_in_range.erase(body)
+
+
+func _on_attack_area_2d_area_entered(area: Area2D) -> void: #for the dragon worm boss
+	if area.is_in_group("enemy"):
+		enemies_in_range.append(area)
+		print(area)
+
+
+func _on_attack_area_2d_area_exited(area: Area2D) -> void:
+	if area.is_in_group("enemy"):
+		enemies_in_range.erase(area)

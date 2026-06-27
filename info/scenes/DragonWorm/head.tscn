@@ -5,7 +5,9 @@
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_b7n0c"]
 
-[node name="Head" type="CharacterBody2D" unique_id=49835238]
+[node name="Head" type="Area2D" unique_id=2065348113]
+collision_layer = 4
+collision_mask = 2
 script = ExtResource("1_ttteh")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=361040727]

@@ -2,6 +2,8 @@
 
 [ext_resource type="TileSet" uid="uid://bj18vugqpe2c" path="res://assets/tilesets/dungeon0.tres" id="1_mxolh"]
 [ext_resource type="Script" uid="uid://dfm8g0ls2ytmf" path="res://scripts/Tools/BoundingBox.gd" id="2_aekuj"]
+[ext_resource type="PackedScene" uid="uid://dsu7swbi3xbg8" path="res://scenes/DragonWorm/dragon_worm.tscn" id="3_u42os"]
+[ext_resource type="PackedScene" uid="uid://p15jcv2yafyu" path="res://scenes/Player.tscn" id="4_4hyy2"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_aekuj"]
 vertices = PackedVector2Array(75.859375, -6, 86, -6, 86, 4.140625, 123.859375, 42, 134, 42, 134, 52.140625, -11.859375, 230, 150, 68.140625, 150, 86, 137, 86, 155.85938, 122, 166, 132.14063, 166, 150, 150, 150, 137, 122, -74, 251.85938, -74, 278, -86, 278, -86, 251.85938, -22, -91.859375, -22, -166, -10, -166, -10, -102, -198, 94.1875, -205.10156, 75.24219, -203.85938, 74, -187.85938, 74, -139.85938, 182, -38, -75.859375, 11.0390625, -102, 22, -91.67969, 22, -75.859375, -38, -27.859375, 38, -59.859375, 38, -43.859375, -59.859375, -6, -52.140625, 230, 150, 251.85938, 139.85938, 262, 68.140625, 262, 52.140625, 246, 4.140625, 246, -102, 20.140625, -75.859375, -6, -102, 36.140625, -123.859375, 58, -171.85938, 58, -102, 219.85938, -102, 235.85938, -198, 171.85938, -187.85938, 182)
@@ -18,3 +20,9 @@ script = ExtResource("2_aekuj")
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=1809061750]
 navigation_polygon = SubResource("NavigationPolygon_aekuj")
+
+[node name="DragonWorm" parent="." unique_id=1476760934 instance=ExtResource("3_u42os")]
+position = Vector2(-64, 184)
+
+[node name="Player" parent="." unique_id=1294629943 instance=ExtResource("4_4hyy2")]
+position = Vector2(40, 176)

@@ -25,7 +25,7 @@ navigation_polygon = SubResource("NavigationPolygon_kx1ml")
 [node name="Exits" type="Node" parent="." unique_id=1618898967]
 
 [node name="Exit_W" type="Marker2D" parent="Exits" unique_id=279514210]
-position = Vector2(-128, -16)
+position = Vector2(-128, -12)
 
 [node name="Exit_S" type="Marker2D" parent="Exits" unique_id=1660264618]
 position = Vector2(16, 126)
