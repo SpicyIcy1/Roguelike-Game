@@ -92,3 +92,5 @@ region_rect = Rect2(7, 67, 16, 16)
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=52967472]
 unique_name_in_owner = true
 libraries/ = SubResource("AnimationLibrary_j4loy")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

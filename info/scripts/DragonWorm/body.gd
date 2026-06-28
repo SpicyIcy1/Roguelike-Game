@@ -3,6 +3,7 @@ extends Area2D
 
 
 var health = 20
+var damage = 25 #half the heads damage
 var last_position := Vector2.ZERO
 
 var tail = false # last few(few defined in dragon worm) segments get counted as the tail
@@ -37,3 +38,8 @@ func die():
 	%AnimationPlayer.play("puff")
 	await %AnimationPlayer.animation_finished
 	queue_free()
+
+
+func _on_body_entered(body: Node2D) -> void:
+	body.take_damage(damage)
+	print("Damaged player")

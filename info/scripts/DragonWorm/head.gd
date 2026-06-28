@@ -9,7 +9,7 @@ const RECORD_INTERVAL := 0.05 # time interval between recording positions
 const MAX_HISTORY_SIZE := 50
 
 var health = 200
-
+var damage = 50
 
 func _ready() -> void:
 	add_to_group("enemy")
@@ -57,3 +57,8 @@ func die():
 	%AnimationPlayer.play("puff")
 	await %AnimationPlayer.animation_finished
 	queue_free()
+
+
+func _on_body_entered(body: Node2D) -> void: #player can be safe when continuing to move with the head but no one is going to do that
+	body.take_damage(damage)
+	print("Damaged player")

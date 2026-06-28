@@ -15,6 +15,8 @@ var reichweite_FightArea: float = 40.0
 var abstand_FightArea: float = 40.0
 var attack_dir: Vector2 = Vector2.ZERO
 
+var is_invincible = false #not fair taking damage 10 times a second
+var invincibility_t = 1.0 #t for time
 var is_attacking = false
 var can_attack = true
 var enemies_in_range: Array = []
@@ -166,9 +168,26 @@ func unequip_item(item: Equipment) -> void:
 	equipped_items.erase(item)
 
 func take_damage(amount: float) -> void:
+	if is_invincible:
+		return
+		
 	current_health -= amount
 	if current_health <= 0:
 		die()
+	else:
+		# i frames
+		trigger_invincibility(invincibility_t)
+
+func trigger_invincibility(duration: float) -> void:
+	is_invincible = true
+	
+	modulate.a = 0.5 #a -> alpha for transparency
+	
+	await get_tree().create_timer(duration).timeout
+	
+	
+	is_invincible = false
+	modulate.a = 1.0
 	
 func die() -> void:
 	get_tree().reload_current_scene()
@@ -187,7 +206,6 @@ func _on_attack_area_2d_body_exited(body: Node2D) -> void:
 func _on_attack_area_2d_area_entered(area: Area2D) -> void: #for the dragon worm boss
 	if area.is_in_group("enemy"):
 		enemies_in_range.append(area)
-		print(area)
 
 
 func _on_attack_area_2d_area_exited(area: Area2D) -> void:
