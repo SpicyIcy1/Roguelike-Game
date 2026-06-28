@@ -8,7 +8,10 @@ var lbl_hp: Label
 var lbl_damage: Label
 var lbl_speed: Label
 var lbl_cooldown: Label
+var lbl_moral: Label
 var lbl_equip: Label
+
+var hud_moral: Label
 
 
 func _ready() -> void:
@@ -27,6 +30,10 @@ func _ready() -> void:
 	add_child(stats_panel)
 
 	stats_panel.visible = false
+
+	hud_moral = _build_hud_moral()
+	add_child(hud_moral)
+	PlayerData.moral_changed.connect(_on_moral_changed)
 
 	if PlayerData.first_start:
 		PlayerData.first_start = false
@@ -115,6 +122,7 @@ func _build_stats() -> Control:
 	lbl_damage   = _stat_row(vbox, "Schaden")
 	lbl_speed    = _stat_row(vbox, "Geschwindigkeit")
 	lbl_cooldown = _stat_row(vbox, "Angriff-Cooldown")
+	lbl_moral    = _stat_row(vbox, "Moral")
 
 	vbox.add_child(HSeparator.new())
 
@@ -153,6 +161,8 @@ func _refresh_stats() -> void:
 	lbl_damage.text   = str(player.damage)
 	lbl_speed.text    = str(player.max_speed)
 	lbl_cooldown.text = "%.2f s" % player.attack_cooldown
+	lbl_moral.text    = "%d  (%s)" % [PlayerData.moral_score, _moral_title(PlayerData.moral_score)]
+	lbl_moral.modulate = _moral_color(PlayerData.moral_score)
 
 	if player.equipped_items.is_empty():
 		lbl_equip.text = "—"
@@ -161,3 +171,44 @@ func _refresh_stats() -> void:
 		for item in player.equipped_items:
 			names.append(item.equipment_name)
 		lbl_equip.text = ", ".join(names)
+
+
+func _build_hud_moral() -> Label:
+	var lbl = Label.new()
+	lbl.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+	lbl.position = Vector2(12, 12)
+	lbl.text = _hud_moral_text(PlayerData.moral_score)
+	lbl.modulate = _moral_color(PlayerData.moral_score)
+	return lbl
+
+
+func _on_moral_changed(new_score: int) -> void:
+	hud_moral.text = _hud_moral_text(new_score)
+	hud_moral.modulate = _moral_color(new_score)
+
+
+func _hud_moral_text(score: int) -> String:
+	var sign_str = "+" if score >= 0 else ""
+	return "Moral: %s%d" % [sign_str, score]
+
+
+func _moral_title(score: int) -> String:
+	if score >= 10:
+		return "Sehr Cool bro"
+	elif score >= 1:
+		return "Gut"
+	elif score == 0:
+		return "Neutral"
+	elif score >= -9:
+		return "GRRRRRRR"
+	else:
+		return "Bösewicht"
+
+
+func _moral_color(score: int) -> Color:
+	if score > 0:
+		return Color(0.4, 1.0, 0.4)
+	elif score < 0:
+		return Color(1.0, 0.4, 0.4)
+	else:
+		return Color(1.0, 1.0, 1.0)

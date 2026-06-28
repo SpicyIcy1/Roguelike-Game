@@ -127,6 +127,7 @@ func take_damage(amount: float, knockback_dir: Vector2 = Vector2.ZERO, knockback
 	
 func die() -> void:
 	_set_state(State.DEAD)
+	PlayerData.add_morality(1)
 	push_warning("Enemy: die() not implemented in ", name)
 
 

@@ -20,6 +20,7 @@ var invincibility_t = 1.0 #t for time
 var is_attacking = false
 var can_attack = true
 var enemies_in_range: Array = []
+var npcs_in_range: Array = []
 var equipped_items: Array[Equipment] = []
 enum Direction { UP, DOWN, HORIZONTAL }
 var last_direction: Direction = Direction.DOWN
@@ -104,7 +105,6 @@ func anim():
 				%AnimationPlayer.play("Idle_Down")
 
 
-
 # Die Funktion zeichnet je nach MausCurserPosition einen Vektor
 func update_attack_area_to_mouse() -> void:
 	var mouse_pos = get_global_mouse_position()
@@ -129,13 +129,18 @@ func attack():
 		return
 	can_attack = false
 	var cooldown = attack_cooldown
-	if enemies_in_range.is_empty():
+	var hit_anything = false
+	for enemy in enemies_in_range:
+		if enemy.has_method("take_damage"):
+			enemy.take_damage(damage)
+			hit_anything = true
+	for npc in npcs_in_range:
+		if npc.has_method("take_damage"):
+			npc.take_damage(damage)
+			hit_anything = true
+	if not hit_anything:
 		# Kein Treffer = längerer Cooldown
 		cooldown *= attack_cooldown_debuff
-	else:
-		for enemy in enemies_in_range:
-			if enemy.has_method("take_damage"):
-				enemy.take_damage(damage)
 	
 	# Animation hier anpassen
 	match attack_dir:
