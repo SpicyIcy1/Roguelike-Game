@@ -22,9 +22,7 @@ script = ExtResource("2_aekuj")
 navigation_polygon = SubResource("NavigationPolygon_4hyy2")
 
 [node name="DragonWorm" parent="." unique_id=1476760934 instance=ExtResource("3_u42os")]
-visible = false
 position = Vector2(-64, 184)
 
 [node name="Player" parent="." unique_id=1294629943 instance=ExtResource("4_4hyy2")]
-visible = false
-position = Vector2(40, 176)
+position = Vector2(16, 224)

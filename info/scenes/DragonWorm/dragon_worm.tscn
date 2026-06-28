@@ -35,4 +35,4 @@ position = Vector2(-32, -32)
 position = Vector2(-32, -32)
 
 [node name="Body9" parent="." unique_id=194787581 instance=ExtResource("2_8k0al")]
-position = Vector2(-32, -32)
+position = Vector2(-48, -48)

@@ -8,7 +8,7 @@ const TAIL_COUNT = 2 #the last x segments will be considered the tail
 # How many array slots to skip between each segment
 const SEGMENT_GAP := 5
 
-var health = 500
+var is_dying: bool = false #to mke sure nothing gets freed twice
 
 const INTERPOLATION_SPEED := 5.0 #head doesnt update its position every frame because we dont want the pcs to explode, without interpolating the movements would be to choppy
 
@@ -23,11 +23,20 @@ func _ready() -> void:
 		segments[i].z_index = %Head.z_index - (i + 1)
 
 func _physics_process(delta: float) -> void:
+	
+	
+	handle_potential_death() 
+	
+	if not is_dying:
+		handle_movement(delta)
+
+
+func handle_movement(delta):
 	for i in range(segments.size() - 1, -1, -1): #looping backwards, paramters start, stop, step
 		var segment = segments[i]
 		
 		if i >= segments.size() - TAIL_COUNT:
-			segments[i].tail = true
+						segments[i].tail = true
 		
 		
 		#Dead Segments
@@ -50,6 +59,20 @@ func _physics_process(delta: float) -> void:
 		if history_index < %Head.position_history.size():
 			var target_position: Vector2 = %Head.position_history[history_index]
 			segment.global_position = segment.global_position.lerp(target_position, INTERPOLATION_SPEED * delta)
+
+func handle_potential_death():
+	if not is_dying: 
+		if %Head.health <= 0:
+			is_dying = true
+			
+			var death_tween = create_tween()
+			for i in range(segments.size() - 1, -1, -1):
+				var segment = segments[i]
+				if is_instance_valid(segment):
+					death_tween.tween_callback(segment.die)
+					death_tween.tween_interval(0.2)
+			death_tween.tween_callback(%Head.die)  # head dies last
+
 
 func recalculate_z_indices() -> void:
 	for i in range(segments.size()):
