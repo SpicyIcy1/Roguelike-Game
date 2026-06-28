@@ -1,0 +1,94 @@
+[gd_scene format=3 uid="uid://dpogbbuop5bcl"]
+
+[ext_resource type="Script" uid="uid://1ypppst1x0n0" path="res://scripts/DragonWorm/body.gd" id="1_0uiuj"]
+[ext_resource type="Texture2D" uid="uid://dmbpi7gcysypd" path="res://assets/DragonWorm.png" id="1_xswbo"]
+[ext_resource type="Texture2D" uid="uid://6kp406ynkmww" path="res://assets/effects/Smoke.png" id="3_2omoh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b7n0c"]
+size = Vector2(25, 25)
+
+[sub_resource type="Animation" id="Animation_2omoh"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Smoke:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(7, 67, 16, 16)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Smoke:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_ntnrk"]
+resource_name = "puff"
+length = 0.25
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Smoke:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [Rect2(7, 67, 16, 16), Rect2(39, 61, 25, 27), Rect2(77, 60, 29, 27), Rect2(116, 60, 28, 28), Rect2(152, 56, 32, 32)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Smoke:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_j4loy"]
+_data = {
+&"RESET": SubResource("Animation_2omoh"),
+&"puff": SubResource("Animation_ntnrk")
+}
+
+[node name="Body" type="Area2D" unique_id=1621403441]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_0uiuj")
+
+[node name="DragonWorm" type="Sprite2D" parent="." unique_id=826221874]
+unique_name_in_owner = true
+texture = ExtResource("1_xswbo")
+region_enabled = true
+region_rect = Rect2(160, 0, 32, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=481588850]
+shape = SubResource("RectangleShape2D_b7n0c")
+
+[node name="Smoke" type="Sprite2D" parent="." unique_id=279532058]
+visible = false
+texture = ExtResource("3_2omoh")
+region_enabled = true
+region_rect = Rect2(7, 67, 16, 16)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=52967472]
+unique_name_in_owner = true
+libraries/ = SubResource("AnimationLibrary_j4loy")

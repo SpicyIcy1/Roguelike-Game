@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://dt5xewt3we2gg"]
 
 [ext_resource type="TileSet" uid="uid://bj18vugqpe2c" path="res://assets/tilesets/dungeon0.tres" id="1_vdosn"]
-[ext_resource type="Script" uid="uid://dfm8g0ls2ytmf" path="res://scripts/BoundingBox.gd" id="2_jtw8u"]
+[ext_resource type="Script" uid="uid://dfm8g0ls2ytmf" path="res://scripts/Tools/BoundingBox.gd" id="2_jtw8u"]
 
 [node name="DeadEndWest" type="Node2D" unique_id=97569535]
 

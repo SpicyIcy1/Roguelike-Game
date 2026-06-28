@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://bwpcipyp8e1a1"]
 
 [ext_resource type="TileSet" uid="uid://bj18vugqpe2c" path="res://assets/tilesets/dungeon0.tres" id="1_3w0v5"]
-[ext_resource type="Script" uid="uid://dfm8g0ls2ytmf" path="res://scripts/BoundingBox.gd" id="2_d37wq"]
+[ext_resource type="Script" uid="uid://dfm8g0ls2ytmf" path="res://scripts/Tools/BoundingBox.gd" id="2_d37wq"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_fy4m4"]
 vertices = PackedVector2Array(310, 22, -38, 22, -38, -22, 310, -22)
@@ -18,10 +18,10 @@ script = ExtResource("2_d37wq")
 [node name="Exits" type="Node" parent="." unique_id=211815786]
 
 [node name="Exit_E" type="Marker2D" parent="Exits" unique_id=72863375]
-position = Vector2(319, 2)
+position = Vector2(319, -10)
 
 [node name="Exit_W" type="Marker2D" parent="Exits" unique_id=287087756]
-position = Vector2(-51, 2)
+position = Vector2(-51, -10)
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=326464679]
 position = Vector2(0, -16)

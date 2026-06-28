@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://c5dv46bhxorns"]
 
 [ext_resource type="TileSet" uid="uid://bj18vugqpe2c" path="res://assets/tilesets/dungeon0.tres" id="1_mtqkf"]
-[ext_resource type="Script" uid="uid://dfm8g0ls2ytmf" path="res://scripts/BoundingBox.gd" id="2_a71us"]
+[ext_resource type="Script" uid="uid://dfm8g0ls2ytmf" path="res://scripts/Tools/BoundingBox.gd" id="2_a71us"]
 [ext_resource type="PackedScene" uid="uid://bsrihjy7mh2mu" path="res://scenes/enemy_spawn_zone.tscn" id="3_vwsn0"]
 [ext_resource type="PackedScene" uid="uid://r0yn2a2s6tuy" path="res://scenes/Snap_dragon.tscn" id="5_37ggs"]
 
@@ -25,7 +25,7 @@ navigation_polygon = SubResource("NavigationPolygon_kx1ml")
 [node name="Exits" type="Node" parent="." unique_id=1618898967]
 
 [node name="Exit_W" type="Marker2D" parent="Exits" unique_id=279514210]
-position = Vector2(-125, -8)
+position = Vector2(-128, -12)
 
 [node name="Exit_S" type="Marker2D" parent="Exits" unique_id=1660264618]
 position = Vector2(16, 126)
