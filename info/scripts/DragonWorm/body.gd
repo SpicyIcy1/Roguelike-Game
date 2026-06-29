@@ -3,7 +3,7 @@ extends Area2D
 
 
 var health = 20
-var damage = 25 #half the heads damage
+var attack_damage = 25 #half the heads damage
 var last_position := Vector2.ZERO
 
 var tail = false # last few(few defined in dragon worm) segments get counted as the tail
@@ -41,5 +41,5 @@ func die():
 
 
 func _on_body_entered(body: Node2D) -> void:
-	body.take_damage(damage)
+	body.take_damage(attack_damage)
 	print("Damaged player")
