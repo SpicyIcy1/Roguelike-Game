@@ -36,7 +36,7 @@ func handle_movement(delta):
 		var segment = segments[i]
 		
 		if i >= segments.size() - TAIL_COUNT:
-						segments[i].tail = true
+			segments[i].tail = true
 		
 		
 		#Dead Segments

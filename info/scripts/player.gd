@@ -146,13 +146,17 @@ func attack():
 	match attack_dir:
 		Vector2.UP:
 			%AnimationPlayer.play("Slash_Up")
+			last_direction = Direction.UP
 		Vector2.DOWN:
 			%AnimationPlayer.play("Slash_Down")
+			last_direction = Direction.DOWN
 		Vector2.LEFT:
 			randi_sprites_36x_36.flip_h = true
+			last_direction = Direction.HORIZONTAL
 			%AnimationPlayer.play("Slash_H")
 		Vector2.RIGHT:
 			randi_sprites_36x_36.flip_h = false
+			last_direction = Direction.HORIZONTAL
 			%AnimationPlayer.play("Slash_H")
 
 	await %AnimationPlayer.animation_finished
