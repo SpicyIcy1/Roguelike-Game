@@ -63,10 +63,27 @@ func _run() -> void:
 		for child in exits_node.get_children():
 			if   child.name == "TEMP_Exit_E": child.name = "Exit_E"
 			elif child.name == "TEMP_Exit_W": child.name = "Exit_W"
-
+	
+	var nav_links := instance.find_children("*", "NavigationLink2D", true, false) # would have been better if we had clumped all nav nodes under one Node like with Exits and used a naming scheme
+	for link in nav_links: 
+		if link is NavigationLink2D:
+			_mirror_x(link, offset_x, size_x)
+			link.start_position.x = -link.start_position.x #eigentliche position der übergange da wir sie meistens per mouse drag so verschoben haben
+			link.end_position.x = -link.end_position.x
+	
+	
+	var spawn_zones := instance.find_children("EnemySpawnZone*", "", true, false)
+	
+	for zone in spawn_zones:
+		if zone is Node2D:
+			_mirror_x(zone, offset_x, size_x)
+			for child in zone.get_children():
+				if child is Marker2D:
+					child.position.x = -child.position.x
+	
 	# Mirror everything else
 	for child in instance.get_children():
-		if child is Node2D and not child is TileMapLayer and child.name != "Exits":
+		if child is Node2D and not child is TileMapLayer and child.name != "Exits" and not child is NavigationLink2D and not child is EnemySpawnZone:
 			_mirror_x(child, offset_x, size_x)
 
 	

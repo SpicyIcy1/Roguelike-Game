@@ -15,9 +15,12 @@ var reichweite_FightArea: float = 40.0
 var abstand_FightArea: float = 40.0
 var attack_dir: Vector2 = Vector2.ZERO
 
+var is_invincible = false #not fair taking damage 10 times a second
+var invincibility_t = 1.0 #t for time
 var is_attacking = false
 var can_attack = true
 var enemies_in_range: Array = []
+var npcs_in_range: Array = []
 var equipped_items: Array[Equipment] = []
 enum Direction { UP, DOWN, HORIZONTAL }
 var last_direction: Direction = Direction.DOWN
@@ -35,11 +38,15 @@ func _ready() -> void:
 @warning_ignore("unused_parameter")
 func _physics_process(delta: float) -> void:
 	
+	var speed_multiplier = 1.0
+	if is_attacking:
+		speed_multiplier = 0.4
+		
 	anim()
 	var direction = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	
 	if direction != Vector2.ZERO:
-		velocity = velocity.move_toward(direction * max_speed, acceleration)
+		velocity = velocity.move_toward(direction * max_speed * speed_multiplier, acceleration)
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, acceleration)
 	
@@ -97,14 +104,6 @@ func anim():
 			Direction.DOWN:
 				%AnimationPlayer.play("Idle_Down")
 
-func _on_attack_area_2d_body_entered(body: Node2D) -> void:
-	if body.is_in_group("enemy"):
-		enemies_in_range.append(body)
-			
-
-func _on_attack_area_2d_body_exited(body: Node2D) -> void:
-	if body.is_in_group("enemy"):
-		enemies_in_range.erase(body)
 
 # Die Funktion zeichnet je nach MausCurserPosition einen Vektor
 func update_attack_area_to_mouse() -> void:
@@ -130,13 +129,18 @@ func attack():
 		return
 	can_attack = false
 	var cooldown = attack_cooldown
-	if enemies_in_range.is_empty():
+	var hit_anything = false
+	for enemy in enemies_in_range:
+		if enemy.has_method("take_damage"):
+			enemy.take_damage(damage)
+			hit_anything = true
+	for npc in npcs_in_range:
+		if npc.has_method("take_damage"):
+			npc.take_damage(damage)
+			hit_anything = true
+	if not hit_anything:
 		# Kein Treffer = längerer Cooldown
 		cooldown *= attack_cooldown_debuff
-	else:
-		for enemy in enemies_in_range:
-			if enemy.has_method("take_damage"):
-				enemy.take_damage(damage)
 	
 	# Animation hier anpassen
 	match attack_dir:
@@ -169,9 +173,46 @@ func unequip_item(item: Equipment) -> void:
 	equipped_items.erase(item)
 
 func take_damage(amount: float) -> void:
+	if is_invincible:
+		return
+		
 	current_health -= amount
 	if current_health <= 0:
 		die()
+	else:
+		# i frames
+		trigger_invincibility(invincibility_t)
+
+func trigger_invincibility(duration: float) -> void:
+	is_invincible = true
+	
+	modulate.a = 0.5 #a -> alpha for transparency
+	
+	await get_tree().create_timer(duration).timeout
+	
+	
+	is_invincible = false
+	modulate.a = 1.0
 	
 func die() -> void:
 	get_tree().reload_current_scene()
+
+
+# --Signals
+func _on_attack_area_2d_body_entered(body: Node2D) -> void:
+	if body.is_in_group("enemy"):
+		enemies_in_range.append(body)
+
+func _on_attack_area_2d_body_exited(body: Node2D) -> void:
+	if body.is_in_group("enemy"):
+		enemies_in_range.erase(body)
+
+
+func _on_attack_area_2d_area_entered(area: Area2D) -> void: #for the dragon worm boss
+	if area.is_in_group("enemy"):
+		enemies_in_range.append(area)
+
+
+func _on_attack_area_2d_area_exited(area: Area2D) -> void:
+	if area.is_in_group("enemy"):
+		enemies_in_range.erase(area)

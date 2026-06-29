@@ -295,7 +295,7 @@ func _phase2_layout_loop() -> void:
 
 	var start_room := _duplicate_room(start_template)
 	start_room.room_type     = RoomData.RoomType.START
-	start_room.grid_position = Vector2i.ZERO
+	start_room.grid_position = -start_room.grid_offset
 	_room_use_counts.clear()
 
 	_layout.register_room(start_room)
