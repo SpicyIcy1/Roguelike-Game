@@ -9,7 +9,7 @@ var max_speed = 120
 var acceleration = 50
 var attack_cooldown = 0.4
 #falls der Spieler ins leere schlägt = längere cooldown
-var attack_cooldown_debuff = 3
+var attack_cooldown_debuff = 1
 
 var reichweite_FightArea: float = 40.0
 var abstand_FightArea: float = 40.0
@@ -34,13 +34,13 @@ func _ready() -> void:
 	get_window().grab_focus() #Damit ich nicht immer "w" in den Code editor schreibe wenn ich das Spiel starte
 	attack_shape.shape.radius = reichweite_FightArea
 	add_child(EscMenu.new())
-		
+
 @warning_ignore("unused_parameter")
 func _physics_process(delta: float) -> void:
 	
 	var speed_multiplier = 1.0
 	if is_attacking:
-		speed_multiplier = 0.4
+		speed_multiplier = 0.0
 		
 	anim()
 	var direction = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
