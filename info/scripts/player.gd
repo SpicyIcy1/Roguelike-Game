@@ -206,10 +206,14 @@ func die() -> void:
 func _on_attack_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemy"):
 		enemies_in_range.append(body)
+	elif body.is_in_group("npc"):
+		npcs_in_range.append(body)
 
 func _on_attack_area_2d_body_exited(body: Node2D) -> void:
 	if body.is_in_group("enemy"):
 		enemies_in_range.erase(body)
+	elif body.is_in_group("npc"):
+		npcs_in_range.erase(body)
 
 
 func _on_attack_area_2d_area_entered(area: Area2D) -> void: #for the dragon worm boss

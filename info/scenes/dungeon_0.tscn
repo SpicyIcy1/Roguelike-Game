@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cdn5ha7ax8ry8" path="res://scripts/MapGenerator/dungeon_0.gd" id="1_64giy"]
 [ext_resource type="PackedScene" uid="uid://bb1y2i10x1132" path="res://scenes/map_generator.tscn" id="2_d47ov"]
 [ext_resource type="PackedScene" uid="uid://p15jcv2yafyu" path="res://scenes/Player.tscn" id="3_d47ov"]
+[ext_resource type="PackedScene" uid="uid://bamhsm1dml1lh" path="res://scenes/NPC_Anta.tscn" id="4_anta"]
 
 [node name="Dungeon0" type="Node2D" unique_id=1670368270]
 script = ExtResource("1_64giy")
@@ -14,3 +15,6 @@ MIN_ROOMS = 10
 
 [node name="Player" parent="." unique_id=1294629943 instance=ExtResource("3_d47ov")]
 position = Vector2(184, 96)
+
+[node name="NPC_Anta" parent="." instance=ExtResource("4_anta")]
+position = Vector2(216, 96)

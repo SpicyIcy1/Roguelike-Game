@@ -11,6 +11,7 @@ var lbl_cooldown: Label
 var lbl_moral: Label
 var lbl_equip: Label
 
+var hud_layer: CanvasLayer
 var hud_moral: Label
 
 
@@ -31,8 +32,14 @@ func _ready() -> void:
 
 	stats_panel.visible = false
 
+	# HUD lebt in einer eigenen CanvasLayer, damit es unabhängig von der
+	# Sichtbarkeit des Pausemenüs ist (Menü ist standardmäßig unsichtbar).
+	hud_layer = CanvasLayer.new()
+	hud_layer.layer = 9
+	add_child(hud_layer)
+
 	hud_moral = _build_hud_moral()
-	add_child(hud_moral)
+	hud_layer.add_child(hud_moral)
 	PlayerData.moral_changed.connect(_on_moral_changed)
 
 	if PlayerData.first_start:
@@ -49,11 +56,13 @@ func _unhandled_input(event: InputEvent) -> void:
 func open() -> void:
 	_show(main_panel)
 	visible = true
+	hud_layer.visible = false
 	get_tree().paused = true
 
 
 func close() -> void:
 	visible = false
+	hud_layer.visible = true
 	get_tree().paused = false
 
 
