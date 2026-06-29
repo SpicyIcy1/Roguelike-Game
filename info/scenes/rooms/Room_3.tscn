@@ -1,12 +1,12 @@
 [gd_scene format=4 uid="uid://dixbryu1k4448"]
 
-[ext_resource type="Script" uid="uid://dfm8g0ls2ytmf" path="res://scripts/BoundingBox.gd" id="2_1siff"]
+[ext_resource type="Script" uid="uid://dfm8g0ls2ytmf" path="res://scripts/Tools/BoundingBox.gd" id="2_1siff"]
 [ext_resource type="TileSet" uid="uid://bj18vugqpe2c" path="res://assets/tilesets/dungeon0.tres" id="3_nenaj"]
 
-[sub_resource type="NavigationPolygon" id="NavigationPolygon_0g03g"]
-vertices = PackedVector2Array(375.54688, 243, 200, 243, 185.92969, 224.24219, 242.39844, 193.45313, 370.4375, 127.328125, 293.1172, 130.07031, 275.1875, 122.390625, 45.171875, -7.8203125, 99.74219, -60.8125)
-polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3, 4), PackedInt32Array(5, 4, 3), PackedInt32Array(6, 5, 3), PackedInt32Array(6, 3, 7, 8)])
-outlines = Array[PackedVector2Array]([PackedVector2Array(100, -75, 281, 114, 295, 120, 419, 133, 411, 245, 195, 253, 171, 221, 226, 191, 31, -8)])
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_1siff"]
+vertices = PackedVector2Array(271.0625, 148.57813, 316.71875, 244.38281, 317.27344, 252.20313, 229.04688, 253.90625, 213.02344, 237.88281, 209.85156, 225.17969, 314.35938, 152.60938, 351.07813, 191.07813, 351.78906, 222.88281, 335.28125, 224.39063, 72.63281, 193.5, 73.3125, 184, 85.140625, 184, 120.50781, 185.32031, 99.03906, 238.21094, 81.953125, 237.25781, 98.32031, 170.8125, 47.703125, 215, 46.320313, 211.64063, 63.742188, 215, 123.10156, 244.5, 113.671875, 251.21875, 242.07813, 114.96875, 183.11719, 204.74219, 171.32813, 146.40625, 65.5625, 109.21094, 18.007813, 111.671875, 16.703125, 109.046875, 9.6328125, 55.171875, 36.53125, 32.921875, 104.53906, 69.13281, 43.289063, 13.4375, 65.46875, 11.671875, 90.1875, -13.046875, 238.46875, 7.703125, 219.92969, 44.78125, 122.296875, 85.109375, 147.21094, 240.64063, 147.77344, 182.45313, 221.14844, 84.97656, 236.38281, 96.953125, 249.21875, -51.109375, 264.27344, -33.046875, 264.72656, -27, 88.8125, -43.328125, 208.5625, -52.132813, 198.64844, -67, 166.67188, -67, 124.03125, -100, 135.67188, -100, 55, -77.140625, 100.109375, -115.59375, 55, -92.67969, 83.0625, -119.140625)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3, 4, 5), PackedInt32Array(6, 7, 8, 9, 0), PackedInt32Array(10, 11, 12, 13, 14, 15), PackedInt32Array(12, 16, 13), PackedInt32Array(17, 18, 10, 19), PackedInt32Array(20, 21, 14, 13), PackedInt32Array(0, 9, 1), PackedInt32Array(22, 0, 5, 23, 24), PackedInt32Array(25, 26, 27, 28, 29, 30), PackedInt32Array(30, 29, 31, 32), PackedInt32Array(30, 32, 33, 34, 35, 36), PackedInt32Array(15, 19, 10), PackedInt32Array(37, 20, 13, 38, 23), PackedInt32Array(23, 38, 24), PackedInt32Array(39, 40, 22, 24, 36), PackedInt32Array(35, 39, 36), PackedInt32Array(41, 42, 43, 34, 33, 44, 45), PackedInt32Array(46, 45, 44, 47), PackedInt32Array(48, 49, 47, 44, 50), PackedInt32Array(51, 48, 50, 52, 53)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(7, 112, -1, 51, 28, 27, 36, 4, 61, 2, 80, -17, 79, -39, 45, -73, 45, -97, 80, -130, 104, -125, 127, -110, 140, -110, 171, -77, 204, -77, 214, -62, 254, -61, 274, -37, 275, -24, 247, 13, 230, 47, 231, 80, 245, 91, 251, 110, 276, 139, 319, 143, 361, 187, 362, 232, 340, 234, 327, 248, 328, 262, 225, 264, 204, 243, 201, 231, 184, 218, 152, 250, 127, 254, 113, 264, 95, 248, 77, 247, 59, 225, 41, 225, 34, 208, 63, 188, 64, 174, 81, 174, 97, 158, 123, 175, 142, 173, 159, 147, 115, 92, 105, 83, 70, 119, 12, 122)])
 
 [node name="WasserKorridor" type="Node2D" unique_id=1247425168]
 
@@ -18,7 +18,7 @@ script = ExtResource("2_1siff")
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=1186953050]
 visible = false
 position = Vector2(-187, -93)
-navigation_polygon = SubResource("NavigationPolygon_0g03g")
+navigation_polygon = SubResource("NavigationPolygon_1siff")
 
 [node name="Exits" type="Node" parent="." unique_id=1393789173]
 
