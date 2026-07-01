@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://bbs7du11j4pv2" path="res://scripts/player.gd" id="1_p0vlq"]
 [ext_resource type="Texture2D" uid="uid://7y8ytswixx2p" path="res://assets/randi_sprites_36x36.png" id="2_v6fml"]
+[ext_resource type="PackedScene" uid="uid://dbss6qll0ka0v" path="res://scenes/weapons/sword.tscn" id="3_3li8b"]
+[ext_resource type="Animation" uid="uid://caby08s8c1ekb" path="res://Slash_H.tres" id="3_mdl7e"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5q5h1"]
 size = Vector2(14, 8)
@@ -15,7 +17,7 @@ step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("RandiSprites36x36:frame")
+tracks/0/path = NodePath("Pivot/RandiSprites36x36:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -31,7 +33,7 @@ step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("RandiSprites36x36:frame")
+tracks/0/path = NodePath("Pivot/RandiSprites36x36:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -47,7 +49,7 @@ step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("RandiSprites36x36:frame")
+tracks/0/path = NodePath("Pivot/RandiSprites36x36:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -87,7 +89,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("RandiSprites36x36:frame")
+tracks/2/path = NodePath("Pivot/RandiSprites36x36:frame")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -108,15 +110,51 @@ tracks/3/keys = {
 "update": 0,
 "values": [Vector2(1, 17)]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Pivot/WeaponPos:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-4, -12)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Pivot/WeaponPos:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Pivot/WeaponPos:z_index")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [-1]
+}
 
 [sub_resource type="Animation" id="Animation_6eyey"]
 resource_name = "Slash_Down"
-length = 0.39999999999999997
+length = 0.4
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("RandiSprites36x36:frame")
+tracks/0/path = NodePath("Pivot/RandiSprites36x36:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -125,32 +163,51 @@ tracks/0/keys = {
 "update": 1,
 "values": [156, 157, 158]
 }
-
-[sub_resource type="Animation" id="Animation_d3wef"]
-resource_name = "Slash_H"
-length = 0.39999999999999997
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("RandiSprites36x36:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.05, 0.15, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1),
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pivot/WeaponPos:z_index")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.0074093877),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [162, 163, 164]
+"values": [1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Pivot/WeaponPos:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.0074093877, 0.15683204, 0.29966855),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, -18), Vector2(0, 0), Vector2(-4, 9)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Pivot/WeaponPos:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.29966855),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0.0, -3.117158]
 }
 
 [sub_resource type="Animation" id="Animation_v6fml"]
 resource_name = "Slash_Up"
-length = 0.39999999999999997
+length = 0.4
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("RandiSprites36x36:frame")
+tracks/0/path = NodePath("Pivot/RandiSprites36x36:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -159,6 +216,42 @@ tracks/0/keys = {
 "update": 1,
 "values": [159, 160, 161]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pivot/WeaponPos:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.30255),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(-2, -13), Vector2(7, 7), Vector2(6, 8)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Pivot/WeaponPos:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Pivot/WeaponPos:z_index")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.06462632),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, -1]
+}
 
 [sub_resource type="Animation" id="Animation_cw2d6"]
 resource_name = "Walk_Down"
@@ -166,7 +259,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("RandiSprites36x36:frame")
+tracks/0/path = NodePath("Pivot/RandiSprites36x36:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -182,7 +275,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("RandiSprites36x36:frame")
+tracks/0/path = NodePath("Pivot/RandiSprites36x36:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -198,7 +291,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("RandiSprites36x36:frame")
+tracks/0/path = NodePath("Pivot/RandiSprites36x36:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -215,15 +308,12 @@ _data = {
 &"Idle_Up": SubResource("Animation_bruh7"),
 &"RESET": SubResource("Animation_3li8b"),
 &"Slash_Down": SubResource("Animation_6eyey"),
-&"Slash_H": SubResource("Animation_d3wef"),
+&"Slash_H": ExtResource("3_mdl7e"),
 &"Slash_Up": SubResource("Animation_v6fml"),
 &"Walk_Down": SubResource("Animation_cw2d6"),
 &"Walk_H": SubResource("Animation_qu4a1"),
 &"Walk_Up": SubResource("Animation_70d11")
 }
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_v6fml"]
-radius = 36.0
 
 [node name="Player" type="CharacterBody2D" unique_id=1294629943 groups=["Player"]]
 collision_layer = 2
@@ -233,12 +323,6 @@ script = ExtResource("1_p0vlq")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=341936671]
 position = Vector2(0, 12)
 shape = SubResource("RectangleShape2D_5q5h1")
-
-[node name="RandiSprites36x36" type="Sprite2D" parent="." unique_id=659547563]
-position = Vector2(0, 1)
-texture = ExtResource("2_v6fml")
-hframes = 18
-vframes = 17
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=658371483]
 monitorable = false
@@ -254,15 +338,18 @@ libraries/ = SubResource("AnimationLibrary_3li8b")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=289636269]
 unique_name_in_owner = true
 
-[node name="AttackArea2D" type="Area2D" parent="." unique_id=1126996340]
-collision_layer = 0
-collision_mask = 4
+[node name="Pivot" type="Node2D" parent="." unique_id=843752995]
+unique_name_in_owner = true
 
-[node name="FightArea" type="CollisionShape2D" parent="AttackArea2D" unique_id=655791729]
-position = Vector2(0, 4)
-shape = SubResource("CircleShape2D_v6fml")
+[node name="RandiSprites36x36" type="Sprite2D" parent="Pivot" unique_id=659547563]
+position = Vector2(0, 1)
+texture = ExtResource("2_v6fml")
+hframes = 18
+vframes = 17
 
-[connection signal="area_entered" from="AttackArea2D" to="." method="_on_attack_area_2d_area_entered"]
-[connection signal="area_exited" from="AttackArea2D" to="." method="_on_attack_area_2d_area_exited"]
-[connection signal="body_entered" from="AttackArea2D" to="." method="_on_attack_area_2d_body_entered"]
-[connection signal="body_exited" from="AttackArea2D" to="." method="_on_attack_area_2d_body_exited"]
+[node name="WeaponPos" type="Node2D" parent="Pivot" unique_id=775844152]
+unique_name_in_owner = true
+z_index = -1
+position = Vector2(-4, -12)
+
+[node name="Sword" parent="Pivot/WeaponPos" unique_id=2142310940 instance=ExtResource("3_3li8b")]

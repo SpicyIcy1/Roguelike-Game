@@ -19,20 +19,19 @@ var is_invincible = false #not fair taking damage 10 times a second
 var invincibility_t = 1.0 #t for time
 var is_attacking = false
 var can_attack = true
-var enemies_in_range: Array = []
+
 var npcs_in_range: Array = []
 var equipped_items: Array[Equipment] = []
 enum Direction { UP, DOWN, HORIZONTAL }
 var last_direction: Direction = Direction.DOWN
 
-@onready var randi_sprites_36x_36: Sprite2D = $RandiSprites36x36
-@onready var attack_shape: CollisionShape2D = $AttackArea2D/FightArea
+
 
 
 func _ready() -> void:
 	
 	get_window().grab_focus() #Damit ich nicht immer "w" in den Code editor schreibe wenn ich das Spiel starte
-	attack_shape.shape.radius = reichweite_FightArea
+	
 	add_child(EscMenu.new())
 
 @warning_ignore("unused_parameter")
@@ -82,7 +81,7 @@ func anim():
 	if is_attacking:
 		return
 	if velocity != Vector2.ZERO:
-		$RandiSprites36x36.flip_h = velocity.x < 0
+		%Pivot.scale.x = -1.0 if velocity.x < 0 else 1.0
 	if velocity != Vector2.ZERO:
 		if abs(velocity.x) > abs(velocity.y):
 			%AnimationPlayer.play("Walk_H")
@@ -103,6 +102,7 @@ func anim():
 				%AnimationPlayer.play("Idle_Up")
 			Direction.DOWN:
 				%AnimationPlayer.play("Idle_Down")
+	
 
 
 # Die Funktion zeichnet je nach MausCurserPosition einen Vektor
@@ -121,8 +121,8 @@ func update_attack_area_to_mouse() -> void:
 			vec = Vector2.UP
 			
 	attack_dir = vec
-	$AttackArea2D.position = vec * abstand_FightArea
 	
+
 func attack():
 	is_attacking = true
 	if not can_attack:
@@ -130,14 +130,7 @@ func attack():
 	can_attack = false
 	var cooldown = attack_cooldown
 	var hit_anything = false
-	for enemy in enemies_in_range:
-		if enemy.has_method("take_damage"):
-			enemy.take_damage(damage)
-			hit_anything = true
-	for npc in npcs_in_range:
-		if npc.has_method("take_damage"):
-			npc.take_damage(damage)
-			hit_anything = true
+	%WeaponPos.get_child(0,true).attack()
 	if not hit_anything:
 		# Kein Treffer = längerer Cooldown
 		cooldown *= attack_cooldown_debuff
@@ -151,11 +144,11 @@ func attack():
 			%AnimationPlayer.play("Slash_Down")
 			last_direction = Direction.DOWN
 		Vector2.LEFT:
-			randi_sprites_36x_36.flip_h = true
+			%Pivot.scale.x = -1
 			last_direction = Direction.HORIZONTAL
 			%AnimationPlayer.play("Slash_H")
 		Vector2.RIGHT:
-			randi_sprites_36x_36.flip_h = false
+			%Pivot.scale.x = 1
 			last_direction = Direction.HORIZONTAL
 			%AnimationPlayer.play("Slash_H")
 
@@ -203,24 +196,3 @@ func die() -> void:
 
 
 # --Signals
-func _on_attack_area_2d_body_entered(body: Node2D) -> void:
-	if body.is_in_group("enemy"):
-		enemies_in_range.append(body)
-	elif body.is_in_group("npc"):
-		npcs_in_range.append(body)
-
-func _on_attack_area_2d_body_exited(body: Node2D) -> void:
-	if body.is_in_group("enemy"):
-		enemies_in_range.erase(body)
-	elif body.is_in_group("npc"):
-		npcs_in_range.erase(body)
-
-
-func _on_attack_area_2d_area_entered(area: Area2D) -> void: #for the dragon worm boss
-	if area.is_in_group("enemy"):
-		enemies_in_range.append(area)
-
-
-func _on_attack_area_2d_area_exited(area: Area2D) -> void:
-	if area.is_in_group("enemy"):
-		enemies_in_range.erase(area)
