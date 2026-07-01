@@ -4,12 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://7y8ytswixx2p" path="res://assets/randi_sprites_36x36.png" id="2_v6fml"]
 [ext_resource type="PackedScene" uid="uid://dbss6qll0ka0v" path="res://scenes/weapons/sword.tscn" id="3_3li8b"]
 [ext_resource type="Animation" uid="uid://caby08s8c1ekb" path="res://Slash_H.tres" id="3_mdl7e"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_5q5h1"]
-size = Vector2(14, 8)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_v6fml"]
-size = Vector2(10, 13)
+[ext_resource type="Script" uid="uid://c4stp414e2hoi" path="res://scripts/Sword.gd" id="5_qu4a1"]
 
 [sub_resource type="Animation" id="Animation_mdl7e"]
 resource_name = "Idle"
@@ -315,21 +310,21 @@ _data = {
 &"Walk_Up": SubResource("Animation_70d11")
 }
 
+[sub_resource type="Resource" id="Resource_3pnln"]
+script = ExtResource("5_qu4a1")
+damage_bonus = 20.0
+metadata/_custom_type_script = "uid://c4stp414e2hoi"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v6fml"]
+size = Vector2(10, 13)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5q5h1"]
+size = Vector2(14, 11)
+
 [node name="Player" type="CharacterBody2D" unique_id=1294629943 groups=["Player"]]
 collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_p0vlq")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=341936671]
-position = Vector2(0, 12)
-shape = SubResource("RectangleShape2D_5q5h1")
-
-[node name="Hitbox" type="Area2D" parent="." unique_id=658371483]
-monitorable = false
-
-[node name="HitboxShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=143045110]
-position = Vector2(1, 17)
-shape = SubResource("RectangleShape2D_v6fml")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1031224145]
 unique_name_in_owner = true
@@ -353,3 +348,15 @@ z_index = -1
 position = Vector2(-4, -12)
 
 [node name="Sword" parent="Pivot/WeaponPos" unique_id=2142310940 instance=ExtResource("3_3li8b")]
+stats = SubResource("Resource_3pnln")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=658371483]
+monitorable = false
+
+[node name="HitboxShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=143045110]
+position = Vector2(1, 17)
+shape = SubResource("RectangleShape2D_v6fml")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=341936671]
+position = Vector2(0, 10.5)
+shape = SubResource("RectangleShape2D_5q5h1")

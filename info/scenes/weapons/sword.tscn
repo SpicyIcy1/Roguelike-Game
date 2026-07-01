@@ -2,17 +2,9 @@
 
 [ext_resource type="Script" uid="uid://b8iwm3pnfdqay" path="res://scripts/swordManager.gd" id="1_3pnln"]
 [ext_resource type="Texture2D" uid="uid://dyttc8v6uhxv0" path="res://assets/Sword.png" id="1_o616w"]
-[ext_resource type="Script" uid="uid://c4stp414e2hoi" path="res://scripts/Sword.gd" id="2_58ehi"]
-
-[sub_resource type="Resource" id="Resource_3pnln"]
-script = ExtResource("2_58ehi")
-equipment_name = "Eisenschwert"
-damage_bonus = 25.0
-metadata/_custom_type_script = "uid://c4stp414e2hoi"
 
 [node name="Sword" type="Node2D" unique_id=2142310940]
 script = ExtResource("1_3pnln")
-stats = SubResource("Resource_3pnln")
 
 [node name="Sword" type="Sprite2D" parent="." unique_id=255833437]
 rotation = 3.1415927
@@ -24,7 +16,7 @@ collision_layer = 0
 collision_mask = 4
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D" unique_id=108806805]
-polygon = PackedVector2Array(-1, 8, -7, -1, -7, -21, 7, -21, 7, -1, 1, 8)
+polygon = PackedVector2Array(-1, 8, -7, -1, -7, -24, 7, -24, 7, -1, 1, 8)
 
 [connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
 [connection signal="area_exited" from="Area2D" to="." method="_on_area_2d_area_exited"]

@@ -10,6 +10,7 @@ func attack():
 			target.take_damage(stats.damage_bonus)
 		else:
 			push_error("AAAAAH nicht gegner in Ebene3!!!")
+	
 
 func _on_area_2d_area_entered(area: Area2D) -> void:
 	targets.append(area)

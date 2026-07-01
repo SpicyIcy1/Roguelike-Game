@@ -11,8 +11,7 @@ var attack_cooldown = 0.4
 #falls der Spieler ins leere schlägt = längere cooldown
 var attack_cooldown_debuff = 1
 
-var reichweite_FightArea: float = 40.0
-var abstand_FightArea: float = 40.0
+
 var attack_dir: Vector2 = Vector2.ZERO
 
 var is_invincible = false #not fair taking damage 10 times a second
@@ -62,7 +61,6 @@ func _input(event: InputEvent) -> void: #alles was mit input zu tun hat und glei
 		dev_mode = !dev_mode
 	
 	if dev_mode:
-		damage = 1000
 		max_speed = 250
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_WHEEL_UP:
 			target_zoom += Vector2(zoom_speed, zoom_speed)
@@ -129,11 +127,11 @@ func attack():
 		return
 	can_attack = false
 	var cooldown = attack_cooldown
-	var hit_anything = false
 	%WeaponPos.get_child(0,true).attack()
-	if not hit_anything:
+	if len(%WeaponPos.get_child(0).targets)==0:
 		# Kein Treffer = längerer Cooldown
 		cooldown *= attack_cooldown_debuff
+		trigger_slowdown(attack_cooldown_debuff)
 	
 	# Animation hier anpassen
 	match attack_dir:
@@ -190,7 +188,14 @@ func trigger_invincibility(duration: float) -> void:
 	
 	is_invincible = false
 	modulate.a = 1.0
+
+func trigger_slowdown(duration: float) -> void:
 	
+	modulate = Color(0.4, 0.4, 0.8, 1.0) 
+	await get_tree().create_timer(duration).timeout
+	# Reset the color back to normal (white means no tint)
+	modulate = Color(1.0, 1.0, 1.0, 1.0)
+
 func die() -> void:
 	get_tree().reload_current_scene()
 
