@@ -7,6 +7,8 @@ var first_start: bool = true
 var moral_score: int = 0
 signal moral_changed(new_score: int)
 
+signal hp_changed(current_health: int, max_health: int)
+
 func add_morality(amount: int) -> void:
 	moral_score += amount
 	emit_signal("moral_changed", moral_score)
@@ -17,3 +19,8 @@ func _physics_process(delta: float) -> void:
 	# damit Nepo glücklich wird
 	if player:
 		global_position = player.global_position
+		
+
+
+func update_hp(current: int, max_hp: int) -> void:
+	emit_signal("hp_changed", current, max_hp)

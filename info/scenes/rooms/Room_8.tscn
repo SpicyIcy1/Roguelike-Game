@@ -26,3 +26,11 @@ position = Vector2(-64, 184)
 
 [node name="Player" parent="." unique_id=1294629943 instance=ExtResource("4_4hyy2")]
 position = Vector2(16, 224)
+
+[node name="Exits" type="Node" parent="." unique_id=1511584906]
+
+[node name="Exit_S" type="Marker2D" parent="Exits" unique_id=1915154879]
+position = Vector2(-80, 288)
+
+[node name="Exit_N" type="Marker2D" parent="Exits" unique_id=680431097]
+position = Vector2(-16, -184)

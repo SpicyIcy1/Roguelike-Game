@@ -174,6 +174,7 @@ func take_damage(amount: float) -> void:
 		return
 		
 	current_health -= amount
+	PlayerData.update_hp(current_health, max_health)
 	if current_health <= 0:
 		die()
 	else:
@@ -199,7 +200,7 @@ func trigger_slowdown(duration: float) -> void:
 	modulate = Color(1.0, 1.0, 1.0, 1.0)
 
 func die() -> void:
-	get_tree().reload_current_scene()
+	get_tree().call_deferred("reload_current_scene") #to remove the annoying error message
 
 
 # --Signals
