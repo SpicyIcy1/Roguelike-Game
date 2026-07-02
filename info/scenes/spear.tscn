@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://caq1m24xpn0bd"]
+
+[ext_resource type="Script" uid="uid://cb8cwnjyofnj" path="res://scripts/throwing_spear.gd" id="1_spear"]
+[ext_resource type="Texture2D" uid="uid://5yocjbyew2c2" path="res://assets/Speer_Asset.png" id="2_texture"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_body"]
+radius = 3.0
+height = 14.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hitbox"]
+radius = 5.0
+height = 16.0
+
+[node name="Spear" type="CharacterBody2D" unique_id=1008464359]
+collision_layer = 0
+script = ExtResource("1_spear")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=987654321]
+rotation = 1.5707964
+texture = ExtResource("2_texture")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1347827813]
+shape = SubResource("CapsuleShape2D_body")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=215376650]
+collision_layer = 0
+collision_mask = 4
+
+[node name="HitboxShape" type="CollisionShape2D" parent="Hitbox" unique_id=1403137755]
+shape = SubResource("CapsuleShape2D_hitbox")

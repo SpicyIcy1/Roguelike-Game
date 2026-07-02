@@ -22,9 +22,11 @@ func equip(player) -> void:
 	player.current_health += max_health_bonus
 	player.attack_cooldown += attack_cooldown_bonus
 	player.max_speed += speed_bonus
-	player.reichweite_FightArea += attack_range_bonus
-	player.abstand_FightArea += attack_offset_bonus
-	player.attack_shape.shape.radius = player.reichweite_FightArea
+
+
+# Wird bei "throw"-Input aufgerufen; Subklassen können das überschreiben
+func on_secondary_action(player) -> void:
+	pass
 
 
 func unequip(player) -> void:
@@ -33,6 +35,3 @@ func unequip(player) -> void:
 	player.current_health = minf(player.current_health, player.max_health)
 	player.attack_cooldown -= attack_cooldown_bonus
 	player.max_speed -= speed_bonus
-	player.reichweite_FightArea -= attack_range_bonus
-	player.abstand_FightArea -= attack_offset_bonus
-	player.attack_shape.shape.radius = player.reichweite_FightArea
