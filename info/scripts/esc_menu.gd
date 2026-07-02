@@ -5,6 +5,7 @@ var main_panel: Control
 var stats_panel: Control
 
 var lbl_hp: Label
+var hp_bar: ProgressBar
 var lbl_damage: Label
 var lbl_speed: Label
 var lbl_cooldown: Label
@@ -13,6 +14,10 @@ var lbl_equip: Label
 
 var hud_layer: CanvasLayer
 var hud_moral: Label
+var hud_hp_bar: ProgressBar
+var hud_hp_label: Label
+
+var player_ref: Node = null
 
 
 var hud_hp: Label
@@ -40,8 +45,7 @@ func _ready() -> void:
 	hud_layer.layer = 9
 	add_child(hud_layer)
 
-	hud_moral = _build_hud_moral()
-	hud_layer.add_child(hud_moral)
+	hud_layer.add_child(_build_hud())
 	PlayerData.moral_changed.connect(_on_moral_changed)
 
 	if PlayerData.first_start:
@@ -57,6 +61,24 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("esc"):
 		toggle()
 		get_viewport().set_input_as_handled()
+
+
+func _process(_delta: float) -> void:
+	if not hud_layer.visible:
+		return
+	if not player_ref or not is_instance_valid(player_ref):
+		player_ref = get_tree().get_first_node_in_group("Player")
+	if not player_ref:
+		return
+
+	hud_hp_bar.max_value = player_ref.max_health
+	hud_hp_bar.value     = player_ref.current_health
+	hud_hp_label.text    = "%d / %d" % [player_ref.current_health, player_ref.max_health]
+
+	var ratio: float = 1.0
+	if player_ref.max_health > 0:
+		ratio = float(player_ref.current_health) / float(player_ref.max_health)
+	hud_hp_bar.modulate = _health_bar_color(ratio)
 
 
 func open() -> void:
@@ -133,7 +155,12 @@ func _build_stats() -> Control:
 	vbox.add_child(title)
 	vbox.add_child(HSeparator.new())
 
-	lbl_hp       = _stat_row(vbox, "Leben")
+	lbl_hp = _stat_row(vbox, "Leben")
+
+	hp_bar = _build_health_bar()
+	vbox.add_child(hp_bar)
+	vbox.add_child(HSeparator.new())
+
 	lbl_damage   = _stat_row(vbox, "Schaden")
 	lbl_speed    = _stat_row(vbox, "Geschwindigkeit")
 	lbl_cooldown = _stat_row(vbox, "Angriff-Cooldown")
@@ -154,6 +181,16 @@ func _build_stats() -> Control:
 	vbox.add_child(btn_back)
 
 	return center
+
+
+func _build_health_bar() -> ProgressBar:
+	var bar = ProgressBar.new()
+	bar.custom_minimum_size = Vector2(0, 16)
+	bar.min_value = 0
+	bar.max_value = 100
+	bar.value = 100
+	bar.show_percentage = false
+	return bar
 
 
 func _stat_row(parent: VBoxContainer, stat_name: String) -> Label:
@@ -179,6 +216,13 @@ func _refresh_stats() -> void:
 	lbl_moral.text    = "%d  (%s)" % [PlayerData.moral_score, _moral_title(PlayerData.moral_score)]
 	lbl_moral.modulate = _moral_color(PlayerData.moral_score)
 
+	hp_bar.max_value = player.max_health
+	hp_bar.value     = player.current_health
+	var hp_ratio: float = 1.0
+	if player.max_health > 0:
+		hp_ratio = float(player.current_health) / float(player.max_health)
+	hp_bar.modulate = _health_bar_color(hp_ratio)
+
 	if player.equipped_items.is_empty():
 		lbl_equip.text = "—"
 	else:
@@ -188,13 +232,32 @@ func _refresh_stats() -> void:
 		lbl_equip.text = ", ".join(names)
 
 
-func _build_hud_moral() -> Label:
-	var lbl = Label.new()
-	lbl.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
-	lbl.position = Vector2(12, 12)
-	lbl.text = _hud_moral_text(PlayerData.moral_score)
-	lbl.modulate = _moral_color(PlayerData.moral_score)
-	return lbl
+func _build_hud() -> Control:
+	var vbox = VBoxContainer.new()
+	vbox.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+	vbox.position = Vector2(12, 12)
+	vbox.custom_minimum_size = Vector2(160, 0)
+
+	hud_hp_bar = ProgressBar.new()
+	hud_hp_bar.custom_minimum_size = Vector2(160, 14)
+	hud_hp_bar.min_value = 0
+	hud_hp_bar.max_value = 100
+	hud_hp_bar.value = 100
+	hud_hp_bar.show_percentage = false
+	vbox.add_child(hud_hp_bar)
+
+	hud_hp_label = Label.new()
+	hud_hp_label.text = "-- / --"
+	hud_hp_label.add_theme_font_size_override("font_size", 12)
+	vbox.add_child(hud_hp_label)
+
+
+	hud_moral = Label.new()
+	hud_moral.text = _hud_moral_text(PlayerData.moral_score)
+	hud_moral.modulate = _moral_color(PlayerData.moral_score)
+	vbox.add_child(hud_moral)
+
+	return vbox
 
 func _build_hud_hp() -> Label:
 	var lbl = Label.new()
@@ -242,3 +305,12 @@ func _moral_color(score: int) -> Color:
 		return Color(1.0, 0.4, 0.4)
 	else:
 		return Color(1.0, 1.0, 1.0)
+
+
+func _health_bar_color(ratio: float) -> Color:
+	if ratio > 0.5:
+		return Color(0.4, 1.0, 0.4)
+	elif ratio > 0.25:
+		return Color(1.0, 1.0, 0.4)
+	else:
+		return Color(1.0, 0.4, 0.4)
