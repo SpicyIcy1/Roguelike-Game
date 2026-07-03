@@ -1,29 +1,32 @@
 extends Node2D
 
 @export var stats : Sword
+@onready var attack_area: Area2D = $Area2D
 
-var targets : Array[Node2D] = []
+var is_slashing: bool = false
+var damaged_targets: Array[Node2D] = []
+var total_hits_this_swing: int = 0
 
-func attack():
-	for target in targets:
-		if target.has_method("take_damage"):
-			target.take_damage(stats.damage_bonus)
-		else:
-			push_error("AAAAAH nicht gegner in Ebene3!!!")
+#rewritten this way to avoid checking for hits -> detecting zero hits -> then moving the sword through enemies -> dealing 0 damage
+func _physics_process(_delta: float) -> void:
 	
-
-func _on_area_2d_area_entered(area: Area2D) -> void:
-	targets.append(area)
-	print("APPEND")
-
-
-func _on_area_2d_body_entered(body: Node2D) -> void:
-	targets.append(body)
-
-
-func _on_area_2d_body_exited(body: Node2D) -> void:
-	targets.erase(body)
+	if is_slashing: 
+		var overlapping = attack_area.get_overlapping_areas() + attack_area.get_overlapping_bodies()
+		
+		for target in overlapping:
+			if is_instance_valid(target) and target.has_method("take_damage"):
+				if not damaged_targets.has(target):
+					target.take_damage(stats.damage_bonus)
+					damaged_targets.append(target)
+					total_hits_this_swing += 1
 
 
-func _on_area_2d_area_exited(area: Area2D) -> void:
-	targets.erase(area)
+func start_attack() -> void:
+	is_slashing = true
+	damaged_targets.clear()
+	total_hits_this_swing = 0
+
+
+func end_attack() -> int: #returns hit counter to find out if anything got hit
+	is_slashing = false
+	return total_hits_this_swing

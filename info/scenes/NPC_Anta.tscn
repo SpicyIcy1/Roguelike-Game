@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://p21tosvqxiyi" path="res://assets/Anta.png" id="2_tex"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
-size = Vector2(14, 8)
+size = Vector2(14, 21)
 
 [sub_resource type="Animation" id="Animation_igf6r"]
 length = 0.001
@@ -87,14 +87,16 @@ radius = 18.0
 [node name="NPC_Anta" type="CharacterBody2D" unique_id=2051229637 groups=["npc"]]
 collision_layer = 4
 script = ExtResource("1_npc")
+max_health = 50
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=272505641]
+z_index = 1
 position = Vector2(0, 1)
 texture = ExtResource("2_tex")
 hframes = 14
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=27628073]
-position = Vector2(0, 12)
+position = Vector2(0, 5.5)
 shape = SubResource("RectangleShape2D_body")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1097170991]

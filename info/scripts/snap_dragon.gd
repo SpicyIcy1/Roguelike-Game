@@ -58,7 +58,7 @@ func _try_sprint() -> void:
 	
 func _do_sprint() -> void:
 	can_sprint = false
-	var dir := (target.global_position - global_position).normalized()
+	var dir : Vector2 = ($NavigationAgent2D.get_next_path_position() - global_position).normalized()
 	var sprint_timer := 0.0
 	
 	while sprint_timer < sprint_max_time:

@@ -64,6 +64,7 @@ func handle_potential_death():
 					death_tween.tween_callback(segment.die)
 					death_tween.tween_interval(0.2)
 			death_tween.tween_callback(%Head.die)  # head dies last
+			PlayerData.add_morality(50)
 
 
 func recalculate_z_indices() -> void:

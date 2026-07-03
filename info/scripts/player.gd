@@ -124,18 +124,16 @@ func update_attack_area_to_mouse() -> void:
 	
 
 func attack():
-	is_attacking = true
 	if not can_attack:
 		return
+		
+	is_attacking = true
 	can_attack = false
-	var cooldown = attack_cooldown
-	%WeaponPos.get_child(0,true).attack()
-	if len(%WeaponPos.get_child(0).targets)==0:
-		# Kein Treffer = längerer Cooldown
-		cooldown *= attack_cooldown_debuff
-		trigger_slowdown(attack_cooldown_debuff)
 	
-	# Animation hier anpassen
+	var weapon = %WeaponPos.get_child(0)
+	weapon.start_attack() # Starts the continuous scanning
+	
+	# Play your attack animation based on direction
 	match attack_dir:
 		Vector2.UP:
 			%AnimationPlayer.play("Slash_Up")
@@ -152,11 +150,22 @@ func attack():
 			last_direction = Direction.HORIZONTAL
 			%AnimationPlayer.play("Slash_H")
 
+	
 	await %AnimationPlayer.animation_finished
+	
+	
+	var total_hits = weapon.end_attack()
+	
+	var cooldown = attack_cooldown
+	if total_hits == 0:
+		# Kein Treffer über die gesamte Dauer -> längerer Cooldown
+		cooldown *= attack_cooldown_debuff
+		trigger_slowdown(attack_cooldown_debuff)
+	
 	await get_tree().create_timer(cooldown).timeout
 	can_attack = true
 	is_attacking = false
-	
+
 func equip_item(item: Equipment) -> void:
 	for existing in equipped_items:
 		if existing.type == item.type:
