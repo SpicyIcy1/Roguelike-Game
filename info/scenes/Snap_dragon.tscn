@@ -218,6 +218,7 @@ _data = {
 }
 
 [node name="snap_dragon_enemy" type="CharacterBody2D" unique_id=2065204506]
+z_index = 10
 collision_layer = 4
 collision_mask = 5
 script = ExtResource("1_s0kvb")
