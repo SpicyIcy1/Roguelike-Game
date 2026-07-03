@@ -20,8 +20,6 @@ var hud_hp_label: Label
 var player_ref: Node = null
 
 
-var hud_hp: Label
-
 func _ready() -> void:
 	process_mode = PROCESS_MODE_ALWAYS
 	layer = 10
@@ -52,9 +50,6 @@ func _ready() -> void:
 		PlayerData.first_start = false
 		call_deferred("open")
 	
-	hud_hp = _build_hud_hp()
-	hud_layer.add_child(hud_hp)
-	PlayerData.hp_changed.connect(_on_hp_changed)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -258,21 +253,6 @@ func _build_hud() -> Control:
 	vbox.add_child(hud_moral)
 
 	return vbox
-
-func _build_hud_hp() -> Label:
-	var lbl = Label.new()
-	lbl.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
-	lbl.position = Vector2(12, 36) # Positioned below the moral label
-	var player = get_tree().get_first_node_in_group("Player")
-	if player:
-		lbl.text = "HP: %d / %d" % [player.current_health, player.max_health]
-	else:
-		lbl.text = "HP: —"
-	return lbl
-
-
-func _on_hp_changed(current: int, max_hp: int) -> void:
-	hud_hp.text = "HP: %d / %d" % [current, max_hp]
 
 
 func _on_moral_changed(new_score: int) -> void:
