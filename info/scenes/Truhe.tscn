@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://dud41l2b34fg6"]
+
+[ext_resource type="Texture2D" uid="uid://3dxgv7d4r3ht" path="res://assets/SNES_-_Secret_of_Mana_-_Miscellaneous_-_Stone_Trap_Chest.png" id="1_akijo"]
+[ext_resource type="Script" uid="uid://cmn4fpbk4xe21" path="res://scripts/truhe.gd" id="1_hyix3"]
+
+[node name="Truhe" type="Node2D" unique_id=702163131]
+script = ExtResource("1_hyix3")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=869851555]
+texture = ExtResource("1_akijo")
+region_enabled = true
+region_rect = Rect2(20, 0, 20, 27)
