@@ -16,11 +16,10 @@ tile_set = ExtResource("3_nenaj")
 script = ExtResource("2_1siff")
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=1186953050]
-visible = false
 position = Vector2(-187, -93)
 navigation_polygon = SubResource("NavigationPolygon_1siff")
 
 [node name="Exits" type="Node" parent="." unique_id=1393789173]
 
 [node name="Exit_E" type="Marker2D" parent="Exits" unique_id=1319669016]
-position = Vector2(185, 97)
+position = Vector2(189, 130)
