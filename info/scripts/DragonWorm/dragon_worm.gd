@@ -6,7 +6,7 @@ extends Node2D # extending entity is not an option because its not a characterbo
 const TAIL_COUNT = 2 #the last x segments will be considered the tail
 
 # How many array slots to skip between each segment
-const SEGMENT_GAP := 5
+const SEGMENT_GAP := 1
 
 var is_dying: bool = false #to mke sure nothing gets freed twice
 
@@ -31,30 +31,22 @@ func _physics_process(delta: float) -> void:
 		handle_movement(delta)
 
 
+
+
 func handle_movement(delta):
-	for i in range(segments.size() - 1, -1, -1): #looping backwards, paramters start, stop, step
+	for i in range(segments.size() - 1, -1, -1):
 		var segment = segments[i]
 		
 		if i >= segments.size() - TAIL_COUNT:
 			segments[i].tail = true
 		
-		
-		#Dead Segments
 		if segment.health <= 0:
 			segment.die()
-			
 			segments.remove_at(i)
-			
 			recalculate_z_indices()
-			continue #dead segemtns get skipped
-			
+			continue 
 		
-		var history_index: int
-		if i == 0:
-			history_index = 0  
-		else:
-			history_index = 2 + (i * SEGMENT_GAP)
-		
+		var history_index = i * SEGMENT_GAP
 		
 		if history_index < %Head.position_history.size():
 			var target_position: Vector2 = %Head.position_history[history_index]

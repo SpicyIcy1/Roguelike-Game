@@ -2,7 +2,7 @@ class_name body_segment
 extends Area2D
 
 
-var health = 20
+var health = 30
 var attack_damage = 25 #half the heads damage
 var last_position := Vector2.ZERO
 
