@@ -3,7 +3,6 @@
 [ext_resource type="TileSet" uid="uid://bj18vugqpe2c" path="res://assets/tilesets/dungeon0.tres" id="1_mxolh"]
 [ext_resource type="Script" uid="uid://dfm8g0ls2ytmf" path="res://scripts/Tools/BoundingBox.gd" id="2_aekuj"]
 [ext_resource type="PackedScene" uid="uid://dsu7swbi3xbg8" path="res://scenes/DragonWorm/dragon_worm.tscn" id="3_u42os"]
-[ext_resource type="PackedScene" uid="uid://p15jcv2yafyu" path="res://scenes/Player.tscn" id="4_4hyy2"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_4hyy2"]
 vertices = PackedVector2Array(-107.3125, 161.45313, -106, 160.14063, -106, 170, 150, 185.61719, 150, 252.96875, 139.00781, 269.45313, 111.6875, 231.42188, 88.49219, 145.07031, 138.13281, 150, 27.1875, 217.34375, 66.38281, 262.1797, -14.0703125, 230, -36.140625, 202, 11.859375, 202, -74, 230, -68.140625, 186, -52.140625, 186, -99.35156, 197.67969, 134, 130, 166, 130, 166, 150, 74, 70, 58, 70, 58, 51.1875, 89.71094, -7.9609375, 136, 46.03125, 148.46094, 64.71875, -74, 278, -86, 278, -86, 246.65625, -84.140625, 170, -185.57031, 190.49219, -22, -99.859375, -22, -166, -10, -166, -10, -104.78906, -162.04688, 138, -198.28906, 165.0625, -186, 138, -206.14844, 102.15625, -186, 78, -212.35156, 77.35156, -172.53125, 57.4375, -163.85938, 78, -103.75, 40.25, -74, 75.859375, -92.140625, 94, -147.85938, 94, -74, 58.648438, -46.359375, 40.21875, -95.328125, 6.5625, -38, -26.203125, -20.140625, 14, 134, 93.640625, 74, 137.82031, 38, -33.820313, 11.5078125, 14, 17.34375, -95.671875, 38, -61.242188, -38, -83.859375)
@@ -31,6 +30,3 @@ position = Vector2(-80, 288)
 
 [node name="Exit_N" type="Marker2D" parent="Exits" unique_id=680431097]
 position = Vector2(-16, -184)
-
-[node name="Player" parent="." unique_id=1294629943 instance=ExtResource("4_4hyy2")]
-position = Vector2(74, 246)

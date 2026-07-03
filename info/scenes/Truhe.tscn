@@ -3,10 +3,20 @@
 [ext_resource type="Texture2D" uid="uid://3dxgv7d4r3ht" path="res://assets/SNES_-_Secret_of_Mana_-_Miscellaneous_-_Stone_Trap_Chest.png" id="1_akijo"]
 [ext_resource type="Script" uid="uid://cmn4fpbk4xe21" path="res://scripts/truhe.gd" id="1_hyix3"]
 
-[node name="Truhe" type="Node2D" unique_id=702163131]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pyrf1"]
+size = Vector2(20, 22)
+
+[node name="Truhe" type="CharacterBody2D" unique_id=890483686]
+collision_layer = 4
+collision_mask = 3
 script = ExtResource("1_hyix3")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=869851555]
+position = Vector2(0, -2)
 texture = ExtResource("1_akijo")
 region_enabled = true
-region_rect = Rect2(20, 0, 20, 27)
+region_rect = Rect2(-0.60102844, 0, 21.06649, 27)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=205767340]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_pyrf1")
