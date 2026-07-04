@@ -10,6 +10,7 @@ var TILE_SIZE: int = 16
 
 const ROOMS_DIR := "res://scenes/rooms/"
 const END_DIR   := "res://scenes/dead_ends/"
+const BOSS_ROOM_PATH := "res://scenes/DragonWorm/Room_boss.tscn"   # <- muss immer genau einmal spawnen, liegt außerhalb ROOMS_DIR
 const OPPOSITE  := { "North": "South", "South": "North", "East": "West", "West": "East" }
 
 
@@ -24,15 +25,15 @@ var _dead_end_sub_pools: Dictionary = { "North": [], "South": [], "East": [], "W
 var _placed_dead_ends: Array[RoomData] = []
 
 
-const MAX_ATTEMPTS := 20
+const MAX_ATTEMPTS := 10
 
 
 # ─── Entry point ──────────────────────────────────────────────────────────────
 
 func generate() -> void:
 	print("━━━ MapGenerator.generate() START ━━━")
-	print("  Config: TILE_SIZE=%d  MAX_ROOMS=%d  MAX_ROOM_USES=%d  MIN_ROOMS=%d" % [
-		TILE_SIZE, MAX_ROOMS, MAX_ROOM_USES, MIN_ROOMS
+	print("  Config: TILE_SIZE=%d  MAX_ROOMS=%d  MAX_ROOM_USES=%d  MIN_ROOMS=%d  BOSS_ROOM=%s" % [
+		TILE_SIZE, MAX_ROOMS, MAX_ROOM_USES, MIN_ROOMS, BOSS_ROOM_PATH.get_file()
 	])
 
 	_phase1_scan_and_parse()
@@ -42,19 +43,32 @@ func generate() -> void:
 		print("\n  ── Attempt %d/%d ──" % [attempt, MAX_ATTEMPTS])
 		_clear_previous()
 		_phase2_layout_loop()
+
 		var placed := _layout.rooms.size()
 		if placed < MIN_ROOMS:
 			print("  ✗ Only %d room(s) placed (MIN_ROOMS=%d) — retrying..." % [placed, MIN_ROOMS])
 			continue
-		_phase3_assign_special_rooms()
+
+		if not _layout_has_boss():
+			var boss_placed := _phase2b_place_boss()
+			if not boss_placed:
+				print("  ✗ Boss room ('%s') could not be attached anywhere — retrying..." % BOSS_ROOM_PATH.get_file())
+				continue
+
 		_phase4_assemble()
-		_phase5_cap_dead_ends()
+
+		var fully_capped := _phase5_cap_dead_ends()
+		if not fully_capped:
+			print("  ✗ Not all exits could be capped — retrying...")
+			continue
+
 		print("━━━ MapGenerator.generate() END (attempt %d, %d rooms, %d dead-end caps) ━━━" % [
 			attempt, placed, _placed_dead_ends.size()
 		])
 		return
 
-	push_error("MapGenerator: failed to place >= %d rooms after %d attempts." % [MIN_ROOMS, MAX_ATTEMPTS])
+	_clear_previous()
+	push_error("MapGenerator: failed to produce a valid map (rooms/boss/capping) after %d attempts." % MAX_ATTEMPTS)
 
 
 # ─── Phase 1: Directory scan & metadata parsing ───────────────────────────────
@@ -88,7 +102,7 @@ func _phase1_scan_and_parse() -> void:
 			print("    SKIP (not .tscn): '%s'" % fname)
 			continue
 		print("  Parsing: '%s'" % clean_name)
-		var room_data := _parse_room_file(clean_name)
+		var room_data := _parse_room_file(ROOMS_DIR + clean_name)
 		if room_data != null:
 			_master_pool.append(room_data)
 			for direction in room_data.available_exits.keys():
@@ -104,6 +118,19 @@ func _phase1_scan_and_parse() -> void:
 		_sub_pools["North"].size(), _sub_pools["South"].size(),
 		_sub_pools["East"].size(),  _sub_pools["West"].size()
 	])
+
+	if _find_room_by_name(BOSS_ROOM_PATH.get_file()) == null:
+		print("  Boss room not found via ROOMS_DIR scan — loading explicitly from BOSS_ROOM_PATH: '%s'" % BOSS_ROOM_PATH)
+		var boss_data := _parse_room_file(BOSS_ROOM_PATH)
+		if boss_data != null:
+			_master_pool.append(boss_data)
+			for direction in boss_data.available_exits.keys():
+				_sub_pools[direction].append(boss_data)
+			print("    ✓ Boss added to pool | exits: %s | size: %s" % [
+				boss_data.available_exits.keys(), boss_data.grid_size
+			])
+		else:
+			push_error("Phase 1: failed to load boss room from BOSS_ROOM_PATH '%s' — boss can never spawn!" % BOSS_ROOM_PATH)
 
 	_phase1b_scan_dead_ends()
 
@@ -159,8 +186,8 @@ func _phase1b_scan_dead_ends() -> void:
 
 # ─── Parsing helpers ──────────────────────────────────────────────────────────
 
-func _parse_room_file(file_name: String) -> RoomData:
-	var path   := ROOMS_DIR + file_name
+func _parse_room_file(path: String) -> RoomData:
+	var file_name := path.get_file()
 	var packed: PackedScene = load(path)
 	if packed == null:
 		push_warning("  _parse_room_file: load('%s') returned null" % path)
@@ -176,7 +203,7 @@ func _parse_room_file(file_name: String) -> RoomData:
 
 	var used_rect: Rect2i = tile_map.get_used_rect()
 	var grid_size   := used_rect.size
-	var grid_offset := used_rect.position  # store locally first
+	var grid_offset := used_rect.position
 
 	if grid_size == Vector2i.ZERO:
 		push_warning("  _parse_room_file: TileMapLayer in '%s' has no painted cells" % file_name)
@@ -203,10 +230,11 @@ func _parse_room_file(file_name: String) -> RoomData:
 
 	instance.free()
 
-	var room_data := RoomData.new()  # declared before we assign to it
+	var room_data := RoomData.new()
 	room_data.room_file_name  = file_name
+	room_data.scene_path      = path
 	room_data.grid_size       = grid_size
-	room_data.grid_offset     = grid_offset  # now valid
+	room_data.grid_offset     = grid_offset
 	room_data.available_exits = available_exits
 	for direction in available_exits.keys():
 		room_data.connected_rooms[direction] = null
@@ -222,16 +250,15 @@ func _parse_dead_end_file(file_name: String) -> RoomData:
 
 	var instance: Node = packed.instantiate()
 
-	# Dead ends are built like rooms — require a TileMapLayer for grid_size.
 	var tile_map: TileMapLayer = _find_first_child_of_type(instance, TileMapLayer)
 	if tile_map == null:
 		push_warning("  _parse_dead_end_file: no TileMapLayer child in '%s'" % file_name)
 		instance.free()
 		return null
-		
+
 	var used_rect: Rect2i = tile_map.get_used_rect()
 	var grid_size   := used_rect.size
-	var grid_offset := used_rect.position  # Store the tilemap offset locally first
+	var grid_offset := used_rect.position
 
 	if grid_size == Vector2i.ZERO:
 		push_warning("  _parse_dead_end_file: TileMapLayer in '%s' has no painted cells" % file_name)
@@ -258,7 +285,7 @@ func _parse_dead_end_file(file_name: String) -> RoomData:
 	if available_exits.is_empty():
 		push_warning("  _parse_dead_end_file: '%s' has no recognised Exit_N/S/E/W children" % file_name)
 		return null
-		
+
 	if available_exits.size() > 1:
 		push_warning("  _parse_dead_end_file: '%s' has %d exits, expected exactly 1 — using first" % [
 			file_name, available_exits.size()
@@ -266,12 +293,13 @@ func _parse_dead_end_file(file_name: String) -> RoomData:
 
 	var end_data := RoomData.new()
 	end_data.room_file_name  = file_name
+	end_data.scene_path      = path
 	end_data.grid_size       = grid_size
-	end_data.grid_offset     = grid_offset  # Assigned to end_data correctly
+	end_data.grid_offset     = grid_offset
 	end_data.available_exits = available_exits
 	for direction in available_exits.keys():
 		end_data.connected_rooms[direction] = null
-		
+
 	return end_data
 
 
@@ -294,7 +322,6 @@ func _phase2_layout_loop() -> void:
 	])
 
 	var start_room := _duplicate_room(start_template)
-	start_room.room_type     = RoomData.RoomType.START
 	start_room.grid_position = -start_room.grid_offset
 	_room_use_counts.clear()
 
@@ -339,6 +366,62 @@ func _phase2_layout_loop() -> void:
 	])
 
 
+
+# ─── Phase 2b: Force boss placement at any compatible open exit ───────────────
+# Growth-queue randomness is too unreliable for rooms with very few exits
+# (e.g. a boss room with only one door) to ever get picked. So instead of
+# hoping it appears during _phase2_layout_loop, we actively scan the already
+# built layout for an open exit the boss room can attach to and attach it there.
+
+func _phase2b_place_boss() -> bool:
+	var boss_template: RoomData = _find_room_by_name(BOSS_ROOM_PATH.get_file())
+	if boss_template == null:
+		push_error("Phase 2b: boss template '%s' not found in master_pool." % BOSS_ROOM_PATH.get_file())
+		return false
+
+	var boss_directions: Array = boss_template.available_exits.keys()
+	print("  Trying to attach boss room (exits: %s) to an open exit..." % boss_directions)
+
+	var open_exits: Array = []
+	for room in _layout.rooms:
+		for direction in room.available_exits.keys():
+			if room.connected_rooms.get(direction) == null:
+				open_exits.append({ "room": room, "direction": direction })
+	open_exits.shuffle()
+
+	for entry in open_exits:
+		var room: RoomData = entry["room"]
+		var direction: String = entry["direction"]
+		var opposite: String = OPPOSITE[direction]
+		if not boss_directions.has(opposite):
+			continue
+
+		var boss := _duplicate_room(boss_template)
+		var exit_local:     Vector2i = _boundary_exit(room, direction)
+		var exit_global:    Vector2i = room.grid_position + exit_local
+		var mouth_cell:     Vector2i = exit_global + _direction_vector(direction)
+		var entrance_local: Vector2i = _boundary_exit(boss, opposite)
+		boss.grid_position = mouth_cell - entrance_local
+
+		var boss_rect := Rect2i(boss.grid_position + boss.grid_offset, boss.grid_size)
+		print("    try boss @ '%s's %s exit | pos: %s | rect: %s | space_free: %s" % [
+			room.room_file_name, direction, boss.grid_position, boss_rect, _layout.is_space_free(boss_rect)
+		])
+
+		if not _layout.is_space_free(boss_rect):
+			continue
+
+		_layout.register_room(boss)
+		room.connected_rooms[direction] = boss
+		boss.connected_rooms[opposite]  = room
+		_room_use_counts[boss.room_file_name] = 1
+		print("    ✓ Boss attached to '%s' via %s exit @ %s" % [room.room_file_name, direction, boss.grid_position])
+		return true
+
+	print("    ✗ No compatible open exit found for boss room")
+	return false
+
+
 func _try_place_room(current_room: RoomData, direction: String) -> RoomData:
 	var opposite: String = OPPOSITE[direction]
 	var pool: Array = _sub_pools.get(opposite, [])
@@ -348,10 +431,10 @@ func _try_place_room(current_room: RoomData, direction: String) -> RoomData:
 
 	var candidates: Array = pool.filter(func(r: RoomData) -> bool:
 		var uses: int = _room_use_counts.get(r.room_file_name, 0)
-		return uses < MAX_ROOM_USES
+		return uses < _room_max_uses(r.room_file_name)
 	)
 	if candidates.is_empty():
-		print("      all candidates for %s exit at MAX_ROOM_USES (%d) — skipping" % [direction, MAX_ROOM_USES])
+		print("      all candidates for %s exit at their use-limit — skipping" % direction)
 		return null
 
 	candidates.shuffle()
@@ -361,14 +444,10 @@ func _try_place_room(current_room: RoomData, direction: String) -> RoomData:
 		var template: RoomData = candidates[i]
 		var new_room := _duplicate_room(template)
 
-		# Use the boundary exit for alignment: the marker's perpendicular axis
-		# gives door row/col; the on-axis coordinate is snapped to the room edge.
 		var current_exit_local:  Vector2i = _boundary_exit(current_room, direction)
 		var current_exit_global: Vector2i = current_room.grid_position + current_exit_local
 		var new_entrance_local:  Vector2i = _boundary_exit(new_room, opposite)
 
-		# Step one cell beyond the current room's wall, then align the new
-		# room so its entrance wall lands exactly there.
 		var mouth_cell:   Vector2i = current_exit_global + _direction_vector(direction)
 		new_room.grid_position = mouth_cell - new_entrance_local
 
@@ -377,58 +456,19 @@ func _try_place_room(current_room: RoomData, direction: String) -> RoomData:
 
 		var uses: int = _room_use_counts.get(template.room_file_name, 0)
 		print("      candidate[%d] '%s' (uses %d/%d) | pos: %s | rect: %s | space_free: %s" % [
-			i, template.room_file_name, uses, MAX_ROOM_USES,
+			i, template.room_file_name, uses, _room_max_uses(template.room_file_name),
 			new_room.grid_position, new_room_rect, space_free
 		])
 
 		if not space_free:
 			continue
 
-		# Commit placement.
 		_room_use_counts[template.room_file_name] = uses + 1
 		current_room.connected_rooms[direction] = new_room
 		new_room.connected_rooms[opposite]      = current_room
 		return new_room
 
 	return null
-
-
-# ─── Phase 3: Critical path & special room assignment ─────────────────────────
-
-func _phase3_assign_special_rooms() -> void:
-	print("\n── Phase 3: Special Room Assignment ──")
-	var start_room := _get_start_room()
-	if start_room == null:
-		push_error("Phase 3: no START room found in layout")
-		return
-
-	var dead_ends: Array[RoomData] = []
-	for room in _layout.rooms:
-		if room == start_room:
-			continue
-		var connected_count := 0
-		for dir in room.connected_rooms.keys():
-			if room.connected_rooms[dir] != null:
-				connected_count += 1
-		if connected_count == 1:
-			dead_ends.append(room)
-
-	print("  Dead ends found: %d" % dead_ends.size())
-	for de in dead_ends:
-		var dist := (de.grid_position - start_room.grid_position).length()
-		print("    '%s' @ %s  dist=%.1f" % [de.room_file_name, de.grid_position, dist])
-
-	dead_ends.sort_custom(func(a: RoomData, b: RoomData) -> bool:
-		var da := (a.grid_position - start_room.grid_position).length_squared()
-		var db := (b.grid_position - start_room.grid_position).length_squared()
-		return da > db
-	)
-
-	var assignment := [RoomData.RoomType.BOSS, RoomData.RoomType.TREASURE, RoomData.RoomType.SHOP]
-	var label      := ["BOSS", "TREASURE", "SHOP"]
-	for idx in range(mini(dead_ends.size(), assignment.size())):
-		dead_ends[idx].room_type = assignment[idx]
-		print("  Assigned %s → '%s'" % [label[idx], dead_ends[idx].room_file_name])
 
 
 # ─── Phase 4: Assembly & physical instantiation ───────────────────────────────
@@ -438,30 +478,28 @@ func _phase4_assemble() -> void:
 	print("  Instancing %d rooms..." % _layout.rooms.size())
 
 	for room in _layout.rooms:
-		var path   := ROOMS_DIR + room.room_file_name
-		var packed: PackedScene = load(path)
+		var packed: PackedScene = load(room.scene_path)
 		if packed == null:
-			push_warning("Phase 4: load('%s') failed" % path)
+			push_warning("Phase 4: load('%s') failed" % room.scene_path)
 			continue
 		var instance: Node2D = packed.instantiate()
 		instance.position = Vector2(room.grid_position * TILE_SIZE)
 		add_child(instance)
-		print("  ✓ Instanced '%s' [%s] at world pos %s" % [
-			room.room_file_name, RoomData.RoomType.keys()[room.room_type], instance.position
-		])
+		print("  ✓ Instanced '%s' at world pos %s" % [room.room_file_name, instance.position])
 
 	print("  Phase 4 done.")
 
 
 # ─── Phase 5: Dead-end capping ────────────────────────────────────────────────
+# Returns true if every open exit in the layout got capped, false otherwise.
 
-func _phase5_cap_dead_ends() -> void:
+func _phase5_cap_dead_ends() -> bool:
 	print("\n── Phase 5: Cap Dead Ends ──")
 	_placed_dead_ends.clear()
 
 	if _dead_end_pool.is_empty():
 		push_warning("Phase 5: dead_end_pool is empty — no open exits will be capped.")
-		return
+		return false
 
 	var open_exits_found := 0
 	var capped            := 0
@@ -486,9 +524,7 @@ func _phase5_cap_dead_ends() -> void:
 			var placed := false
 			for template: RoomData in pool:
 				var cap := _duplicate_room(template)
-				cap.room_type = RoomData.RoomType.STANDARD
 
-				# Same boundary-based alignment as _try_place_room.
 				var exit_local:   Vector2i = _boundary_exit(room, direction)
 				var exit_global:  Vector2i = room.grid_position + exit_local
 				var mouth_cell:   Vector2i = exit_global + _direction_vector(direction)
@@ -509,7 +545,6 @@ func _phase5_cap_dead_ends() -> void:
 					print("      ✗ overlaps — skipping")
 					continue
 
-				# Register so later caps respect this one.
 				_layout.register_room(cap)
 				room.connected_rooms[direction] = cap
 				cap.connected_rooms[opposite]   = room
@@ -527,10 +562,9 @@ func _phase5_cap_dead_ends() -> void:
 
 	print("  Instancing %d dead-end cap(s)..." % _placed_dead_ends.size())
 	for cap in _placed_dead_ends:
-		var path   := END_DIR + cap.room_file_name
-		var packed: PackedScene = load(path)
+		var packed: PackedScene = load(cap.scene_path)
 		if packed == null:
-			push_warning("Phase 5: load('%s') failed" % path)
+			push_warning("Phase 5: load('%s') failed" % cap.scene_path)
 			continue
 		var instance: Node2D = packed.instantiate()
 		instance.position = Vector2(cap.grid_position * TILE_SIZE)
@@ -540,23 +574,12 @@ func _phase5_cap_dead_ends() -> void:
 	print("  Phase 5 done | open exits: %d | capped: %d | uncapped: %d" % [
 		open_exits_found, capped, uncapped
 	])
-	
-	if uncapped > 0:
-		_clear_previous()
-		generate()
+
+	return uncapped == 0
 
 
 # ─── Alignment helper ─────────────────────────────────────────────────────────
 
-# Returns the grid cell on the true room boundary for the given exit direction.
-# The exit marker's perpendicular axis gives the door's row/column position;
-# the on-axis coordinate is snapped to the room's outer edge, regardless of
-# where the marker was placed inside the room.
-#
-#   North exit → top row    (y = 0),               x from marker
-#   South exit → bottom row (y = grid_size.y - 1), x from marker
-#   East  exit → right col  (x = grid_size.x - 1), y from marker
-#   West  exit → left col   (x = 0),               y from marker
 func _boundary_exit(room: RoomData, direction: String) -> Vector2i:
 	var marker: Vector2i = room.available_exits[direction]
 	match direction:
@@ -577,20 +600,27 @@ func _clear_previous() -> void:
 func _duplicate_room(template: RoomData) -> RoomData:
 	var r := RoomData.new()
 	r.room_file_name  = template.room_file_name
+	r.scene_path      = template.scene_path
 	r.grid_size       = template.grid_size
-	r.grid_offset     = template.grid_offset  # ◄ CRITICAL FIX: Keep the offset!
-	r.room_type       = RoomData.RoomType.STANDARD
+	r.grid_offset     = template.grid_offset
 	r.available_exits = template.available_exits.duplicate(true)
 	for direction in template.available_exits.keys():
 		r.connected_rooms[direction] = null
 	return r
 
 
-func _get_start_room() -> RoomData:
+func _room_max_uses(file_name: String) -> int:
+	if file_name == BOSS_ROOM_PATH.get_file():
+		return 1
+	return MAX_ROOM_USES
+
+
+func _layout_has_boss() -> bool:
+	var boss_file := BOSS_ROOM_PATH.get_file()
 	for room in _layout.rooms:
-		if room.room_type == RoomData.RoomType.START:
-			return room
-	return null
+		if room.room_file_name == boss_file:
+			return true
+	return false
 
 
 func _direction_vector(direction: String) -> Vector2i:
