@@ -23,3 +23,8 @@ navigation_polygon = SubResource("NavigationPolygon_1siff")
 
 [node name="Exit_E" type="Marker2D" parent="Exits" unique_id=1319669016]
 position = Vector2(189, 130)
+
+[node name="NavigationLink2D" type="NavigationLink2D" parent="." unique_id=1635062433]
+position = Vector2(-8, 0)
+start_position = Vector2(200, 120)
+end_position = Vector2(168, 120)

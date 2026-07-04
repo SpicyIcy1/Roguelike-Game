@@ -19,6 +19,10 @@ config/icon="res://icon.svg"
 
 PlayerData="*uid://5tfqjtu2g4a0"
 
+[debug]
+
+file_logging/enable_file_logging=true
+
 [display]
 
 window/size/viewport_width=512

@@ -3,7 +3,7 @@ extends Area2D
 
 
 var health = 30
-var attack_damage = 25 #half the heads damage
+var attack_damage = 12 #half the heads damage
 var last_position := Vector2.ZERO
 
 var tail = false # last few(few defined in dragon worm) segments get counted as the tail

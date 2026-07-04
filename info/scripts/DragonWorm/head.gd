@@ -1,17 +1,17 @@
 extends Area2D
 
-var speed = 40
+var speed = 35
 var velocity := Vector2.ZERO 
 var position_history: Array[Vector2] = []
 
 
 const MAX_HISTORY_SIZE := 50
 var health = 200
-var damage = 50
+var damage = 25
 # ----------------------------------------------------
 
 # Distanz statt Zeit
-const MIN_DISTANCE_THRESHOLD := 10.0 
+const MIN_DISTANCE_THRESHOLD := 15.0 
 var last_recorded_position := Vector2.ZERO
 
 func _ready() -> void:
@@ -52,6 +52,19 @@ func movement(delta):
 
 func take_damage(damage: float):
 	health -= damage
+	
+	var tween = create_tween()
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS) #process mode always
+	tween.tween_property(self, "modulate", Color(1, 0.2, 0.2, 1), 0.1)
+	
+	tween.tween_interval(0.5)
+	
+	tween.tween_property(self, "modulate", Color(1, 1, 1, 1), 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	
+	
+	process_mode = Node.PROCESS_MODE_DISABLED
+	await get_tree().create_timer(0.4).timeout
+	process_mode = Node.PROCESS_MODE_INHERIT
 
 func die():
 	%AnimationPlayer.play("puff")

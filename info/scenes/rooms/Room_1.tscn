@@ -1,14 +1,14 @@
 [gd_scene format=4 uid="uid://c8hdm57x41cks"]
 
 [ext_resource type="TileSet" uid="uid://bj18vugqpe2c" path="res://assets/tilesets/dungeon0.tres" id="1_eijpu"]
-[ext_resource type="Script" uid="uid://dfm8g0ls2ytmf" path="res://scripts/BoundingBox.gd" id="2_84ca7"]
+[ext_resource type="Script" uid="uid://dfm8g0ls2ytmf" path="res://scripts/Tools/BoundingBox.gd" id="2_84ca7"]
 [ext_resource type="PackedScene" uid="uid://bsrihjy7mh2mu" path="res://scenes/enemy_spawn_zone.tscn" id="3_wrr2d"]
 [ext_resource type="PackedScene" uid="uid://r0yn2a2s6tuy" path="res://scenes/Snap_dragon.tscn" id="4_yxps1"]
 
-[sub_resource type="NavigationPolygon" id="NavigationPolygon_scgta"]
-vertices = PackedVector2Array(292.03906, 90, 441, 85.32031, 441, 145.72656, 394.53906, 149.3125, 236, 230.34375, 236, 177.60938, 243.75, 88.85156, 344.85938, 199, 248.74219, 241.07031, 169.25, 116.32031, 116.609375, 111.859375, 119.359375, 69.140625, 234.77344, 70.89844, 331.09375, 242.89844, 345.85156, 228.84375)
-polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(4, 5, 6, 0, 3, 7, 8), PackedInt32Array(9, 10, 11, 12), PackedInt32Array(5, 9, 12, 6), PackedInt32Array(13, 8, 7, 14)])
-outlines = Array[PackedVector2Array]([PackedVector2Array(110, 59, 106, 121, 165, 126, 226, 182, 226, 235, 245, 251, 335, 253, 356, 233, 355, 203, 399, 159, 419, 155, 419, 75, 292, 80, 250, 79, 241, 61)])
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_yxps1"]
+vertices = PackedVector2Array(441, 118.859375, 414.85938, 145, 398.85938, 145, 317, 133, 317, 81, 441, 69, 345, 198.85938, 345, 230.85938, 334.85938, 241, 317, 229, 317, 161, 265, 229, 247.14063, 241, 237, 230.85938, 255.96875, 69, 265, 81, 265, 133, 265, 161, 119.140625, 113, 109, 102.859375, 109, 53, 231.96875, 53, 166.75781, 113, 237, 174.46094)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3, 4, 5), PackedInt32Array(6, 7, 8, 9, 10), PackedInt32Array(11, 9, 8, 12, 13), PackedInt32Array(3, 2, 6, 10), PackedInt32Array(14, 5, 4, 15), PackedInt32Array(16, 3, 10, 17), PackedInt32Array(18, 19, 20, 21, 22), PackedInt32Array(23, 22, 21, 14, 15, 16), PackedInt32Array(23, 16, 17), PackedInt32Array(23, 17, 11, 13)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(227, 235, 243, 251, 339, 251, 355, 235, 355, 203, 307, 219, 275, 219, 275, 171, 307, 171, 307, 219, 355, 203, 403, 155, 419, 155, 451, 123, 451, 59, 307, 59, 307, 91, 307, 123, 275, 123, 275, 91, 307, 91, 307, 59, 259, 59, 235, 43, 99, 43, 99, 107, 115, 123, 163, 123, 227, 179)])
 
 [node name="Room1" type="Node2D" unique_id=858342480]
 
@@ -19,16 +19,13 @@ script = ExtResource("2_84ca7")
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=1449314854]
 position = Vector2(-3, 5)
-navigation_polygon = SubResource("NavigationPolygon_scgta")
+navigation_polygon = SubResource("NavigationPolygon_yxps1")
 
 [node name="Exits" type="Node" parent="." unique_id=1839648480]
 
-[node name="Exit_E" type="Marker2D" parent="Exits" unique_id=848521201]
-position = Vector2(434, 120)
-
 [node name="NavigationLink2D" type="NavigationLink2D" parent="." unique_id=2112210100]
-start_position = Vector2(448, 120)
-end_position = Vector2(408, 120)
+start_position = Vector2(464, 120)
+end_position = Vector2(432, 120)
 
 [node name="EnemySpawnZone" parent="." unique_id=1127633428 instance=ExtResource("3_wrr2d")]
 position = Vector2(272, 104)

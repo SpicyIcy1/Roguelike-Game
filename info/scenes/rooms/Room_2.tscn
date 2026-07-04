@@ -4,9 +4,9 @@
 [ext_resource type="Script" uid="uid://dfm8g0ls2ytmf" path="res://scripts/Tools/BoundingBox.gd" id="2_d37wq"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_fy4m4"]
-vertices = PackedVector2Array(310, 22, -38, 22, -38, -22, 310, -22)
-polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
-outlines = Array[PackedVector2Array]([PackedVector2Array(-48, -32, -48, 32, 320, 32, 320, -32)])
+vertices = PackedVector2Array(310, -25.820313, 310, 22, -38, 22, 282.07813, -39.78125, 4.140625, -54, 267.85938, -54, -10.078125, -39.78125, -38, -25.820313)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(4, 5, 3, 2, 6), PackedInt32Array(6, 2, 7)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-48, -32, -16, -48, 0, -64, 272, -64, 288, -48, 320, -32, 320, 32, -48, 32)])
 
 [node name="Node2D" type="Node2D" unique_id=43633248]
 

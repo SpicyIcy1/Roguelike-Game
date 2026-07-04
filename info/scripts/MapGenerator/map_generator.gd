@@ -540,6 +540,10 @@ func _phase5_cap_dead_ends() -> void:
 	print("  Phase 5 done | open exits: %d | capped: %d | uncapped: %d" % [
 		open_exits_found, capped, uncapped
 	])
+	
+	if uncapped > 0:
+		_clear_previous()
+		generate()
 
 
 # ─── Alignment helper ─────────────────────────────────────────────────────────

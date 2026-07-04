@@ -103,7 +103,8 @@ func take_damage(amount: float, knockback_dir: Vector2 = Vector2.ZERO, knockback
 	if current_health <= 0:
 		die()
 		return
-
+	
+	flash_red()
 	#Knockback durch Attacke wird hier ausgelösst
 	is_in_knockback = true
 	$AnimationPlayer.stop()
@@ -138,3 +139,16 @@ func _in_attack_range() -> bool:
 	if not target:
 		return false
 	return global_position.distance_to(target.global_position) <= ATTACK_RANGE
+
+
+func flash_red(): #wichtig jeder Enemy (wir haben bisher nur 1 :( ) muss nen Sprite2D namens haben
+	var tween = create_tween()
+	
+
+	tween.tween_property(self, "modulate", Color(1, 0.2, 0.2, 1), 0.1)
+	
+	
+	tween.tween_interval(0.5)
+	
+	
+	tween.tween_property(self, "modulate", Color(1, 1, 1, 1), 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
