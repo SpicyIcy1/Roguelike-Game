@@ -32,7 +32,6 @@ func _ready() -> void:
 	get_window().grab_focus() #Damit ich nicht immer "w" in den Code editor schreibe wenn ich das Spiel starte
 	
 	add_child(EscMenu.new())
-	equip_item(ThrowingSpearItem.new())
 
 @warning_ignore("unused_parameter")
 func _physics_process(delta: float) -> void:
