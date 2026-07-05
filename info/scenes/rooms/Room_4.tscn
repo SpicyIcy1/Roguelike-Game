@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://c7esobbx6jjo2"]
 
 [ext_resource type="TileSet" uid="uid://bj18vugqpe2c" path="res://assets/tilesets/dungeon0.tres" id="1_qpftx"]
-[ext_resource type="Script" uid="uid://dfm8g0ls2ytmf" path="res://scripts/BoundingBox.gd" id="2_fdmxd"]
+[ext_resource type="Script" uid="uid://dfm8g0ls2ytmf" path="res://scripts/Tools/BoundingBox.gd" id="2_fdmxd"]
 [ext_resource type="PackedScene" uid="uid://bsrihjy7mh2mu" path="res://scenes/enemy_spawn_zone.tscn" id="3_qv4bs"]
 [ext_resource type="PackedScene" uid="uid://r0yn2a2s6tuy" path="res://scenes/Snap_dragon.tscn" id="4_0o14w"]
 
@@ -46,3 +46,6 @@ position = Vector2(-140, -97)
 
 [node name="Marker2D2" type="Marker2D" parent="EnemySpawnZone" unique_id=1405025766]
 position = Vector2(134, 106)
+
+[node name="chest_spawn" type="Marker2D" parent="." unique_id=281840323 groups=["chest_spawn"]]
+position = Vector2(-138, 91)

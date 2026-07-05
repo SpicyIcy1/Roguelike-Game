@@ -2,8 +2,10 @@ extends Entity
 
 var opened = false
 
+const MORAL_THRESHOLD = 5
+
 func take_damage(amount: float) -> void:
-	if not opened:
+	if not opened and PlayerData.moral_score >= MORAL_THRESHOLD:
 		open()
 		opened = true
 
