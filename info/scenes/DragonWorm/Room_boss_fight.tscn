@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://by0q33ih16mh8" path="res://assets/tiles.png" id="5_fv2ty"]
 [ext_resource type="PackedScene" uid="uid://d00vao07smdfj" path="res://scenes/Portal.tscn" id="6_k5pwd"]
 [ext_resource type="PackedScene" uid="uid://p15jcv2yafyu" path="res://scenes/Player.tscn" id="7_m1ay5"]
+[ext_resource type="Texture2D" uid="uid://b7804v7nj0q8j" path="res://assets/effects/Explosion.png" id="8_fnngo"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_rm1tl"]
 vertices = PackedVector2Array(145, 169.78906, 145, 249.78125, 143, 223, 143, 167.00781, 161, 153.78125, 117.390625, 26.609375, 145, 54.21875, 145, 81, 129, 81, 79, 52.679688, 49.789063, 172.85938, 1.2734375, 225, -97, 225, -97, 206.72656, -89.78906, 143, -68.34375, 121.5625, 33, 114.10156, 69.84375, 223, 137.78125, 257, 73.27344, 257, 65.27344, 241, 9.2734375, 241, -33.8125, -57.28125, -26.742188, -106.74219, 8.5390625, -111.78125, 60.226563, -30.5625, 29.257813, 4.1484375, -22.492188, 2.890625, 127.15625, 158.53906, 101.78125, 175.45313, 95, 173.1875, 95, 153.78906, 129, 136.27344, 159.99219, 120.77344, 161, 121.27344, 79, 137.78125, -127.86719, 45.328125, -59.632813, 28.421875, -80.4375, 49.226563, -89.72656, 68.84375, -100.85156, 82.03906, -138.78125, 87.99219, -153.78906, 73, -205.46094, 66.49219, -191, 73, -200.09375, 85.60156, -191, 121.27344, -196.3125, 168.75, -186.53125, 177, -147.53906, 143, -137.78906, 177, -119.109375, 195.67188, -52.351563, 97.57031, -38.421875, 83.640625, -19.460938, 71, 3.8515625, 71, 33, 88.49219)
@@ -16,6 +17,68 @@ agent_radius = 15.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_b7n0c"]
 size = Vector2(32, 16)
+
+[sub_resource type="Animation" id="Animation_fnngo"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Explosion:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(0, 5, 22, 22)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Explosion:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_otg5b"]
+resource_name = "explosion"
+length = 0.25
+step = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Explosion:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.050466046, 0.10041714, 0.15036823, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [Rect2(0, 5, 22, 22), Rect2(45, 2, 28, 28), Rect2(92, 1, 30, 30), Rect2(139, 0, 32, 32), Rect2(187, 0, 32, 32)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Explosion:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fv2ty"]
+_data = {
+&"RESET": SubResource("Animation_fnngo"),
+&"explosion": SubResource("Animation_otg5b")
+}
 
 [node name="RoomBossFight" type="Node2D" unique_id=451547856]
 script = ExtResource("1_ve7lj")
@@ -61,3 +124,13 @@ destination_path = "res://scenes/Overworld.tscn"
 
 [node name="Player" parent="." unique_id=1294629943 instance=ExtResource("7_m1ay5")]
 position = Vector2(-16, -156)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=651607630]
+libraries/ = SubResource("AnimationLibrary_fv2ty")
+
+[node name="Explosion" type="Sprite2D" parent="." unique_id=1681666885]
+visible = false
+position = Vector2(-81, 250)
+texture = ExtResource("8_fnngo")
+region_enabled = true
+region_rect = Rect2(0, 5, 22, 22)
