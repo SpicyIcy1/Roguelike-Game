@@ -2,7 +2,7 @@ extends Node2D
 
 
 
-@onready var boss = $DragonWorm
+@onready var boss : = $DragonWorm
 
 func _ready():
 	print("FIGHT!")

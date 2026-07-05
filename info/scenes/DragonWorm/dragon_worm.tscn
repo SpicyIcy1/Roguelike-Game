@@ -14,25 +14,25 @@ unique_name_in_owner = true
 position = Vector2(-16, -16)
 
 [node name="Body2" parent="." unique_id=474561089 instance=ExtResource("2_8k0al")]
-position = Vector2(-32, -32)
+position = Vector2(-192, -16)
 
 [node name="Body3" parent="." unique_id=1298461751 instance=ExtResource("2_8k0al")]
-position = Vector2(-32, -32)
+position = Vector2(-176, -32)
 
 [node name="Body4" parent="." unique_id=751197674 instance=ExtResource("2_8k0al")]
-position = Vector2(-32, -32)
+position = Vector2(-152, -32)
 
 [node name="Body5" parent="." unique_id=1234859109 instance=ExtResource("2_8k0al")]
-position = Vector2(-32, -32)
+position = Vector2(-40, 0)
 
 [node name="Body6" parent="." unique_id=1494735045 instance=ExtResource("2_8k0al")]
-position = Vector2(-32, -32)
+position = Vector2(-128, -32)
 
 [node name="Body7" parent="." unique_id=976006947 instance=ExtResource("2_8k0al")]
-position = Vector2(-32, -32)
+position = Vector2(-112, -16)
 
 [node name="Body8" parent="." unique_id=1225497401 instance=ExtResource("2_8k0al")]
-position = Vector2(-32, -32)
+position = Vector2(-88, 0)
 
 [node name="Body9" parent="." unique_id=194787581 instance=ExtResource("2_8k0al")]
-position = Vector2(-48, -48)
+position = Vector2(-64, 16)

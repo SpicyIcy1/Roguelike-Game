@@ -236,7 +236,6 @@ hframes = 5
 vframes = 7
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=1079749842]
-debug_enabled = true
 
 [node name="PathUpdateTimer" type="Timer" parent="." unique_id=1312229281]
 

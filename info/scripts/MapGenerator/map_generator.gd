@@ -25,7 +25,7 @@ var _dead_end_sub_pools: Dictionary = { "North": [], "South": [], "East": [], "W
 var _placed_dead_ends: Array[RoomData] = []
 
 
-const MAX_ATTEMPTS := 10
+const MAX_ATTEMPTS := 20
 
 
 # ─── Entry point ──────────────────────────────────────────────────────────────
