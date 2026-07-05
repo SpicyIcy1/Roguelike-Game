@@ -49,3 +49,7 @@ position = Vector2(-11, 0)
 
 [node name="Marker2D2" type="Marker2D" parent="EnemySpawnZone" unique_id=391768160]
 position = Vector2(224, 58)
+
+[node name="ChestSpawn" type="Marker2D" parent="." unique_id=1957264473 groups=["chest_spawn"]]
+position = Vector2(-95, -9)
+gizmo_extents = 45.1

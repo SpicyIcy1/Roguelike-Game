@@ -32,7 +32,10 @@ position = Vector2(272, 104)
 enemy_type = ExtResource("4_yxps1")
 
 [node name="Marker2D" type="Marker2D" parent="EnemySpawnZone" unique_id=1035986342]
-position = Vector2(64, 72)
+position = Vector2(64, 75)
 
 [node name="Marker2D2" type="Marker2D" parent="EnemySpawnZone" unique_id=1926244524]
 position = Vector2(-64, -24)
+
+[node name="chest_spawn" type="Marker2D" parent="." unique_id=62313066 groups=["chest_spawn"]]
+position = Vector2(198, 74)

@@ -95,3 +95,6 @@ position = Vector2(86, 93)
 
 [node name="Marker2D2" type="Marker2D" parent="EnemySpawnZone3" unique_id=641357919]
 position = Vector2(58, 197)
+
+[node name="chest_spawn" type="Marker2D" parent="." unique_id=1141479707 groups=["chest_spawn"]]
+position = Vector2(145, 54)

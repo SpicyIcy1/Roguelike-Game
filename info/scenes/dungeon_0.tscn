@@ -4,8 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://bb1y2i10x1132" path="res://scenes/map_generator.tscn" id="2_d47ov"]
 [ext_resource type="PackedScene" uid="uid://p15jcv2yafyu" path="res://scenes/Player.tscn" id="3_d47ov"]
 [ext_resource type="PackedScene" uid="uid://bamhsm1dml1lh" path="res://scenes/NPC_Anta.tscn" id="4_anta"]
-[ext_resource type="PackedScene" uid="uid://dud41l2b34fg6" path="res://scenes/Truhe.tscn" id="5_fbeyf"]
-
 [node name="Dungeon0" type="Node2D" unique_id=1670368270]
 script = ExtResource("1_64giy")
 
@@ -18,6 +16,3 @@ position = Vector2(184, 96)
 
 [node name="NPC_Anta" parent="." unique_id=243851171 instance=ExtResource("4_anta")]
 position = Vector2(216, 96)
-
-[node name="Truhe" parent="." unique_id=702163131 instance=ExtResource("5_fbeyf")]
-position = Vector2(92, 135)

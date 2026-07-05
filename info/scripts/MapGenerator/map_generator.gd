@@ -10,7 +10,8 @@ var TILE_SIZE: int = 16
 
 const ROOMS_DIR := "res://scenes/rooms/"
 const END_DIR   := "res://scenes/dead_ends/"
-const BOSS_ROOM_PATH := "res://scenes/DragonWorm/Room_boss.tscn"   # <- muss immer genau einmal spawnen, liegt außerhalb ROOMS_DIR
+const BOSS_ROOM_PATH := "res://scenes/DragonWorm/Room_boss.tscn"
+const TRUHE_SCENE := "res://scenes/Truhe.tscn"   # <- muss immer genau einmal spawnen, liegt außerhalb ROOMS_DIR
 const OPPOSITE  := { "North": "South", "South": "North", "East": "West", "West": "East" }
 
 
@@ -23,6 +24,9 @@ var _room_use_counts: Dictionary = {}
 var _dead_end_pool: Array[RoomData] = []
 var _dead_end_sub_pools: Dictionary = { "North": [], "South": [], "East": [], "West": [] }
 var _placed_dead_ends: Array[RoomData] = []
+
+# Nur normale Räume (kein Start, kein Boss, keine Dead-Ends) für Chest-Spawns
+var _spawnable_room_instances: Array[Node2D] = []
 
 
 const MAX_ATTEMPTS := 20
@@ -62,6 +66,7 @@ func generate() -> void:
 			print("  ✗ Not all exits could be capped — retrying...")
 			continue
 
+		_phase6_spawn_chest()
 		print("━━━ MapGenerator.generate() END (attempt %d, %d rooms, %d dead-end caps) ━━━" % [
 			attempt, placed, _placed_dead_ends.size()
 		])
@@ -476,7 +481,9 @@ func _try_place_room(current_room: RoomData, direction: String) -> RoomData:
 func _phase4_assemble() -> void:
 	print("\n── Phase 4: Assemble ──")
 	print("  Instancing %d rooms..." % _layout.rooms.size())
+	_spawnable_room_instances.clear()
 
+	var boss_file := BOSS_ROOM_PATH.get_file()
 	for room in _layout.rooms:
 		var packed: PackedScene = load(room.scene_path)
 		if packed == null:
@@ -486,6 +493,10 @@ func _phase4_assemble() -> void:
 		instance.position = Vector2(room.grid_position * TILE_SIZE)
 		add_child(instance)
 		print("  ✓ Instanced '%s' at world pos %s" % [room.room_file_name, instance.position])
+
+		# Normale Räume merken (kein Start, kein Boss)
+		if room.room_file_name != "Room_Start.tscn" and room.room_file_name != boss_file:
+			_spawnable_room_instances.append(instance)
 
 	print("  Phase 4 done.")
 
@@ -644,3 +655,32 @@ func _find_first_child_of_type(parent: Node, type: Variant) -> Node:
 		if is_instance_of(child, type):
 			return child
 	return null
+
+
+# ─── Phase 6: Truhe an einem zufälligen Marker2D "chest_spawn" spawnen
+
+func _phase6_spawn_chest() -> void:
+	print("\n── Phase 6: Spawn Chest ──")
+
+	var markers: Array = []
+	for room_instance in _spawnable_room_instances:
+		for node in room_instance.find_children("*", "Node2D", true, false):
+			if node.is_in_group("chest_spawn"):
+				markers.append(node)
+
+	if markers.is_empty():
+		push_warning("Phase 6: Keine Marker2D in Gruppe 'chest_spawn' in normalen Räumen gefunden.")
+		return
+
+	markers.shuffle()
+	var chosen_marker: Node2D = markers[0]
+
+	var packed: PackedScene = load(TRUHE_SCENE)
+	if packed == null:
+		push_warning("Phase 6: Truhe.tscn konnte nicht geladen werden.")
+		return
+
+	var truhe: Node2D = packed.instantiate()
+	truhe.global_position = chosen_marker.global_position
+	add_child(truhe)
+	print("  ✓ Truhe gespawnt bei Marker '%s' @ %s" % [chosen_marker.name, chosen_marker.global_position])
