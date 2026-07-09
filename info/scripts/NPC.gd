@@ -9,7 +9,7 @@ var current_state: State = State.IDLE
 @export var ACCELERATION := 600.0
 @export var GIVE_UP_RANGE := 200.0
 @export var ATTACK_COOLDOWN := 1.0
-@export var CALM_DOWN_TIME := 1.0
+@export var CALM_DOWN_TIME := 10.0
 @export var attack_damage := 8
 @export var sprite_faces_left := true  # blicken die Walk_Right-Frames nach links?
 
