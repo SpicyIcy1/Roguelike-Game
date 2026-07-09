@@ -3,9 +3,10 @@ extends Node2D # extending entity is not an option because its not a CharacterBo
 
 @onready var segments: Array[BodySegment] = []
 const TAIL_COUNT: int = 2 # the last x segments will be considered the tail
-const SEGMENT_GAP: int = 1 # how many array slots to skip between each segment
+const SEGMENT_GAP: int = 3 # how many array slots to skip between each segment
 var is_dying: bool = false # to make sure nothing gets freed twice
-const INTERPOLATION_SPEED: float = 5.0 # head doesn't update its position every frame because we don't want the pcs to explode; without interpolating the movements would be too choppy
+const INTERPOLATION_SPEED: float = 3.0 # head doesn't update its position every frame because we don't want the pcs to explode;
+#without interpolating the movements would be too choppy
 
 func _ready() -> void:
 	%Head.z_index = 100 # z index is for ordering
@@ -14,8 +15,7 @@ func _ready() -> void:
 		if child != %Head and child is Node2D:
 			segments.append(child)
 
-	for i: int in range(segments.size()): # counts the z index down for newer segments
-		segments[i].z_index = %Head.z_index - (i + 1)
+	recalculate_z_indices()
 
 func _physics_process(delta: float) -> void:
 	handle_potential_death()

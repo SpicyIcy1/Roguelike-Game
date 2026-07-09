@@ -5,7 +5,7 @@ var speed: float = 35.0
 var velocity: Vector2 = Vector2.ZERO
 var position_history: Array[Vector2] = []
 const MAX_HISTORY_SIZE: int = 50
-const MIN_DISTANCE_THRESHOLD: float = 15.0
+const MIN_DISTANCE_THRESHOLD: float = 5.0
 var last_recorded_position: Vector2 = Vector2.ZERO
 
 func _init() -> void:
