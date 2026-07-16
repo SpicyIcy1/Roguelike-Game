@@ -29,7 +29,7 @@ var _placed_dead_ends: Array[RoomData] = []
 var _spawnable_room_instances: Array[Node2D] = []
 
 
-const MAX_ATTEMPTS := 20
+const MAX_ATTEMPTS := 40
 
 
 # ─── Entry point ──────────────────────────────────────────────────────────────
