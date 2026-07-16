@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://b8bvps4vpyhu6"]
+
+[ext_resource type="PackedScene" uid="uid://do7ntn06cvvl2" path="res://minigame/map_1.tscn" id="2_mv4hf"]
+[ext_resource type="Script" uid="uid://da1nrivjlpdny" path="res://minigame/scriptsmini/MultiplayerMenu.gd" id="3_4upoq"]
+
+[node name="Mini" type="Node2D" unique_id=1203936898]
+
+[node name="Map1" parent="." unique_id=167906447 instance=ExtResource("2_mv4hf")]
+position = Vector2(6, 62)
+
+[node name="MultiplayerMenu" type="CanvasLayer" parent="." unique_id=1458191409]
+script = ExtResource("3_4upoq")
+metadata/_custom_type_script = "uid://da1nrivjlpdny"
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=951966415]
+_spawnable_scenes = PackedStringArray("uid://linqs4cce7xe")
+spawn_path = NodePath("..")

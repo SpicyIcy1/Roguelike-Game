@@ -4,6 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://bb1y2i10x1132" path="res://scenes/map_generator.tscn" id="2_d47ov"]
 [ext_resource type="PackedScene" uid="uid://p15jcv2yafyu" path="res://scenes/Player.tscn" id="3_d47ov"]
 [ext_resource type="PackedScene" uid="uid://bamhsm1dml1lh" path="res://scenes/NPC_Anta.tscn" id="4_anta"]
+[ext_resource type="Texture2D" uid="uid://ixmn1pi16tyo" path="res://assets/SnesGaming.png" id="5_fodiu"]
+[ext_resource type="PackedScene" uid="uid://d00vao07smdfj" path="res://scenes/Portal.tscn" id="6_yqfk0"]
+
 [node name="Dungeon0" type="Node2D" unique_id=1670368270]
 script = ExtResource("1_64giy")
 
@@ -16,3 +19,14 @@ position = Vector2(184, 96)
 
 [node name="NPC_Anta" parent="." unique_id=243851171 instance=ExtResource("4_anta")]
 position = Vector2(216, 96)
+
+[node name="SnesGaming" type="Sprite2D" parent="." unique_id=2103964278]
+position = Vector2(88, 96)
+texture = ExtResource("5_fodiu")
+region_enabled = true
+region_rect = Rect2(78, 0, 32, 31)
+
+[node name="Portal" parent="." unique_id=1722887702 instance=ExtResource("6_yqfk0")]
+position = Vector2(88, 96)
+scale = Vector2(0.8, 1.5)
+destination_path = "res://minigame/mini.tscn"
