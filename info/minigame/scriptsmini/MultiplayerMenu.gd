@@ -320,9 +320,7 @@ func get_local_ip() -> String:
 			continue
 		if ip.begins_with("169.254."):
 			continue
-		# Docker/Bridge typischerweise 172.16-172.31 (inkl. 172.17/172.18)
-		if ip.begins_with("172."):
-			continue
+		
 		# Nimm die erste "vernünftige" IPv4
 		return ip
 	return "Keine brauchbare IP gefunden"
