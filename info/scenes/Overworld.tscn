@@ -10,7 +10,7 @@
 position = Vector2(38, 96)
 texture = ExtResource("3_puia7")
 
-[node name="Portal" parent="." unique_id=1722887702 instance=ExtResource("3_w51ix")]
+[node name="Dungeon Entrance" parent="." unique_id=1722887702 instance=ExtResource("3_w51ix")]
 position = Vector2(2, 45)
 destination_path = "res://scenes/Main.tscn"
 spawn_point_name = "Entry0"
@@ -18,3 +18,39 @@ spawn_point_name = "Entry0"
 [node name="Player" parent="." unique_id=1294629943 instance=ExtResource("2_gacct")]
 z_index = 1
 position = Vector2(1, 77)
+
+[node name="Portal" parent="." unique_id=840901820 instance=ExtResource("3_w51ix")]
+position = Vector2(101, 77)
+destination_path = "res://scenes/DragonWorm/Room_boss_fight.tscn"
+
+[node name="Collision" type="Node" parent="." unique_id=690467677]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Collision" unique_id=662846558]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Collision/StaticBody2D" unique_id=326125918]
+polygon = PackedVector2Array(-280, 864, -264, 648, -192, 576, -152, 576, -120, 544, -56, 544, 8, 608, 168, 608, 208, 560, 344, 560, 392, 504, 392, 456, 432, 416, 480, 312, 520, 280, 512, 245, 470, 240, 528, 224, 600, 232, 552, 144, 512, 192, 472, 192, 472, 112, 552, 56, 552, -24, 512, 48, 488, 48, 440, -32, 384, -32, 360, -128, 312, -128, 312, -160, 344, -160, 344, -184, 312, -200, 232, -208, 200, -240, 136, -232, 72, -304, 8, -304, -24, -336, -155, -333, -215, -279, -222, -194, -346, -187, -352, -229, -361, -671, 51, -673, 806, -674, 804, -430, 808, -322, 799, -308, 304, -280, 808, -304, 808, 864)
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="Collision" unique_id=2134173729]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Collision/StaticBody2D2" unique_id=821756678]
+polygon = PackedVector2Array(-312, 864, -331, 569, -331, 516, -253, 508, -272, 423, -373, 420, -411, 392, -438, 367, -431, 309, -462, -60, -477, -104, -394, -152, -394, -672, -398, -230, -457, -208, -489, -177, -499, -99, -554, -46, -557, 298, -523, 330, -522, 398, -488, 431, -455, 481, -418, 484, -358, 544, -440, 544, -456, 512, -728, 512, -728, 864)
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="Collision" unique_id=2120612670]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Collision/StaticBody2D3" unique_id=1262939734]
+polygon = PackedVector2Array(48, 224, 16, 224, -32, 168, -24, 136, -48, 128, -72, 128, -104, 96, -56, 48, -24, 48, -24, 32, 32, 32, 32, 56, 72, 88, 80, 56, 128, 56, 128, 80, 152, 80, 152, 160, 88, 224, 88, 256, 168, 272, 184, 248, 200, 240, 200, 96, 168, 72, 168, 32, 192, 8, 192, -16, 160, 0, 128, 8, 72, 0, 32, -32, -56, -32, -88, -56, -96, -40, -56, 0, -88, 32, -152, 16, -152, 72, -128, 88, -72, 160, -40, 160, -40, 192, 16, 256, 56, 256)
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="Collision" unique_id=35161710]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Collision/StaticBody2D4" unique_id=177354784]
+polygon = PackedVector2Array(168, 272, 120, 312, 120, 336, -88, 336, -136, 288, -168, 288, -208, 256, -208, 152, -272, 152, -344, 8, -344, -64, -288, -64, -248, -112, -216, -112, -152, -200, -24, -200, 24, -152, 120, -152, 264, -144, 280, -152, 272, -112, 296, -88, 296, -40, 312, -24, 336, 32, 376, 112, 432, 112, 432, 192, 368, 192, 344, 160, 312, 80, 296, 32, 216, 8, 216, -56, 192, -48, 144, -48, 112, -80, 32, -72, -24, -128, -64, -120, -128, -128, -144, -88, -120, -56, -120, -32, -152, -72, -208, -56, -216, 8, -192, 16, -192, 80, -216, 96, -208, 152, -168, 160, -136, 224, -72, 224, -40, 288, 24, 288, 48, 328, 64, 288, 104, 288)
+
+[node name="StaticBody2D5" type="StaticBody2D" parent="Collision" unique_id=225810421]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Collision/StaticBody2D5" unique_id=1979384081]
+polygon = PackedVector2Array(373, 211, 308, 209, 281, 276, 290, 304, 259, 373, 119, 403, -8, 402, -131, 408, -156, 384, -221, 390, -284, 338, -346, 273, -368, 320, -378, 326, -394, 291, -360, 264, -360, 152, -424, 96, -424, 24, -384, 0, -384, -64, -392, -64, -432, -24, -432, 96, -360, 160, -363, 199, -414, 247, -413, 301, -386, 329, -386, 343, -347, 384, -344, 387, -250, 387, -203, 434, -56, 434, 8, 498, 104, 498, 146, 450, 279, 450, 360, 370, 364, 291, 382, 259, 435, 240, 394, 242)
+
+[node name="StaticBody2D6" type="StaticBody2D" parent="Collision" unique_id=742844216]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Collision/StaticBody2D6" unique_id=1247866341]
+polygon = PackedVector2Array(-729, 446, -541, 447, -559, 352, -580, 261, -571, -32, -571, -100, -526, -99, -513, -202, -505, -229, -440, -237, -414, -285, -412, -673, -729, -673)
