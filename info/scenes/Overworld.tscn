@@ -3,6 +3,14 @@
 [ext_resource type="PackedScene" uid="uid://p15jcv2yafyu" path="res://scenes/Player.tscn" id="2_gacct"]
 [ext_resource type="Texture2D" uid="uid://u5ydiiq3be1r" path="res://assets/130078.png" id="3_puia7"]
 [ext_resource type="PackedScene" uid="uid://d00vao07smdfj" path="res://scenes/Portal.tscn" id="3_w51ix"]
+[ext_resource type="Texture2D" uid="uid://cp70fq3gr3muv" path="res://assets/SNES - Secret of Mana - Maps - Sprite Village.png" id="4_gacct"]
+[ext_resource type="PackedScene" uid="uid://b6brx3vtkm28t" path="res://scenes/NPC_WiseGuy.tscn" id="5_w51ix"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_gacct"]
+vertices = PackedVector2Array(-101.96094, -1.703125, -171.77344, 0.703125, -171.20313, -20.859375, -111.22656, -19.867188, -108.03906, -52.890625, -109.25781, -88.359375, -105.15625, -84.59375, 199.14844, -28.96875, 193.24219, -24.90625, 206.0625, -11.328125, 207.10156, 16.867188, -373.02344, 1390.6016, -372.10938, 1454.8438, -410.1172, 1454.1406, -410.96094, 1401.8594, -307.0078, 1199.9609, -292, 1174.5625, -303.02344, 574.5, -293, 816.97656, -290.96094, 569.97656, -180.85156, 500.04688, -171.77344, 511.96094, 98.65625, 507.02344, 39.546875, 515.97656, 148.61719, 502.10156, 273.9375, 473.39063, 274.0625, 474.65625, 400.5, 352.14063, 366.21875, 380.07813, 447.10156, 259.28906, 451.9297, 253.17188, 440.95313, 102.578125, 447.03906, 101.546875, 412.95313, 9.0234375, 411.14063, 11.09375, 298.4375, -126.53906, 308.70313, -117.28125, 295.5703, -167.92188, 290.72656, -163.99219, -174.88281, -243.07813, 21.25, -208.89844, -172.95313, -237.97656, -201.61719, -174.32813, -191.85938, -164.42188, -357.9375, -76.859375, -372.6172, -83.390625, -364.14063, 28.679688, -359.02344, 16.039063, -223.13281, 259.4297, -230.6875, 273.85156, -115.96094, 337.75, -117.03906, 370.0078, 112.60156, 360.39844, 114.03906, 370.97656, 279.52344, 153.60156, 279.96094, 145.22656, 286.4375, 119.02344, 219.25781, 59.40625)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(4, 0, 3), PackedInt32Array(4, 3, 5, 6), PackedInt32Array(6, 5, 7, 8), PackedInt32Array(8, 7, 9, 10), PackedInt32Array(11, 12, 13, 14), PackedInt32Array(11, 14, 15, 16), PackedInt32Array(16, 15, 17, 18), PackedInt32Array(19, 18, 17), PackedInt32Array(19, 17, 20, 21), PackedInt32Array(21, 20, 22, 23), PackedInt32Array(24, 23, 22), PackedInt32Array(24, 22, 25, 26), PackedInt32Array(27, 26, 25, 28), PackedInt32Array(27, 28, 29, 30), PackedInt32Array(30, 29, 31, 32), PackedInt32Array(33, 32, 31, 34), PackedInt32Array(33, 34, 35, 36), PackedInt32Array(37, 36, 35, 38), PackedInt32Array(39, 37, 38, 40), PackedInt32Array(39, 40, 41), PackedInt32Array(42, 39, 41, 43), PackedInt32Array(42, 43, 44, 45), PackedInt32Array(46, 45, 44, 47), PackedInt32Array(46, 47, 48, 49), PackedInt32Array(49, 48, 50, 51), PackedInt32Array(51, 50, 52, 53), PackedInt32Array(54, 53, 52, 55), PackedInt32Array(56, 54, 55), PackedInt32Array(56, 55, 57, 10), PackedInt32Array(10, 57, 8)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-179, -29, -180, 9, -93, 6, -100, -53, -98, -75, 187, -18, 212, 63, 270, 145, 109, 352, -113, 330, -217, 254, -351, 14, -350, -72, -185, -159, -167, -229, 20, -201, 284, -157, 291, -123, 404, 15, 433, 104, 439, 257, 360, 375, 270, 466, 98, 499, -183, 492, -311, 570, -315, 1198, -419, 1400, -418, 1462, -364, 1463, -365, 1392, -284, 1176, -285, 817, -283, 575, -170, 520, 40, 524, 150, 510, 278, 482, 407, 357, 460, 255, 455, 100, 420, 5, 316, -121, 302, -175, -180, -252, -208, -180, -381, -88, -372, 31, -237, 279, -120, 378, 118, 379, 287, 157, 295, 117, 215, 14, 214, -13, 205, -36, -117, -98, -119, -28)])
+agent_radius = 8.0
 
 [node name="Overworld" type="Node2D" unique_id=743961411]
 
@@ -23,12 +31,16 @@ position = Vector2(1, 77)
 position = Vector2(101, 77)
 destination_path = "res://scenes/DragonWorm/Room_boss_fight.tscn"
 
-[node name="Collision" type="Node" parent="." unique_id=690467677]
+[node name="SnesSecretOfManaMapsSpriteVillage" type="Sprite2D" parent="." unique_id=36019808]
+position = Vector2(-378, 1247)
+texture = ExtResource("4_gacct")
+
+[node name="Collision" type="Node2D" parent="." unique_id=2079875629]
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Collision" unique_id=662846558]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Collision/StaticBody2D" unique_id=326125918]
-polygon = PackedVector2Array(-280, 864, -264, 648, -192, 576, -152, 576, -120, 544, -56, 544, 8, 608, 168, 608, 208, 560, 344, 560, 392, 504, 392, 456, 432, 416, 480, 312, 520, 280, 512, 245, 470, 240, 528, 224, 600, 232, 552, 144, 512, 192, 472, 192, 472, 112, 552, 56, 552, -24, 512, 48, 488, 48, 440, -32, 384, -32, 360, -128, 312, -128, 312, -160, 344, -160, 344, -184, 312, -200, 232, -208, 200, -240, 136, -232, 72, -304, 8, -304, -24, -336, -155, -333, -215, -279, -222, -194, -346, -187, -352, -229, -361, -671, 51, -673, 806, -674, 804, -430, 808, -322, 799, -308, 304, -280, 808, -304, 808, 864)
+polygon = PackedVector2Array(-280, 864, -264, 648, -192, 576, -152, 576, -120, 544, -56, 544, 8, 608, 168, 608, 208, 560, 344, 560, 392, 504, 392, 456, 432, 416, 480, 312, 520, 280, 512, 245, 470, 240, 528, 224, 600, 232, 552, 144, 512, 192, 472, 192, 472, 112, 552, 56, 552, -24, 512, 48, 488, 48, 440, -32, 384, -32, 360, -128, 312, -128, 312, -160, 344, -160, 344, -184, 312, -200, 232, -208, 200, -240, 136, -232, 72, -304, 8, -304, -24, -336, -155, -333, -215, -279, -209, -197, -346, -187, -352, -229, -361, -671, 51, -673, 806, -674, 804, -430, 808, -322, 799, -308, 304, -280, 808, -304, 808, 864)
 
 [node name="StaticBody2D2" type="StaticBody2D" parent="Collision" unique_id=2134173729]
 
@@ -43,7 +55,7 @@ polygon = PackedVector2Array(48, 224, 16, 224, -32, 168, -24, 136, -48, 128, -72
 [node name="StaticBody2D4" type="StaticBody2D" parent="Collision" unique_id=35161710]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Collision/StaticBody2D4" unique_id=177354784]
-polygon = PackedVector2Array(168, 272, 120, 312, 120, 336, -88, 336, -136, 288, -168, 288, -208, 256, -208, 152, -272, 152, -344, 8, -344, -64, -288, -64, -248, -112, -216, -112, -152, -200, -24, -200, 24, -152, 120, -152, 264, -144, 280, -152, 272, -112, 296, -88, 296, -40, 312, -24, 336, 32, 376, 112, 432, 112, 432, 192, 368, 192, 344, 160, 312, 80, 296, 32, 216, 8, 216, -56, 192, -48, 144, -48, 112, -80, 32, -72, -24, -128, -64, -120, -128, -128, -144, -88, -120, -56, -120, -32, -152, -72, -208, -56, -216, 8, -192, 16, -192, 80, -216, 96, -208, 152, -168, 160, -136, 224, -72, 224, -40, 288, 24, 288, 48, 328, 64, 288, 104, 288)
+polygon = PackedVector2Array(168, 272, 120, 312, 120, 336, -88, 336, -136, 288, -168, 288, -208, 256, -208, 152, -272, 152, -344, 8, -344, -64, -288, -64, -248, -112, -216, -112, -152, -200, -24, -200, 24, -152, 120, -152, 264, -144, 280, -152, 272, -112, 296, -88, 296, -40, 312, -24, 336, 32, 376, 112, 432, 112, 439, 241, 432, 192, 368, 192, 344, 160, 312, 80, 296, 32, 216, 8, 216, -56, 192, -48, 144, -48, 112, -80, 32, -72, -24, -128, -64, -120, -128, -128, -144, -88, -120, -56, -120, -32, -152, -72, -208, -56, -216, 8, -192, 16, -192, 80, -216, 96, -208, 152, -168, 160, -136, 224, -72, 224, -40, 288, 24, 288, 48, 328, 64, 288, 104, 288)
 
 [node name="StaticBody2D5" type="StaticBody2D" parent="Collision" unique_id=225810421]
 
@@ -54,3 +66,23 @@ polygon = PackedVector2Array(373, 211, 308, 209, 281, 276, 290, 304, 259, 373, 1
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Collision/StaticBody2D6" unique_id=1247866341]
 polygon = PackedVector2Array(-729, 446, -541, 447, -559, 352, -580, 261, -571, -32, -571, -100, -526, -99, -513, -202, -505, -229, -440, -237, -414, -285, -412, -673, -729, -673)
+
+[node name="StaticBody2D7" type="StaticBody2D" parent="Collision" unique_id=842844353]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Collision/StaticBody2D7" unique_id=101562913]
+polygon = PackedVector2Array(-331, 865, -328, 1193, -407, 1196, -417, 1224, -472, 1221, -502, 1198, -553, 1210, -624, 1206, -624, 1261, -670, 1254, -624, 1362, -554, 1360, -554, 1403, -596, 1407, -605, 1439, -661, 1423, -666, 1479, -629, 1495, -588, 1466, -541, 1459, -455, 1514, -423, 1565, -431, 1631, -795, 1634, -793, 865)
+
+[node name="StaticBody2D8" type="StaticBody2D" parent="Collision" unique_id=1375628538]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Collision/StaticBody2D8" unique_id=267918993]
+polygon = PackedVector2Array(-264, 866, -265, 1180, -181, 1216, -186, 1260, -124, 1264, -140, 1361, -113, 1393, -131, 1427, -163, 1459, -186, 1371, -230, 1372, -257, 1432, -213, 1453, -362, 1507, -384, 1629, 37, 1632, 37, 864)
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=666478025]
+navigation_polygon = SubResource("NavigationPolygon_gacct")
+
+[node name="NPC_WiseGuy" parent="." unique_id=1917040545 node_paths=PackedStringArray("target_node") instance=ExtResource("5_w51ix")]
+position = Vector2(-157, -6)
+target_node = NodePath("../Goal")
+
+[node name="Goal" type="Marker2D" parent="." unique_id=277593217]
+position = Vector2(-389, 1422)

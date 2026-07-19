@@ -1,21 +1,26 @@
-[gd_scene load_steps=4 format=3 uid="uid://b6brx3vtkm28t"]
+[gd_scene format=3 uid="uid://b6brx3vtkm28t"]
 
-[ext_resource type="Script" uid="uid://cgf8fqcf2eyd" path="res://scripts/NPC.gd" id="1_npc"]
+[ext_resource type="Script" uid="uid://mdxl1dftaxyq" path="res://scripts/npc_wise_guy.gd" id="1_qtukc"]
 [ext_resource type="Texture2D" uid="uid://6yimpfpep6cv" path="res://assets/Wiseguy.png" id="2_tex"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
-size = Vector2(14, 8)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_w51ix"]
+radius = 6.0
+height = 14.0
 
-[node name="NPC_WiseGuy" type="CharacterBody2D" groups=["npc"]]
+[node name="NPC_WiseGuy" type="CharacterBody2D" unique_id=1917040545 groups=["npc"]]
 collision_layer = 4
-collision_mask = 1
-script = ExtResource("1_npc")
+script = ExtResource("1_qtukc")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=384318426]
 position = Vector2(0, 1)
 texture = ExtResource("2_tex")
 hframes = 10
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 12)
-shape = SubResource("RectangleShape2D_body")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1294756848]
+position = Vector2(0, 9)
+shape = SubResource("CapsuleShape2D_w51ix")
+disabled = true
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=757369929]
+path_max_distance = 300.0
+debug_enabled = true
