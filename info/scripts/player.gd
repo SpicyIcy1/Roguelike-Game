@@ -165,6 +165,16 @@ func attack():
 	can_attack = true
 	is_attacking = false
 
+# Rüstet ein aufgesammeltes Schwert aus: ersetzt die Stats der aktiven Waffe,
+# damit sich der Schaden im Kampf wirklich ändert.
+func equip_weapon_stats(sword: Sword) -> void:
+	var weapon = %WeaponPos.get_child(0)
+	if weapon:
+		weapon.stats = sword
+		weapon.modulate = sword.color  # Waffe in der Rarität-Farbe des Schwerts einfärben
+		print("Neues Schwert ausgerüstet: ", sword.equipment_name, " (Schaden ", sword.damage_bonus, ")")
+
+
 func equip_item(item: Equipment) -> void:
 	for existing in equipped_items:
 		if existing.type == item.type:
