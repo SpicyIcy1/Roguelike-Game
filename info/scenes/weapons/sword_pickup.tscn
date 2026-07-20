@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://bjellbod8a5b5"]
+
+[ext_resource type="Script" path="res://scripts/sword_pickup.gd" id="1_pickup"]
+[ext_resource type="Texture2D" uid="uid://dyttc8v6uhxv0" path="res://assets/Sword.png" id="2_tex"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pickup"]
+radius = 8.0
+
+[node name="SwordPickup" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_pickup")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_pickup")

@@ -1,6 +1,8 @@
 class_name NPC
 extends CharacterBody2D
 
+const SWORD_PICKUP_SCENE: PackedScene = preload("res://scenes/weapons/sword_pickup.tscn")
+
 enum State { IDLE, FIGHT }
 var current_state: State = State.IDLE
 
@@ -72,8 +74,19 @@ func take_damage(amount: float, _knockback_dir: Vector2 = Vector2.ZERO, _knockba
 
 
 func die() -> void:
+	# Tod wird nur durch einen Player-Kill ausgelöst -> zufälliges Schwert droppen.
+	# Bessere Schwerter sind seltener (siehe Sword.random_drop()).
+	_drop_sword()
 	PlayerData.add_morality(-5)
 	queue_free()
+
+
+func _drop_sword() -> void:
+	var pickup := SWORD_PICKUP_SCENE.instantiate()
+	pickup.sword = Sword.random_drop()
+	# An die Szene hängen, nicht an den NPC (der wird gleich freigegeben)
+	get_parent().add_child(pickup)
+	pickup.global_position = global_position
 
 
 func _start_fighting() -> void:

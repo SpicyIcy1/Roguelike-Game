@@ -19,7 +19,6 @@ hframes = 10
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1294756848]
 position = Vector2(0, 9)
 shape = SubResource("CapsuleShape2D_w51ix")
-disabled = true
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=757369929]
 path_max_distance = 300.0

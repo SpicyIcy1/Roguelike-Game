@@ -30,6 +30,7 @@ position = Vector2(1, 77)
 [node name="Portal" parent="." unique_id=840901820 instance=ExtResource("3_w51ix")]
 position = Vector2(101, 77)
 destination_path = "res://scenes/DragonWorm/Room_boss_fight.tscn"
+required_morality = 10
 
 [node name="SnesSecretOfManaMapsSpriteVillage" type="Sprite2D" parent="." unique_id=36019808]
 position = Vector2(-378, 1247)
