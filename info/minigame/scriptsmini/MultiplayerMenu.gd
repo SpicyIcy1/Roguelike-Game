@@ -311,16 +311,28 @@ func _status_color(status: String) -> Color:
 			return Color(1.0, 0.4, 0.4) # Rot
 		_:
 			return Color(1.0, 1.0, 1.0) # Weiß (Offline)
+
 func get_local_ip() -> String:
 	var ips: Array = IP.get_local_addresses()
+	var fallback_ip: String = ""
+
 	for ip in ips:
-		if ":" in ip:
-			continue
-		if ip.begins_with("127."):
-			continue
-		if ip.begins_with("169.254."):
+		# IPv6 und Loopback/Link-Local ignorieren
+		if ":" in ip or ip.begins_with("127.") or ip.begins_with("169.254."):
 			continue
 		
-		# Nimm die erste "vernünftige" IPv4
-		return ip
-	return "Keine brauchbare IP gefunden"
+		# Typische echte LAN-IPs bevorzugen (192.168.x.x oder 10.x.x.x)
+		if ip.begins_with("192.168.") or ip.begins_with("10."):
+			return ip
+		
+		# Virtuelle Docker/WSL IPs (172.17.x.x - 172.31.x.x) ignorieren
+		if ip.begins_with("172.17.") or ip.begins_with("172.18.") or ip.begins_with("172.19."):
+			continue
+
+		if fallback_ip == "":
+			fallback_ip = ip
+
+	if fallback_ip != "":
+		return fallback_ip
+
+	return "Keine passende LAN-IP gefunden"
